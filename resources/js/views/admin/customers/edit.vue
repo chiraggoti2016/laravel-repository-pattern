@@ -93,27 +93,133 @@
         </b-container>
 
         <div class="table-responsive">
-          <div class="d-flex justify-content-end align-items-center mb-1">
-            <a
-              href="#"
-              class="btn btn-sm btn-primary btn-icon-split"
-              v-b-modal.modal-prevent-closing
+          <div class="row">
+            <div class="col-6">Users</div>
+            <div
+              class="col-6 d-flex justify-content-end align-items-center mb-1"
             >
-              <span class="icon text-white-50">
-                <i class="fas fa-plus"></i>
-              </span>
-              <span class="text">Add User</span>
-            </a>
+              <a
+                href="#"
+                class="btn btn-sm btn-primary btn-icon-split"
+                v-b-modal.modal-prevent-closing
+              >
+                <span class="icon text-white-50">
+                  <i class="fas fa-plus"></i>
+                </span>
+                <span class="text">Add User</span>
+              </a>
+            </div>
           </div>
           <b-table
+            id="users-b-table-id"
+            small
             striped
             hover
             :items="form.users"
             :fields="userFields"
-          ></b-table>
+            responsive="sm"
+            caption-top
+          >
+            <template #cell(index)="data">
+              {{ data.index + 1 }}
+            </template>
+
+            <template #cell(actions)="data">
+              <action-button
+                :data="data"
+                :meta="editActionButton.meta"
+                name="edit"
+                @click="editActionButtonClick"
+              ></action-button>
+              <action-button
+                :data="data"
+                :meta="deleteActionButton.meta"
+                :classes="deleteActionButton.classes"
+                name="delete"
+                @click="deleteActionButtonClick"
+              ></action-button>
+            </template>
+          </b-table>
+        </div>
+
+        <div class="table-responsive">
+          <div class="row">
+            <div class="col-6">Projects</div>
+            <div
+              class="col-6 d-flex justify-content-end align-items-center mb-1"
+            >
+              <a
+                href="#"
+                class="btn btn-sm btn-primary btn-icon-split"
+                v-b-modal.modal-project
+              >
+                <span class="icon text-white-50">
+                  <i class="fas fa-plus"></i>
+                </span>
+                <span class="text">Add Project</span>
+              </a>
+            </div>
+          </div>
+          <b-table
+            id="projects-b-table-id"
+            small
+            striped
+            hover
+            :items="form.projects"
+            :fields="projectFields"
+            responsive="sm"
+            caption-top
+          >
+            <template #cell(index)="data">
+              {{ data.index + 1 }}
+            </template>
+
+            <template #cell(actions)="data">
+              <action-button
+                :data="data"
+                :meta="editActionButton.meta"
+                name="edit"
+                @click="editProjectActionButtonClick"
+              ></action-button>
+              <action-button
+                :data="data"
+                :meta="deleteActionButton.meta"
+                :classes="deleteActionButton.classes"
+                name="delete"
+                @click="deleteProjectActionButtonClick"
+              ></action-button>
+            </template>
+          </b-table>
         </div>
       </div>
     </div>
+
+    <b-overlay :show="busy" no-wrap>
+      <template #overlay>
+        <div
+          ref="dialog"
+          tabindex="-1"
+          role="dialog"
+          aria-modal="false"
+          aria-labelledby="form-confirm-label"
+          class="text-center p-3"
+        >
+          <p><strong id="form-confirm-label">Are you sure?</strong></p>
+          <div class="d-flex">
+            <b-button
+              variant="outline-danger"
+              class="mr-3"
+              @click="onOverlayCancel"
+            >
+              Cancel
+            </b-button>
+            <b-button variant="outline-success" @click="onOverlayOK"
+              >OK</b-button
+            >
+          </div>
+        </div>
+      </template>
+    </b-overlay>
 
     <b-modal
       id="modal-prevent-closing"
@@ -188,10 +294,82 @@
         </b-form-group>
       </form>
     </b-modal>
+
+    <b-modal
+      id="modal-project"
+      ref="modal2"
+      title="Add Project"
+      @show="resetProjectModal"
+      @hidden="resetProjectModal"
+      @ok="handleProjectOk"
+    >
+      <form ref="form" @submit.stop.prevent="handleAddProjectSubmit">
+        <b-form-group
+          id="project-modal-input-group-1"
+          label="Name"
+          label-for="modal-name-input"
+        >
+          <b-form-input
+            id="modal-name-input"
+            name="modal-name-input"
+            class="mb-2 mr-sm-2 mb-sm-0"
+            placeholder="Name"
+            v-model="$v.newproject.name.$model"
+            :state="validateProjectModalState('name')"
+            aria-describedby="project-modal-input-1-live-feedback"
+          ></b-form-input>
+          <b-form-invalid-feedback id="project-modal-input-1-live-feedback"
+            >This is a required field.</b-form-invalid-feedback
+          >
+        </b-form-group>
+
+        <b-form-group
+          id="project-modal-input-group-2"
+          label="Start Date"
+          label-for="modal-startdate-input"
+        >
+          <b-form-input
+            id="modal-startdate-input"
+            name="modal-startdate-input"
+            class="mb-2 mr-sm-2 mb-sm-0"
+            placeholder="Start Date"
+            v-model="$v.newproject.startdate.$model"
+            :state="validateProjectModalState('startdate')"
+            aria-describedby="project-modal-input-2-live-feedback"
+          ></b-form-input>
+          <div
+            class="invalid-feedback"
+            v-if="!$v.newproject.startdate.required"
+          >
+            This is a required field.
+          </div>
+        </b-form-group>
+
+        <b-form-group
+          id="project-modal-input-group-3"
+          label="End Date"
+          label-for="modal-enddate-input"
+        >
+          <b-form-input
+            id="modal-enddate-input"
+            name="modal-enddate-input"
+            class="mb-2 mr-sm-2 mb-sm-0"
+            placeholder="End Date"
+            v-model="$v.newproject.enddate.$model"
+            :state="validateProjectModalState('enddate')"
+            aria-describedby="project-modal-input-3-live-feedback"
+          ></b-form-input>
+          <div class="invalid-feedback" v-if="!$v.newproject.enddate.required">
+            This is a required field.
+          </div>
+        </b-form-group>
+      </form>
+    </b-modal>
   </div>
 </template>
 
 <script>
+import ActionButton from "./../components/ActionButton.vue";
 import * as notify from "../../../utils/notify.js";
 import { reactive, toRefs } from "vue";
 import { validationMixin } from "vuelidate";
@@ -202,17 +380,60 @@ export default {
   mixins: [validationMixin],
   data() {
     return {
-      userFields: ["name", "email", "phone"],
+      busy: false,
+      userFields: ["index", "name", "email", "phone", "actions"],
+      projectFields: [
+        "index",
+        "name",
+        "status",
+        "startdate",
+        "enddate",
+        "actions",
+      ],
       form: {
         name: null,
         address: null,
         country: null,
         users: [],
+        projects: [],
       },
+      editUserIndex: null,
       newuser: {
         name: null,
         email: null,
         phone: null,
+      },
+      newproject: {
+        name: "",
+        startdate: "",
+        enddate: "",
+        status: "",
+      },
+      editProjectIndex: null,
+      editActionButton: {
+        meta: {
+          icon: {
+            has: true,
+            classes: {
+              "fa-edit": true,
+            },
+          },
+        },
+      },
+      deleteActionButton: {
+        meta: {
+          icon: {
+            has: true,
+            classes: {
+              "fa-trash": true,
+            },
+          },
+        },
+        classes: {
+          btn: true,
+          "btn-danger": true,
+          "btn-sm": true,
+        },
       },
     };
   },
@@ -241,10 +462,20 @@ export default {
         numbercheck: helpers.regex("phone", /^(\+\d{1,3}[- ]?)?\d{10}$/),
       },
     },
+    newproject: {
+      name: {
+        required,
+      },
+      startdate: {
+        required,
+      },
+      enddate: {
+        required,
+      },
+    },
   },
   async mounted() {
     const { data } = await this.getData(this.$route.params.id);
-    console.log("data", data);
     this.form = {
       ...data,
     };
@@ -260,6 +491,7 @@ export default {
         address: null,
         country: null,
         users: [],
+        projects: [],
       };
 
       this.$nextTick(() => {
@@ -287,7 +519,10 @@ export default {
     },
     validateModalState(name) {
       const { $dirty, $error } = this.$v.newuser[name];
-      console.log("dirty, error", { name, $dirty, $error });
+      return $dirty ? !$error : null;
+    },
+    validateProjectModalState(name) {
+      const { $dirty, $error } = this.$v.newproject[name];
       return $dirty ? !$error : null;
     },
     resetModal() {
@@ -296,6 +531,17 @@ export default {
         email: "",
         phone: "",
       };
+      this.editUserIndex = null;
+
+      this.$v.$reset();
+    },
+    resetProjectModal() {
+      this.newproject = {
+        name: "",
+        startdate: "",
+        enddate: "",
+      };
+      this.editProjectIndex = null;
 
       this.$v.$reset();
     },
@@ -305,19 +551,48 @@ export default {
       // Trigger submit handler
       this.handleAddUserSubmit();
     },
+    handleProjectOk(bvModalEvent) {
+      // Prevent modal from closing
+      bvModalEvent.preventDefault();
+      // Trigger submit handler
+      this.handleAddProjectSubmit();
+    },
     handleAddUserSubmit() {
       this.$v.newuser.$touch();
       if (this.$v.newuser.$anyError) {
         return;
       }
 
-      // Push the name to submitted names
-      this.form.users.push(this.newuser);
+      // Push / Update
+      if (this.editUserIndex != null && this.editUserIndex != -1) {
+        this.form.users[this.editUserIndex] = this.newuser;
+      } else this.form.users.push(this.newuser);
+
+      this.$root.$emit("bv::refresh::table", "users-b-table-id");
       this.resetModal();
 
       // Hide the modal manually
       this.$nextTick(() => {
         this.$bvModal.hide("modal-prevent-closing");
+      });
+    },
+    handleAddProjectSubmit() {
+      this.$v.newproject.$touch();
+      if (this.$v.newproject.$anyError) {
+        return;
+      }
+
+      // Push / Update
+      if (this.editProjectIndex != null && this.editProjectIndex != -1) {
+        this.form.projects[this.editProjectIndex] = this.newproject;
+      } else this.form.projects.push(this.newproject);
+
+      this.$root.$emit("bv::refresh::table", "projects-b-table-id");
+      this.resetProjectModal();
+
+      // Hide the modal manually
+      this.$nextTick(() => {
+        this.$bvModal.hide("modal-project");
       });
     },
     async getData(id) {
@@ -328,6 +603,51 @@ export default {
         notify.authError(error);
       }
     },
+    editActionButtonClick(data) {
+      const { name, email, phone } = data.item;
+      this.$bvModal.show("modal-prevent-closing");
+      this.editUserIndex = data.index;
+      this.newuser = {
+        name,
+        email,
+        phone,
+      };
+      this.$v.$reset();
+    },
+    deleteActionButtonClick(data) {
+      this.editUserIndex = data.index;
+      this.busy = true;
+    },
+    editProjectActionButtonClick(data) {
+      const { name, startdate, enddate } = data.item;
+      this.$bvModal.show("modal-project");
+      this.editProjectIndex = data.index;
+      this.newproject = {
+        name,
+        startdate,
+        enddate,
+      };
+      this.$v.$reset();
+    },
+    deleteProjectActionButtonClick(data) {
+      this.editProjectIndex = data.index;
+      this.busy = true;
+    },
+
+    onOverlayCancel() {
+      this.busy = false;
+    },
+    onOverlayOK() {
+      if (this.editUserIndex > -1) {
+        this.form.users.splice(this.editUserIndex, 1);
+      }
+      this.$root.$emit("bv::refresh::table", "users-b-table-id");
+
+      this.busy = false;
+    },
+  },
+  components: {
+    ActionButton,
   },
 };
 </script>

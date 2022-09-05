@@ -28,16 +28,43 @@
         </div>
       </div>
     </div>
+
+    <b-overlay :show="busy" no-wrap>
+      <template #overlay>
+        <div
+          ref="dialog"
+          tabindex="-1"
+          role="dialog"
+          aria-modal="false"
+          aria-labelledby="form-confirm-label"
+          class="text-center p-3"
+        >
+          <p><strong id="form-confirm-label">Are you sure?</strong></p>
+          <div class="d-flex">
+            <b-button
+              variant="outline-danger"
+              class="mr-3"
+              @click="onOverlayCancel"
+            >
+              Cancel
+            </b-button>
+            <b-button variant="outline-success" @click="onOverlayOK"
+              >OK</b-button
+            >
+          </div>
+        </div>
+      </template>
+    </b-overlay>
   </div>
 </template>
 
 <script>
 import { reactive, toRefs } from "vue";
-import ActionButtons from "./../components/Actions.vue";
+import ActionButton from "./../components/ActionButton.vue";
 export default {
   name: "Partner",
-  setup() {
-    const data = reactive({
+  data() {
+    return {
       url: "https://optima.test/api/partners",
       columns: [
         {
@@ -70,7 +97,7 @@ export default {
           name: "cancelled",
         },
         {
-          label: "Actions",
+          label: "",
           name: "edit",
           orderable: false,
           classes: {
@@ -78,38 +105,62 @@ export default {
             "btn-warning": true,
             "btn-sm": true,
           },
-          icon: {
-            has: true,
-            classes: {
-              "fa-edit": true,
-            },
-          },
           meta: {
             prefixLink: "/admin/partners/edit/",
             icon: {
               has: true,
               classes: {
-                "fa-flag": true,
+                "fa-edit": true,
               },
             },
           },
           event: "click",
-          handler: (data) => {
-            // /admin/partners/edit
-            // alert(`You clicked row ${data.id}`);
+          handler: () => {},
+          component: ActionButton,
+        },
+        {
+          label: "",
+          name: "delete",
+          orderable: false,
+          classes: {
+            btn: true,
+            "btn-danger": true,
+            "btn-sm": true,
           },
-          component: ActionButtons,
+          meta: {
+            prefixLink: null,
+            icon: {
+              has: true,
+              classes: {
+                "fa-trash": true,
+              },
+            },
+          },
+          event: "click",
+          handler: this.deleteAction,
+          component: ActionButton,
         },
       ],
       headers: {
         ...axiosHeaders,
       },
-    });
-
-    return { ...toRefs(data) };
+      busy: false,
+    };
   },
   components: {
-    ActionButtons,
+    ActionButton,
+  },
+  methods: {
+    onOverlayCancel() {
+      this.busy = false;
+    },
+    onOverlayOK() {
+      this.busy = false;
+    },
+    deleteAction(data) {
+      console.log("delete action");
+      this.busy = true;
+    },
   },
 };
 </script>

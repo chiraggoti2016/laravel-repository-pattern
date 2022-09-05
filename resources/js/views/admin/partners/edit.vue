@@ -106,14 +106,64 @@
             </a>
           </div>
           <b-table
+            id="users-b-table-id"
+            small
             striped
             hover
             :items="form.users"
             :fields="userFields"
-          ></b-table>
+            responsive="sm"
+          >
+            <template #cell(index)="data">
+              {{ data.index + 1 }}
+            </template>
+
+            <template #cell(actions)="data">
+              <action-button
+                :data="data"
+                :meta="editActionButton.meta"
+                name="edit"
+                @click="editActionButtonClick"
+              ></action-button>
+              <action-button
+                :data="data"
+                :meta="deleteActionButton.meta"
+                :classes="deleteActionButton.classes"
+                name="delete"
+                @click="deleteActionButtonClick"
+              ></action-button>
+            </template>
+          </b-table>
         </div>
       </div>
     </div>
+
+    <b-overlay :show="busy" no-wrap>
+      <template #overlay>
+        <div
+          ref="dialog"
+          tabindex="-1"
+          role="dialog"
+          aria-modal="false"
+          aria-labelledby="form-confirm-label"
+          class="text-center p-3"
+        >
+          <p><strong id="form-confirm-label">Are you sure?</strong></p>
+          <div class="d-flex">
+            <b-button
+              variant="outline-danger"
+              class="mr-3"
+              @click="onOverlayCancel"
+            >
+              Cancel
+            </b-button>
+            <b-button variant="outline-success" @click="onOverlayOK"
+              >OK</b-button
+            >
+          </div>
+        </div>
+      </template>
+    </b-overlay>
 
     <b-modal
       id="modal-prevent-closing"
@@ -192,6 +242,7 @@
 </template>
 
 <script>
+import ActionButton from "./../components/ActionButton.vue";
 import * as notify from "../../../utils/notify.js";
 import { reactive, toRefs } from "vue";
 import { validationMixin } from "vuelidate";
@@ -202,17 +253,44 @@ export default {
   mixins: [validationMixin],
   data() {
     return {
-      userFields: ["name", "email", "phone"],
+      busy: false,
+      userFields: ["index", "name", "email", "phone", "actions"],
       form: {
         name: null,
         address: null,
         country: null,
         users: [],
       },
+      editUserIndex: null,
       newuser: {
         name: null,
         email: null,
         phone: null,
+      },
+      editActionButton: {
+        meta: {
+          icon: {
+            has: true,
+            classes: {
+              "fa-edit": true,
+            },
+          },
+        },
+      },
+      deleteActionButton: {
+        meta: {
+          icon: {
+            has: true,
+            classes: {
+              "fa-trash": true,
+            },
+          },
+        },
+        classes: {
+          btn: true,
+          "btn-danger": true,
+          "btn-sm": true,
+        },
       },
     };
   },
@@ -244,7 +322,6 @@ export default {
   },
   async mounted() {
     const { data } = await this.getData(this.$route.params.id);
-    console.log("data", data);
     this.form = {
       ...data,
     };
@@ -287,7 +364,6 @@ export default {
     },
     validateModalState(name) {
       const { $dirty, $error } = this.$v.newuser[name];
-      console.log("dirty, error", { name, $dirty, $error });
       return $dirty ? !$error : null;
     },
     resetModal() {
@@ -296,6 +372,7 @@ export default {
         email: "",
         phone: "",
       };
+      this.editUserIndex = null;
 
       this.$v.$reset();
     },
@@ -311,8 +388,12 @@ export default {
         return;
       }
 
-      // Push the name to submitted names
-      this.form.users.push(this.newuser);
+      // Push / Update
+      if (this.editUserIndex != null && this.editUserIndex != -1) {
+        this.form.users[this.editUserIndex] = this.newuser;
+      } else this.form.users.push(this.newuser);
+
+      this.$root.$emit("bv::refresh::table", "users-b-table-id");
       this.resetModal();
 
       // Hide the modal manually
@@ -328,6 +409,36 @@ export default {
         notify.authError(error);
       }
     },
+    editActionButtonClick(data) {
+      const { name, email, phone } = data.item;
+      this.$bvModal.show("modal-prevent-closing");
+      this.editUserIndex = data.index;
+      this.newuser = {
+        name,
+        email,
+        phone,
+      };
+      this.$v.$reset();
+    },
+    deleteActionButtonClick(data) {
+      this.editUserIndex = data.index;
+      this.busy = true;
+    },
+
+    onOverlayCancel() {
+      this.busy = false;
+    },
+    onOverlayOK() {
+      if (this.editUserIndex > -1) {
+        this.form.users.splice(this.editUserIndex, 1);
+      }
+      this.$root.$emit("bv::refresh::table", "users-b-table-id");
+
+      this.busy = false;
+    },
+  },
+  components: {
+    ActionButton,
   },
 };
 </script>

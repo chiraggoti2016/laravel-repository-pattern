@@ -20,6 +20,7 @@ class CustomerResource extends JsonResource
             'address'   =>  $this->address,
             'country'   =>  $this->country,
             'users'     =>  UserResource::collection($this->users),
+            'projects'  =>  [],
         ];
     }
 }
