@@ -3,6 +3,7 @@ namespace App\Repositories;
 
 use App\Models\Customer;
 use App\Models\User;
+use App\Models\Project;
 use App\Contracts\CustomerContract;
 use App\Http\Resources\Customer as CustomerResource;
 use Illuminate\Http\Request;
@@ -27,9 +28,12 @@ class CustomerRepository extends BaseRepository implements CustomerContract
 
     function create($data) {
         $users = $data['users'];
-        unset($data['users']);
+        $projects = $data['projects'];
+        if(isset($data['users'])) unset($data['users']);
+        if(isset($data['projects'])) unset($data['projects']);
         if($customer = parent::create($data)) {
             $this->createUpdateUsers($customer, $users);
+            $this->createUpdateProjects($customer, $projects);
             return $customer;
         }
         return false;
@@ -37,10 +41,13 @@ class CustomerRepository extends BaseRepository implements CustomerContract
 
     function update($data, $id) {
         $users = $data['users'];
-        unset($data['users']);
+        $projects = $data['projects'];
+        if(isset($data['users'])) unset($data['users']);
+        if(isset($data['projects'])) unset($data['projects']);
         if(parent::update($data, $id)) {
             $customer = $this->findData($id);
             $this->createUpdateUsers($customer, $users);
+            $this->createUpdateProjects($customer, $projects);
             return $customer;
         }
         return false;
@@ -61,6 +68,14 @@ class CustomerRepository extends BaseRepository implements CustomerContract
         }, $users);
 
         $customer->users()->saveMany($users);
+    }
+
+    function createUpdateProjects($customer, $projects) {
+        $projects = array_map(function($each){
+            return new Project($each);
+        }, $projects);
+
+        $customer->projects()->saveMany($projects);
     }
 
 }

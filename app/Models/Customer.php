@@ -55,4 +55,9 @@ class Customer extends Model
     {
         return $this->belongsToMany(User::class, 'customer_users');
     }
+    
+    public function projects()
+    {
+        return $this->belongsToMany(Project::class, 'customer_projects');
+    }
 }

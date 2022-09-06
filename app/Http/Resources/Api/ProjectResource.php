@@ -4,7 +4,7 @@ namespace App\Http\Resources\Api;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class CustomerResource extends JsonResource
+class ProjectResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -15,12 +15,12 @@ class CustomerResource extends JsonResource
     public function toArray($request)
     {
         return [
-            'id'        =>  $this->id,
-            'name'      =>  $this->name,
-            'address'   =>  $this->address,
-            'country'   =>  $this->country,
-            'users'     =>  UserResource::collection($this->users),
-            'projects'  =>  ProjectResource::collection($this->projects),
+            'id'            =>  $this->id,
+            'name'          =>  $this->name,
+            'startdate'     =>  $this->startdate,
+            'startend'      =>  $this->startend,
+            'status'        =>  $this->status,
+            'scope'         =>  $this->scope
         ];
     }
 }

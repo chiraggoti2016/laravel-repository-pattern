@@ -23,7 +23,7 @@
               @click="resetForm()"
             >
               <span class="icon text-white-50">
-                <i class="fas fa-close"></i>
+                <i class="fa fa-undo-alt"></i>
               </span>
               <span class="text">Reset</span>
             </a>
@@ -93,103 +93,111 @@
         </b-container>
 
         <div class="table-responsive">
-          <div class="row">
-            <div class="col-6">Users</div>
-            <div
-              class="col-6 d-flex justify-content-end align-items-center mb-1"
-            >
-              <a
-                href="#"
-                class="btn btn-sm btn-primary btn-icon-split"
-                v-b-modal.modal-prevent-closing
-              >
-                <span class="icon text-white-50">
-                  <i class="fas fa-plus"></i>
-                </span>
-                <span class="text">Add User</span>
-              </a>
-            </div>
-          </div>
-          <b-table
-            id="users-b-table-id"
-            small
-            striped
-            hover
-            :items="form.users"
-            :fields="userFields"
-            responsive="sm"
-            caption-top
-          >
-            <template #cell(index)="data">
-              {{ data.index + 1 }}
-            </template>
+          <b-card title="Users">
+            <b-card-text>
+              <div class="d-flex justify-content-end align-items-center mb-1">
+                <a
+                  href="#"
+                  class="btn btn-sm btn-primary btn-icon-split"
+                  v-b-modal.modal-prevent-closing
+                >
+                  <span class="icon text-white-50">
+                    <i class="fas fa-plus"></i>
+                  </span>
+                  <span class="text">Add User</span>
+                </a>
+              </div>
+            </b-card-text>
 
-            <template #cell(actions)="data">
-              <action-button
-                :data="data"
-                :meta="editActionButton.meta"
-                name="edit"
-                @click="editActionButtonClick"
-              ></action-button>
-              <action-button
-                :data="data"
-                :meta="deleteActionButton.meta"
-                :classes="deleteActionButton.classes"
-                name="delete"
-                @click="deleteActionButtonClick"
-              ></action-button>
-            </template>
-          </b-table>
+            <b-card-text>
+              <b-table
+                id="users-b-table-id"
+                small
+                striped
+                hover
+                :items="form.users"
+                :fields="userFields"
+                responsive="sm"
+                caption-top
+              >
+                <template #cell(index)="data">
+                  {{ data.index + 1 }}
+                </template>
+
+                <template #cell(actions)="data">
+                  <action-button
+                    :data="data"
+                    :meta="editActionButton.meta"
+                    name="edit"
+                    @click="editActionButtonClick"
+                  ></action-button>
+                  <action-button
+                    :data="data"
+                    :meta="deleteActionButton.meta"
+                    :classes="deleteActionButton.classes"
+                    name="delete"
+                    @click="deleteActionButtonClick"
+                  ></action-button>
+                </template>
+              </b-table>
+            </b-card-text>
+          </b-card>
         </div>
 
         <div class="table-responsive">
-          <div class="row">
-            <div class="col-6">Projects</div>
-            <div
-              class="col-6 d-flex justify-content-end align-items-center mb-1"
-            >
-              <a
-                href="#"
-                class="btn btn-sm btn-primary btn-icon-split"
-                v-b-modal.modal-project
-              >
-                <span class="icon text-white-50">
-                  <i class="fas fa-plus"></i>
-                </span>
-                <span class="text">Add Project</span>
-              </a>
-            </div>
-          </div>
-          <b-table
-            id="projects-b-table-id"
-            small
-            striped
-            hover
-            :items="form.projects"
-            :fields="projectFields"
-            responsive="sm"
-            caption-top
-          >
-            <template #cell(index)="data">
-              {{ data.index + 1 }}
-            </template>
+          <b-card title="Projects">
+            <b-card-text>
+              <div class="d-flex justify-content-end align-items-center mb-1">
+                <a
+                  href="#"
+                  class="btn btn-sm btn-primary btn-icon-split"
+                  v-b-modal.modal-project
+                >
+                  <span class="icon text-white-50">
+                    <i class="fas fa-plus"></i>
+                  </span>
+                  <span class="text">Add Project</span>
+                </a>
+              </div>
+            </b-card-text>
 
-            <template #cell(actions)="data">
-              <action-button
-                :data="data"
-                :meta="editActionButton.meta"
-                name="edit"
-                @click="editProjectActionButtonClick"
-              ></action-button>
-              <action-button
-                :data="data"
-                :meta="deleteActionButton.meta"
-                :classes="deleteActionButton.classes"
-                name="delete"
-                @click="deleteProjectActionButtonClick"
-              ></action-button>
-            </template>
-          </b-table>
+            <b-card-text>
+              <b-table
+                id="projects-b-table-id"
+                small
+                striped
+                hover
+                :items="form.projects"
+                :fields="projectFields"
+                responsive="sm"
+                caption-top
+              >
+                <template #cell(index)="data">
+                  {{ data.index + 1 }}
+                </template>
+
+                <template #cell(status)="data">
+                  <b-badge variant="secondary">{{ data.item.status }}</b-badge>
+                </template>
+
+                <template #cell(actions)="data">
+                  <action-button
+                    :data="data"
+                    :meta="editActionButton.meta"
+                    name="edit"
+                    @click="editProjectActionButtonClick"
+                  ></action-button>
+                  <action-button
+                    :data="data"
+                    :meta="deleteActionButton.meta"
+                    :classes="deleteActionButton.classes"
+                    name="delete"
+                    @click="deleteProjectActionButtonClick"
+                  ></action-button>
+                </template>
+              </b-table>
+            </b-card-text>
+          </b-card>
         </div>
       </div>
     </div>
@@ -269,6 +277,12 @@
           <div class="invalid-feedback" v-if="!$v.newuser.email.email">
             Enter vaild email.
           </div>
+          <div
+            class="invalid-feedback"
+            v-if="!$v.newuser.email.isEmailAlreadyExists"
+          >
+            Email already exists.
+          </div>
         </b-form-group>
 
         <b-form-group
@@ -328,7 +342,7 @@
           label="Start Date"
           label-for="modal-startdate-input"
         >
-          <b-form-input
+          <b-form-datepicker
             id="modal-startdate-input"
             name="modal-startdate-input"
             class="mb-2 mr-sm-2 mb-sm-0"
@@ -336,7 +350,7 @@
             v-model="$v.newproject.startdate.$model"
             :state="validateProjectModalState('startdate')"
             aria-describedby="project-modal-input-2-live-feedback"
-          ></b-form-input>
+          ></b-form-datepicker>
           <div
             class="invalid-feedback"
             v-if="!$v.newproject.startdate.required"
@@ -350,7 +364,7 @@
           label="End Date"
           label-for="modal-enddate-input"
         >
-          <b-form-input
+          <b-form-datepicker
             id="modal-enddate-input"
             name="modal-enddate-input"
             class="mb-2 mr-sm-2 mb-sm-0"
@@ -358,7 +372,7 @@
             v-model="$v.newproject.enddate.$model"
             :state="validateProjectModalState('enddate')"
             aria-describedby="project-modal-input-3-live-feedback"
-          ></b-form-input>
+          ></b-form-datepicker>
           <div class="invalid-feedback" v-if="!$v.newproject.enddate.required">
             This is a required field.
           </div>
@@ -374,13 +388,13 @@ import * as notify from "../../../utils/notify.js";
 import { reactive, toRefs } from "vue";
 import { validationMixin } from "vuelidate";
 import { required, email, helpers, numeric } from "vuelidate/lib/validators";
-
 export default {
   name: "AddCustomer",
   mixins: [validationMixin],
   data() {
     return {
       busy: false,
+      isDeleteFor: null,
       userFields: ["index", "name", "email", "phone", "actions"],
       projectFields: [
         "index",
@@ -402,12 +416,14 @@ export default {
         name: null,
         email: null,
         phone: null,
+        isNew: true,
       },
       newproject: {
         name: "",
         startdate: "",
         enddate: "",
-        status: "",
+        status: "pending",
+        isNew: true,
       },
       editProjectIndex: null,
       editActionButton: {
@@ -456,6 +472,13 @@ export default {
       email: {
         required,
         email,
+        isEmailAlreadyExists: (value, vm) => {
+          if (value === "" || value === null) return true;
+          return axios.post("users/email-already-exists", {
+            email: value,
+            id: vm.id,
+          });
+        },
       },
       phone: {
         required,
@@ -527,9 +550,11 @@ export default {
     },
     resetModal() {
       this.newuser = {
+        id: null,
         name: "",
         email: "",
         phone: "",
+        isNew: true,
       };
       this.editUserIndex = null;
 
@@ -537,9 +562,12 @@ export default {
     },
     resetProjectModal() {
       this.newproject = {
+        id: null,
         name: "",
         startdate: "",
         enddate: "",
+        status: "pending",
+        isNew: true,
       };
       this.editProjectIndex = null;
 
@@ -565,8 +593,8 @@ export default {
 
       // Push / Update
       if (this.editUserIndex != null && this.editUserIndex != -1) {
-        this.form.users[this.editUserIndex] = this.newuser;
-      } else this.form.users.push(this.newuser);
+        this.form.users[this.editUserIndex] = { ...this.newuser, isNew: false };
+      } else this.form.users.push({ ...this.newuser, isNew: true, id: null });
 
       this.$root.$emit("bv::refresh::table", "users-b-table-id");
       this.resetModal();
@@ -584,8 +612,12 @@ export default {
 
       // Push / Update
       if (this.editProjectIndex != null && this.editProjectIndex != -1) {
-        this.form.projects[this.editProjectIndex] = this.newproject;
-      } else this.form.projects.push(this.newproject);
+        this.form.projects[this.editProjectIndex] = {
+          ...this.newproject,
+          isNew: false,
+        };
+      } else
+        this.form.projects.push({ ...this.newproject, isNew: true, id: null });
 
       this.$root.$emit("bv::refresh::table", "projects-b-table-id");
       this.resetProjectModal();
@@ -604,10 +636,11 @@ export default {
       }
     },
     editActionButtonClick(data) {
-      const { name, email, phone } = data.item;
+      const { id, name, email, phone } = data.item;
       this.$bvModal.show("modal-prevent-closing");
       this.editUserIndex = data.index;
       this.newuser = {
+        id,
         name,
         email,
         phone,
@@ -615,35 +648,48 @@ export default {
       this.$v.$reset();
     },
     deleteActionButtonClick(data) {
+      this.isDeleteFor = "user";
       this.editUserIndex = data.index;
       this.busy = true;
     },
     editProjectActionButtonClick(data) {
-      const { name, startdate, enddate } = data.item;
+      const { id, name, startdate, enddate, status } = data.item;
       this.$bvModal.show("modal-project");
       this.editProjectIndex = data.index;
       this.newproject = {
+        id,
         name,
         startdate,
         enddate,
+        status,
       };
       this.$v.$reset();
     },
     deleteProjectActionButtonClick(data) {
+      this.isDeleteFor = "project";
       this.editProjectIndex = data.index;
       this.busy = true;
     },
 
     onOverlayCancel() {
+      this.isDeleteFor = null;
       this.busy = false;
     },
     onOverlayOK() {
-      if (this.editUserIndex > -1) {
-        this.form.users.splice(this.editUserIndex, 1);
+      if (this.isDeleteFor == "user") {
+        if (this.editUserIndex > -1) {
+          this.form.users.splice(this.editUserIndex, 1);
+        }
+        this.$root.$emit("bv::refresh::table", "users-b-table-id");
+      } else {
+        if (this.editProjectIndex > -1) {
+          this.form.projects.splice(this.editProjectIndex, 1);
+        }
+        this.$root.$emit("bv::refresh::table", "users-b-table-id");
       }
-      this.$root.$emit("bv::refresh::table", "users-b-table-id");
 
       this.busy = false;
+      this.isDeleteFor = null;
     },
   },
   components: {

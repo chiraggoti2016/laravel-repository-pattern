@@ -93,17 +93,22 @@
         </b-container>
 
         <div class="table-responsive">
-          <div class="d-flex justify-content-end align-items-center mb-1">
-            <a
-              href="#"
-              class="btn btn-sm btn-primary btn-icon-split"
-              v-b-modal.modal-prevent-closing
+          <div class="row">
+            <div class="col-6">Users</div>
+            <div
+              class="col-6 d-flex justify-content-end align-items-center mb-1"
             >
-              <span class="icon text-white-50">
-                <i class="fas fa-plus"></i>
-              </span>
-              <span class="text">Add User</span>
-            </a>
+              <a
+                href="#"
+                class="btn btn-sm btn-primary btn-icon-split"
+                v-b-modal.modal-prevent-closing
+              >
+                <span class="icon text-white-50">
+                  <i class="fas fa-plus"></i>
+                </span>
+                <span class="text">Add User</span>
+              </a>
+            </div>
           </div>
           <b-table
             id="users-b-table-id"
@@ -113,6 +118,7 @@
             :items="form.users"
             :fields="userFields"
             responsive="sm"
+            caption-top
           >
             <template #cell(index)="data">
               {{ data.index + 1 }}
@@ -131,6 +137,60 @@
                 :classes="deleteActionButton.classes"
                 name="delete"
                 @click="deleteActionButtonClick"
+              ></action-button>
+            </template>
+          </b-table>
+        </div>
+
+        <div class="table-responsive">
+          <div class="row">
+            <div class="col-6">Projects</div>
+            <div
+              class="col-6 d-flex justify-content-end align-items-center mb-1"
+            >
+              <a
+                href="#"
+                class="btn btn-sm btn-primary btn-icon-split"
+                v-b-modal.modal-project
+              >
+                <span class="icon text-white-50">
+                  <i class="fas fa-plus"></i>
+                </span>
+                <span class="text">Add Project</span>
+              </a>
+            </div>
+          </div>
+          <b-table
+            id="projects-b-table-id"
+            small
+            striped
+            hover
+            :items="form.projects"
+            :fields="projectFields"
+            responsive="sm"
+            caption-top
+          >
+            <template #cell(index)="data">
+              {{ data.index + 1 }}
+            </template>
+
+            <template #cell(status)="data">
+              <b-badge variant="secondary">{{ data.status }}</b-badge>
+            </template>
+
+            <template #cell(actions)="data">
+              <action-button
+                :data="data"
+                :meta="editActionButton.meta"
+                name="edit"
+                @click="editProjectActionButtonClick"
+              ></action-button>
+              <action-button
+                :data="data"
+                :meta="deleteActionButton.meta"
+                :classes="deleteActionButton.classes"
+                name="delete"
+                @click="deleteProjectActionButtonClick"
               ></action-button>
             </template>
           </b-table>
@@ -238,6 +298,77 @@
         </b-form-group>
       </form>
     </b-modal>
+
+    <b-modal
+      id="modal-project"
+      ref="modal2"
+      title="Add Project"
+      @show="resetProjectModal"
+      @hidden="resetProjectModal"
+      @ok="handleProjectOk"
+    >
+      <form ref="form" @submit.stop.prevent="handleAddProjectSubmit">
+        <b-form-group
+          id="project-modal-input-group-1"
+          label="Name"
+          label-for="modal-name-input"
+        >
+          <b-form-input
+            id="modal-name-input"
+            name="modal-name-input"
+            class="mb-2 mr-sm-2 mb-sm-0"
+            placeholder="Name"
+            v-model="$v.newproject.name.$model"
+            :state="validateProjectModalState('name')"
+            aria-describedby="project-modal-input-1-live-feedback"
+          ></b-form-input>
+          <b-form-invalid-feedback id="project-modal-input-1-live-feedback"
+            >This is a required field.</b-form-invalid-feedback
+          >
+        </b-form-group>
+
+        <b-form-group
+          id="project-modal-input-group-2"
+          label="Start Date"
+          label-for="modal-startdate-input"
+        >
+          <b-form-datepicker
+            id="modal-startdate-input"
+            name="modal-startdate-input"
+            class="mb-2 mr-sm-2 mb-sm-0"
+            placeholder="Start Date"
+            v-model="$v.newproject.startdate.$model"
+            :state="validateProjectModalState('startdate')"
+            aria-describedby="project-modal-input-2-live-feedback"
+          ></b-form-datepicker>
+          <div
+            class="invalid-feedback"
+            v-if="!$v.newproject.startdate.required"
+          >
+            This is a required field.
+          </div>
+        </b-form-group>
+
+        <b-form-group
+          id="project-modal-input-group-3"
+          label="End Date"
+          label-for="modal-enddate-input"
+        >
+          <b-form-datepicker
+            id="modal-enddate-input"
+            name="modal-enddate-input"
+            class="mb-2 mr-sm-2 mb-sm-0"
+            placeholder="End Date"
+            v-model="$v.newproject.enddate.$model"
+            :state="validateProjectModalState('enddate')"
+            aria-describedby="project-modal-input-3-live-feedback"
+          ></b-form-datepicker>
+          <div class="invalid-feedback" v-if="!$v.newproject.enddate.required">
+            This is a required field.
+          </div>
+        </b-form-group>
+      </form>
+    </b-modal>
   </div>
 </template>
 
@@ -254,12 +385,22 @@ export default {
   data() {
     return {
       busy: false,
+      isDeleteFor: null,
       userFields: ["index", "name", "email", "phone", "actions"],
+      projectFields: [
+        "index",
+        "name",
+        "status",
+        "startdate",
+        "enddate",
+        "actions",
+      ],
       form: {
         name: null,
         address: null,
         country: null,
         users: [],
+        projects: [],
       },
       editUserIndex: null,
       newuser: {
@@ -267,6 +408,13 @@ export default {
         email: null,
         phone: null,
       },
+      newproject: {
+        name: "",
+        startdate: "",
+        enddate: "",
+        status: "pending",
+      },
+      editProjectIndex: null,
       editActionButton: {
         meta: {
           icon: {
@@ -319,6 +467,17 @@ export default {
         numbercheck: helpers.regex("phone", /^(\+\d{1,3}[- ]?)?\d{10}$/),
       },
     },
+    newproject: {
+      name: {
+        required,
+      },
+      startdate: {
+        required,
+      },
+      enddate: {
+        required,
+      },
+    },
   },
   methods: {
     validateState(name) {
@@ -331,6 +490,7 @@ export default {
         address: null,
         country: null,
         users: [],
+        projects: [],
       };
 
       this.$nextTick(() => {
@@ -359,6 +519,10 @@ export default {
       const { $dirty, $error } = this.$v.newuser[name];
       return $dirty ? !$error : null;
     },
+    validateProjectModalState(name) {
+      const { $dirty, $error } = this.$v.newproject[name];
+      return $dirty ? !$error : null;
+    },
     resetModal() {
       this.newuser = {
         name: "",
@@ -369,11 +533,28 @@ export default {
 
       this.$v.$reset();
     },
+    resetProjectModal() {
+      this.newproject = {
+        name: "",
+        startdate: "",
+        enddate: "",
+        status: "pending",
+      };
+      this.editProjectIndex = null;
+
+      this.$v.$reset();
+    },
     handleOk(bvModalEvent) {
       // Prevent modal from closing
       bvModalEvent.preventDefault();
       // Trigger submit handler
       this.handleAddUserSubmit();
+    },
+    handleProjectOk(bvModalEvent) {
+      // Prevent modal from closing
+      bvModalEvent.preventDefault();
+      // Trigger submit handler
+      this.handleAddProjectSubmit();
     },
     handleAddUserSubmit() {
       this.$v.newuser.$touch();
@@ -395,6 +576,26 @@ export default {
       });
     },
 
+    handleAddProjectSubmit() {
+      this.$v.newproject.$touch();
+      if (this.$v.newproject.$anyError) {
+        return;
+      }
+
+      // Push / Update
+      if (this.editProjectIndex != null && this.editProjectIndex != -1) {
+        this.form.projects[this.editProjectIndex] = this.newproject;
+      } else this.form.projects.push(this.newproject);
+
+      this.$root.$emit("bv::refresh::table", "projects-b-table-id");
+      this.resetProjectModal();
+
+      // Hide the modal manually
+      this.$nextTick(() => {
+        this.$bvModal.hide("modal-project");
+      });
+    },
+
     editActionButtonClick(data) {
       const { name, email, phone } = data.item;
       this.$bvModal.show("modal-prevent-closing");
@@ -407,20 +608,47 @@ export default {
       this.$v.$reset();
     },
     deleteActionButtonClick(data) {
+      this.isDeleteFor = "user";
       this.editUserIndex = data.index;
+      this.busy = true;
+    },
+    editProjectActionButtonClick(data) {
+      const { name, startdate, enddate, status } = data.item;
+      this.$bvModal.show("modal-project");
+      this.editProjectIndex = data.index;
+      this.newproject = {
+        name,
+        startdate,
+        enddate,
+        status,
+      };
+      this.$v.$reset();
+    },
+    deleteProjectActionButtonClick(data) {
+      this.isDeleteFor = "project";
+      this.editProjectIndex = data.index;
       this.busy = true;
     },
 
     onOverlayCancel() {
+      this.isDeleteFor = null;
       this.busy = false;
     },
     onOverlayOK() {
-      if (this.editUserIndex > -1) {
-        this.form.users.splice(this.editUserIndex, 1);
+      if (this.isDeleteFor == "user") {
+        if (this.editUserIndex > -1) {
+          this.form.users.splice(this.editUserIndex, 1);
+        }
+        this.$root.$emit("bv::refresh::table", "users-b-table-id");
+      } else {
+        if (this.editProjectIndex > -1) {
+          this.form.projects.splice(this.editProjectIndex, 1);
+        }
+        this.$root.$emit("bv::refresh::table", "users-b-table-id");
       }
-      this.$root.$emit("bv::refresh::table", "users-b-table-id");
 
       this.busy = false;
+      this.isDeleteFor = null;
     },
   },
   components: {
