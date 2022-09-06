@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Http\Requests\Api\Users\AddUsersRequest;
 use App\Http\Requests\Api\Users\UpdateUsersRequest;
 use App\Contracts\UserContract;
+use App\Http\Requests\Api\Users\EmailAlreadyExistsRequest;
 
 class UsersController extends Controller
 {
@@ -48,4 +49,8 @@ class UsersController extends Controller
 		$res=$this->userService->delete($id);
 		return $this->sendResponse($res);
     }
+
+	public function emailAlreadyExists(EmailAlreadyExistsRequest $request) { 
+		return $this->sendResponse(); 
+	}
 }

@@ -36,16 +36,12 @@ class Customer extends Model
     ];
 
     protected $appends = [
-        'users_count',
-        'projects_count',
         'oracle',
         'microsoft',
         'vmware',
         'sap',
     ];
     
-    public function getUsersCountAttribute() { return 0; }
-    public function getProjectsCountAttribute() { return 0; }
     public function getOracleAttribute() { return true; }
     public function getMicrosoftAttribute() { return false; }
     public function getVmwareAttribute() { return false; }

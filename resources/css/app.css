@@ -1,0 +1,7 @@
+.participant-red-header-text {
+    color:red;
+}
+
+.custom-control-input.is-valid ~ .custom-control-label {
+    color: inherit !important;
+}

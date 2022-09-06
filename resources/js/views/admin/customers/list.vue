@@ -122,28 +122,6 @@ export default {
           handler: () => {},
           component: ActionButton,
         },
-        {
-          label: "",
-          name: "delete",
-          orderable: false,
-          classes: {
-            btn: true,
-            "btn-danger": true,
-            "btn-sm": true,
-          },
-          meta: {
-            prefixLink: null,
-            icon: {
-              has: true,
-              classes: {
-                "fa-trash": true,
-              },
-            },
-          },
-          event: "click",
-          handler: this.deleteAction,
-          component: ActionButton,
-        },
       ],
       headers: {
         ...axiosHeaders,
@@ -160,10 +138,6 @@ export default {
     },
     onOverlayOK() {
       this.busy = false;
-    },
-    deleteAction(data) {
-      console.log("delete action");
-      this.busy = true;
     },
   },
 };

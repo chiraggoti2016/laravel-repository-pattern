@@ -6,3 +6,4 @@ window.axiosHeaders = {
     Authorization: 'Bearer ' + localStorage.getItem('token'),
 };
 
+export default axios;  

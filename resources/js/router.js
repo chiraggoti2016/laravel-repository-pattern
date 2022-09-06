@@ -93,6 +93,15 @@ let router = new Router({
             }
         },
         {
+            path: "/admin/customers/open/project/:id/:projectid",
+            name: "customersopen",
+            component: () => import("./views/admin/customers/open/index.vue"),
+            meta: {
+                requiresAuth: true,
+                layout: AdminLayout
+            }
+        },
+        {
             path: "/admin/customers/edit/:id",
             name: "customersedit",
             component: () => import("./views/admin/customers/edit.vue"),

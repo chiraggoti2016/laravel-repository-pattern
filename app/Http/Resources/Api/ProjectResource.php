@@ -18,9 +18,11 @@ class ProjectResource extends JsonResource
             'id'            =>  $this->id,
             'name'          =>  $this->name,
             'startdate'     =>  $this->startdate,
-            'startend'      =>  $this->startend,
+            'enddate'       =>  $this->enddate,
             'status'        =>  $this->status,
-            'scope'         =>  $this->scope
+            'scope'         =>  $this->scope,
+            'isNew'         =>  false,
+            'participants'  =>  $this->participants ?? [],
         ];
     }
 }

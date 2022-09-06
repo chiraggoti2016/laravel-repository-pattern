@@ -10,10 +10,12 @@
  import "./axios";
  import store from "./vuex";
  import common from './mixins/common.js';
+ import * as constants from './mixins/constants';
  import Toasted from "vue-toasted";
  import Chart from "chart.js";
  import DataTable from 'laravel-vue-datatable';
  import BootstrapVue from "bootstrap-vue";
+ import Vuelidate from "vuelidate";
 
 
 //  import "bootstrap/dist/css/bootstrap.css";
@@ -23,8 +25,12 @@
  Vue.use(Toasted);
 
 
+ Vue.use(Vuelidate);
  // Mixins
  Vue.mixin(common);
+
+ //  constants
+ Vue.mixin(constants);
 
  Vue.use(DataTable);
  Vue.use(BootstrapVue);

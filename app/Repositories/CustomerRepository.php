@@ -4,10 +4,12 @@ namespace App\Repositories;
 use App\Models\Customer;
 use App\Models\User;
 use App\Models\Project;
+use App\Models\ProjectParticipant;
 use App\Contracts\CustomerContract;
 use App\Http\Resources\Customer as CustomerResource;
 use Illuminate\Http\Request;
 use DataTableCollectionResource;
+use DB;
 
 class CustomerRepository extends BaseRepository implements CustomerContract
 {
@@ -20,64 +22,96 @@ class CustomerRepository extends BaseRepository implements CustomerContract
         $orderBy = $request->input('column'); //Index
         $orderByDir = $request->input('dir', 'asc');
         $searchValue = $request->input('search');
-
-        $query = Customer::eloquentQuery($orderBy, $orderByDir, $searchValue);
+        
+        $query = Customer::eloquentQuery($orderBy, $orderByDir, $searchValue)->withCount(['users', 'projects']);
         $data = $query->paginate($length);
         return new DataTableCollectionResource($data);
     }
 
     function create($data) {
-        $users = $data['users'];
-        $projects = $data['projects'];
-        if(isset($data['users'])) unset($data['users']);
-        if(isset($data['projects'])) unset($data['projects']);
-        if($customer = parent::create($data)) {
-            $this->createUpdateUsers($customer, $users);
-            $this->createUpdateProjects($customer, $projects);
-            return $customer;
+        DB::beginTransaction();
+        try {
+            $users = $data['users'];
+            $projects = $data['projects'];
+            if(isset($data['users'])) unset($data['users']);
+            if(isset($data['projects'])) unset($data['projects']);
+            if($customer = parent::create($data)) {
+                $usersIds = $this->createUpdateUsers($customer, $users);
+                $projectsIds = $this->createUpdateProjects($customer, $projects);
+                $this->attachProjectParticipants($projectsIds, $usersIds);
+                DB::commit();
+                return $customer;
+            }
+        }catch(\Throwable $e){
+            DB::rollBack();
+            dd($e);
+            Log::debug('Customer Repository : ',[ 'error' =>$e ]);
         }
         return false;
     }
 
     function update($data, $id) {
-        $users = $data['users'];
-        $projects = $data['projects'];
-        if(isset($data['users'])) unset($data['users']);
-        if(isset($data['projects'])) unset($data['projects']);
-        if(parent::update($data, $id)) {
-            $customer = $this->findData($id);
-            $this->createUpdateUsers($customer, $users);
-            $this->createUpdateProjects($customer, $projects);
-            return $customer;
+        DB::beginTransaction();
+        try {
+            $users = $data['users'];
+            $projects = $data['projects'];
+            if(isset($data['users'])) unset($data['users']);
+            if(isset($data['projects'])) unset($data['projects']);
+            if(parent::update($data, $id)) {
+                $customer = $this->findData($id);
+                $usersIds = $this->createUpdateUsers($customer, $users);
+                $projectsIds = $this->createUpdateProjects($customer, $projects);
+                $this->attachProjectParticipants($projectsIds, $usersIds);
+                DB::commit();
+                return $customer;
+            }
+        }catch(\Throwable $e){
+            DB::rollBack();
+            dd($e);
+            \Log::debug('Customer Repository : ',[ 'error' =>$e ]);
         }
         return false;
     }
 
     function createUpdateUsers($customer, $users) {
-        $users = array_map(function($each){
+        $userIds = array_map(function($each){
             $password = '123456';
             $name = explode(' ', $each['name']);
             unset($each['name']);
-            $user = array_merge([
+            $userData = array_merge([
                 'first_name' => isset($name[0]) ? $name[0] : '',
                 'last_name' => isset($name[1]) ? $name[1] : '',
                 'password' => \Hash::make($password),
                 'role'      => 'customer',
             ], $each);
-            return new User($user);
+            $user = User::updateOrCreate(['id' =>$userData['id']],$userData);
+            return $user->id;
         }, $users);
 
-        $customer->users()->saveMany($users);
+        $customer->users()->sync($userIds);
+        return $userIds;
     }
 
     function createUpdateProjects($customer, $projects) {
-        $projects = array_map(function($each){
-            return new Project($each);
+        $projectIds = array_map(function($each){
+            $project = Project::updateOrCreate(['id' => $each['id']],$each);
+            return $project->id;
         }, $projects);
 
-        $customer->projects()->saveMany($projects);
+        $customer->projects()->sync($projectIds);
+        return $projectIds;
     }
 
+    function attachProjectParticipants($projectsIds, $usersIds) {
+        foreach($projectsIds as $project_id) {
+            foreach($usersIds as $user_id) {
+                ProjectParticipant::updateOrCreate([
+                    'user_id'       => $user_id,
+                    'project_id'    => $project_id
+                ]);
+            }
+        }
+    }
 }
 
 ?>

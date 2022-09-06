@@ -7,6 +7,7 @@ use App\Contracts\PartnerContract;
 use App\Http\Resources\Partner as PartnerResource;
 use Illuminate\Http\Request;
 use DataTableCollectionResource;
+use DB;
 
 class PartnerRepository extends BaseRepository implements PartnerContract
 {
@@ -20,46 +21,61 @@ class PartnerRepository extends BaseRepository implements PartnerContract
         $orderByDir = $request->input('dir', 'asc');
         $searchValue = $request->input('search');
 
-        $query = Partner::eloquentQuery($orderBy, $orderByDir, $searchValue);
+        $query = Partner::eloquentQuery($orderBy, $orderByDir, $searchValue)->withCount(['users']);
         $data = $query->paginate($length);
         return new DataTableCollectionResource($data);
     }
 
     function create($data) {
-        $users = $data['users'];
-        unset($data['users']);
-        if($partner = parent::create($data)) {
-            $this->createUpdateUsers($partner, $users);
-            return $partner;
+        DB::beginTransaction();
+        try {
+            $users = $data['users'];
+            unset($data['users']);
+            if($partner = parent::create($data)) {
+                $this->createUpdateUsers($partner, $users);
+                DB::commit();
+                return $partner;
+            }
+        }catch(\Throwable $e){
+            DB::rollBack();
+            Log::debug('Customer Repository : ',[ 'error' =>$e ]);
         }
         return false;
     }
 
     function update($data, $id) {
-        $users = $data['users'];
-        unset($data['users']);
-        if(parent::update($data, $id)) {
-            $partner = $this->findData($id);
-            $this->createUpdateUsers($partner, $users);
-            return $partner;
+        DB::beginTransaction();
+        try {
+            $users = $data['users'];
+            unset($data['users']);
+            if(parent::update($data, $id)) {
+                $partner = $this->findData($id);
+                $this->createUpdateUsers($partner, $users);
+                DB::commit();
+                return $partner;
+            }
+        }catch(\Throwable $e){
+            DB::rollBack();
+            Log::debug('Customer Repository : ',[ 'error' =>$e ]);
         }
         return false;
     }
 
     function createUpdateUsers($partner, $users) {
-        $users = array_map(function($each){
+        $userIds = array_map(function($each){
             $password = '123456';
             $name = explode(' ', $each['name']);
             unset($each['name']);
-            $user = array_merge([
+            $userData = array_merge([
                 'first_name' => isset($name[0]) ? $name[0] : '',
                 'last_name' => isset($name[1]) ? $name[1] : '',
                 'password' => \Hash::make($password),
             ], $each);
-            return new User($user);
+            $user = User::updateOrCreate(['id' =>$userData['id']],$userData);
+            return $user->id;
         }, $users);
 
-        $partner->users()->saveMany($users);
+        $partner->users()->sync($userIds);
     }
 
 }

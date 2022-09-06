@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Project extends Model
+class ProjectParticipant extends Model
 {
     use HasFactory;
     /**
@@ -14,15 +14,7 @@ class Project extends Model
      * @var array
      */
     protected $fillable = [
-        'name',
-        'startdate',
-        'enddate',
-        'status',
-        'scope',
+        'user_id',
+        'project_id',
     ];
-
-    public function participants()
-    {
-        return $this->belongsToMany(User::class, 'project_participants');
-    }
 }

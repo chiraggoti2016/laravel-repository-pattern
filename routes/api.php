@@ -28,7 +28,9 @@ Route::group(['middleware' => ['auth:api']], function () {
     Route::resource('partners',Api\PartnersController::class);
     Route::resource('customers',Api\CustomersController::class);
     Route::resource('users',Api\UsersController::class);
+    Route::resource('projects',Api\ProjectsController::class);
     Route::get('users',[Api\UsersController::class, 'index'])->name('users.get');
+    Route::post('users/email-already-exists', [Api\UsersController::class, 'emailAlreadyExists'])->name('users.email-already-exists');
     Route::get('partners',[Api\PartnersController::class, 'index'])->name('users.get');
     Route::get('customers',[Api\CustomersController::class, 'index'])->name('users.get');
 });

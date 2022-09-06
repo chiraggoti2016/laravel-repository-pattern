@@ -36,21 +36,24 @@ class Partner extends Model
     ];
 
     protected $appends = [
-        'users_count',
         'customers_count',
         'ola_engagements_count',
         'completed',
         'cancelled',
     ];
     
-    public function getUsersCountAttribute() { return 0; }
     public function getCustomersCountAttribute() { return 0; }
     public function getOlaEngagementsCountAttribute() { return 0; }
-    public function getCompletedAttribute() { return false; }
-    public function getCancelledAttribute() { return false; }
+    public function getCompletedAttribute() { return 0; }
+    public function getCancelledAttribute() { return 0; }
 
     public function users()
     {
         return $this->belongsToMany(User::class, 'partner_users');
     }
+
+    // public function customers()
+    // {
+    //     return $this->belongsToMany(User::class, 'partner_customers');
+    // }
 }
