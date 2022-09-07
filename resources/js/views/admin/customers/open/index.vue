@@ -408,7 +408,7 @@ import ActionButton from "./../../components/ActionButton.vue";
 import * as notify from "../../../../utils/notify.js";
 import { validationMixin } from "vuelidate";
 import { required, email, helpers, numeric } from "vuelidate/lib/validators";
-import { SCOPE_OPTIONS } from "../../../../mixins/constants";
+import { SCOPE_OPTIONS, SCOPE_STAGES } from "../../../../mixins/constants";
 export default {
   name: "CustomersProjectOpen",
   mixins: [validationMixin],

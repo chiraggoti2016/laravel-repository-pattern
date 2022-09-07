@@ -44,7 +44,6 @@ class CustomerRepository extends BaseRepository implements CustomerContract
             }
         }catch(\Throwable $e){
             DB::rollBack();
-            dd($e);
             Log::debug('Customer Repository : ',[ 'error' =>$e ]);
         }
         return false;
@@ -67,7 +66,6 @@ class CustomerRepository extends BaseRepository implements CustomerContract
             }
         }catch(\Throwable $e){
             DB::rollBack();
-            dd($e);
             \Log::debug('Customer Repository : ',[ 'error' =>$e ]);
         }
         return false;

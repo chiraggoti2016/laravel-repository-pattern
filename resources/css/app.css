@@ -5,3 +5,8 @@
 .custom-control-input.is-valid ~ .custom-control-label {
     color: inherit !important;
 }
+
+/* zero-last-action-padding */
+.zero-last-action-padding table tbody tr td:last-child {
+    padding-left: 0px;
+}
