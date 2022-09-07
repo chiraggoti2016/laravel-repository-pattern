@@ -95,7 +95,17 @@
         </b-container>
 
         <div class="table-responsive">
-          <b-card sub-title="Users">
+          <b-card
+            sub-title="Users"
+            class="form-list"
+            :class="
+              $v.form.users.$dirty
+                ? $v.form.users.$invalid
+                  ? 'is-invalid'
+                  : 'is-valid'
+                : ''
+            "
+          >
             <b-card-text>
               <div class="d-flex justify-content-end align-items-center mb-1">
                 <a
@@ -113,6 +123,7 @@
 
             <b-card-text>
               <b-table
+                v-if="form.users.length > 0"
                 id="users-b-table-id"
                 small
                 striped
@@ -142,6 +153,15 @@
                   ></action-button>
                 </template>
               </b-table>
+              <p
+                v-if="$v.form.users.$dirty && $v.form.users.$invalid"
+                class="mb-0"
+              >
+                No Data
+              </p>
+              <div class="invalid-feedback" v-if="!$v.form.users.required">
+                Please add at least one user.
+              </div>
             </b-card-text>
           </b-card>
         </div>
@@ -178,10 +198,11 @@
     <b-modal
       id="modal-prevent-closing"
       ref="modal"
-      title="Add User"
+      :title="editUserIndex !== null ? 'Edit User' : 'Add User'"
       @show="resetModal"
       @hidden="resetModal"
       @ok="handleOk"
+      :ok-title="editUserIndex !== null ? 'Edit' : 'Add'"
     >
       <form ref="form" @submit.stop.prevent="handleAddUserSubmit">
         <b-form-group
@@ -331,6 +352,9 @@ export default {
         required,
       },
       country: {
+        required,
+      },
+      users: {
         required,
       },
     },

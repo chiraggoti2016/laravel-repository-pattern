@@ -16,9 +16,9 @@ class CreatePartnerCustomersTable extends Migration
         Schema::create('partner_customers', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('customer_id')->comment('customer id');
-            $table->foreign('customer_id')->references('id')->on('customers');
+            $table->foreign('customer_id')->references('id')->on('customers')->onDelete('cascade');
             $table->unsignedBigInteger('partner_id')->comment('partner id');
-            $table->foreign('partner_id')->references('id')->on('partners');
+            $table->foreign('partner_id')->references('id')->on('partners')->onDelete('cascade');
             $table->timestamps();
         });
     }

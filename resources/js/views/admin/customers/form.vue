@@ -95,7 +95,17 @@
         </b-container>
 
         <div class="table-responsive">
-          <b-card sub-title="Users">
+          <b-card
+            sub-title="Users"
+            class="form-list"
+            :class="
+              $v.form.users.$dirty
+                ? $v.form.users.$invalid
+                  ? 'is-invalid'
+                  : 'is-valid'
+                : ''
+            "
+          >
             <b-card-text>
               <div class="d-flex justify-content-end align-items-center mb-1">
                 <a
@@ -113,6 +123,7 @@
 
             <b-card-text>
               <b-table
+                v-if="form.users.length > 0"
                 id="users-b-table-id"
                 small
                 striped
@@ -142,12 +153,26 @@
                   ></action-button>
                 </template>
               </b-table>
+              <p v-if="form.users.length === 0" class="mb-0">No Data</p>
+              <div class="invalid-feedback" v-if="!$v.form.users.required">
+                Please add at least one user.
+              </div>
             </b-card-text>
           </b-card>
         </div>
 
         <div class="table-responsive">
-          <b-card sub-title="Projects">
+          <b-card
+            sub-title="Projects"
+            class="form-list"
+            :class="
+              $v.form.projects.$dirty
+                ? $v.form.projects.$invalid
+                  ? 'is-invalid'
+                  : 'is-valid'
+                : ''
+            "
+          >
             <b-card-text>
               <div class="d-flex justify-content-end align-items-center mb-1">
                 <a
@@ -165,6 +190,7 @@
 
             <b-card-text>
               <b-table
+                v-if="form.projects.length > 0"
                 id="projects-b-table-id"
                 small
                 striped
@@ -181,11 +207,12 @@
                 <template #cell(status)="data">
                   <b-badge variant="secondary">{{ data.item.status }}</b-badge>
                 </template>
+
                 <template #cell(scope)="data">
                   <b-badge
                     variant="secondary"
-                    v-if="data.item.scope && SCOPE[data.item.scope]"
-                    >{{ SCOPE[data.item.scope].text }}</b-badge
+                    v-if="data.item.scope && scopes[data.item.scope]"
+                    >{{ scopes[data.item.scope].name }}</b-badge
                   >
                 </template>
 
@@ -211,6 +238,11 @@
                   ></action-button>
                 </template>
               </b-table>
+
+              <p v-if="form.projects.length === 0" class="mb-0">No Data</p>
+              <div class="invalid-feedback" v-if="!$v.form.projects.required">
+                Please add at least one project.
+              </div>
             </b-card-text>
           </b-card>
         </div>
@@ -247,10 +279,11 @@
     <b-modal
       id="modal-prevent-closing"
       ref="modal"
-      title="Add User"
+      :title="editUserIndex !== null ? 'Edit User' : 'Add User'"
       @show="resetModal"
       @hidden="resetModal"
       @ok="handleOk"
+      :ok-title="editUserIndex !== null ? 'Edit' : 'Add'"
     >
       <form ref="form" @submit.stop.prevent="handleAddUserSubmit">
         <b-form-group
@@ -327,10 +360,11 @@
     <b-modal
       id="modal-project"
       ref="modal2"
-      title="Add Project"
+      :title="editProjectIndex !== null ? 'Edit Project' : 'Add Project'"
       @show="resetProjectModal"
       @hidden="resetProjectModal"
       @ok="handleProjectOk"
+      :ok-title="editProjectIndex !== null ? 'Edit' : 'Add'"
     >
       <form ref="form" @submit.stop.prevent="handleAddProjectSubmit">
         <b-form-group
@@ -403,7 +437,8 @@ import * as notify from "../../../utils/notify.js";
 import { reactive, toRefs } from "vue";
 import { validationMixin } from "vuelidate";
 import { required, email, helpers, numeric } from "vuelidate/lib/validators";
-import { SCOPE } from "../../../mixins/constants";
+import { getScopesBySlug } from "../../../services/scope";
+
 export default {
   name: "FormCustomer",
   mixins: [validationMixin],
@@ -419,7 +454,9 @@ export default {
   },
   data() {
     return {
-      SCOPE: SCOPE,
+      scopes: {
+        oracle_database: { id: 1, name: "Oracle Database" },
+      },
       busy: false,
       isDeleteFor: null,
       userFields: ["index", "name", "email", "phone", "actions"],
@@ -451,7 +488,7 @@ export default {
         startdate: "",
         enddate: "",
         status: "pending",
-        scope: SCOPE.oracle_database.key,
+        scope: "oracle_database",
         isNew: true,
       },
       editProjectIndex: null,
@@ -510,6 +547,12 @@ export default {
       country: {
         required,
       },
+      users: {
+        required,
+      },
+      projects: {
+        required,
+      },
     },
     newuser: {
       name: {
@@ -544,6 +587,8 @@ export default {
     },
   },
   async mounted() {
+    // load scopes
+    await this.getScopes();
     if (this.formtype === "edit") {
       const { data } = await this.getData(this.getParamId());
       this.form = {
@@ -552,6 +597,10 @@ export default {
     }
   },
   methods: {
+    async getScopes() {
+      const { data } = await getScopesBySlug();
+      this.scopes = { ...data };
+    },
     getParamId() {
       return this.$route.params.id;
     },
@@ -633,7 +682,7 @@ export default {
         startdate: "",
         enddate: "",
         status: "pending",
-        scope: SCOPE.oracle_database.key,
+        scope: "oracle_database",
         isNew: true,
       };
       this.editProjectIndex = null;

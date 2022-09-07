@@ -20,89 +20,89 @@ class ScopeStageSeeder extends Seeder
 
         // Oracle Database
         $scopes = [
-    		array('name' => 'Oracle Database', 'scope_id' => 1),
-            array('name' => 'Pre-Engagement Questionaire', 'scope_id' => 1),
-            array('name' => 'Data Collection', 'scope_id' => 1),
-            array('name' => 'Data Review', 'scope_id' => 1),
-            array('name' => 'Right Sizing', 'scope_id' => 1),
-            array('name' => 'Right Costing', 'scope_id' => 1),
-            array('name' => 'TCO Calculation', 'scope_id' => 1),
-            array('name' => 'Report Preparation', 'scope_id' => 1),
-            array('name' => 'Report Presentation - Draft', 'scope_id' => 1),
-            array('name' => 'Report Review', 'scope_id' => 1),
-            array('name' => 'Report Presentation - Final', 'scope_id' => 1),
-            array('name' => 'Final Submission & Sign-off', 'scope_id' => 1),
+    		array('name' => 'Oracle Database', 'scope' => 'oracle_database'),
+            array('name' => 'Pre-Engagement Questionaire', 'scope' => 'oracle_database'),
+            array('name' => 'Data Collection', 'scope' => 'oracle_database'),
+            array('name' => 'Data Review', 'scope' => 'oracle_database'),
+            array('name' => 'Right Sizing', 'scope' => 'oracle_database'),
+            array('name' => 'Right Costing', 'scope' => 'oracle_database'),
+            array('name' => 'TCO Calculation', 'scope' => 'oracle_database'),
+            array('name' => 'Report Preparation', 'scope' => 'oracle_database'),
+            array('name' => 'Report Presentation - Draft', 'scope' => 'oracle_database'),
+            array('name' => 'Report Review', 'scope' => 'oracle_database'),
+            array('name' => 'Report Presentation - Final', 'scope' => 'oracle_database'),
+            array('name' => 'Final Submission & Sign-off', 'scope' => 'oracle_database'),
     	];
     	DB::table('scope_stages')->insert($scopes);
 
         // Oracle Apps
         $scopes = [
-    		array('name' => 'Oracle Apps', 'scope_id' => 2),
-            array('name' => 'Pre-Engagement Questionaire', 'scope_id' => 2),
-            array('name' => 'Data Collection', 'scope_id' => 2),
-            array('name' => 'Data Review', 'scope_id' => 2),
-            array('name' => 'Right Sizing', 'scope_id' => 2),
-            array('name' => 'Right Costing', 'scope_id' => 2),
-            array('name' => 'TCO Calculation', 'scope_id' => 2),
-            array('name' => 'Report Preparation', 'scope_id' => 2),
-            array('name' => 'Report Presentation - Draft', 'scope_id' => 2),
-            array('name' => 'Report Review', 'scope_id' => 2),
-            array('name' => 'Report Presentation - Final', 'scope_id' => 2),
-            array('name' => 'Final Submission & Sign-off', 'scope_id' => 2),
+    		array('name' => 'Oracle Apps', 'scope' => 'oracle_apps'),
+            array('name' => 'Pre-Engagement Questionaire', 'scope' => 'oracle_apps'),
+            array('name' => 'Data Collection', 'scope' => 'oracle_apps'),
+            array('name' => 'Data Review', 'scope' => 'oracle_apps'),
+            array('name' => 'Right Sizing', 'scope' => 'oracle_apps'),
+            array('name' => 'Right Costing', 'scope' => 'oracle_apps'),
+            array('name' => 'TCO Calculation', 'scope' => 'oracle_apps'),
+            array('name' => 'Report Preparation', 'scope' => 'oracle_apps'),
+            array('name' => 'Report Presentation - Draft', 'scope' => 'oracle_apps'),
+            array('name' => 'Report Review', 'scope' => 'oracle_apps'),
+            array('name' => 'Report Presentation - Final', 'scope' => 'oracle_apps'),
+            array('name' => 'Final Submission & Sign-off', 'scope' => 'oracle_apps'),
     	];
     	DB::table('scope_stages')->insert($scopes);
 
 
         // Microsoft
         $scopes = [
-            array('name' => 'Microsoft', 'scope_id' => 3),
-            array('name' => 'Pre-Engagement Questionaire', 'scope_id' => 3),
-            array('name' => 'Data Collection', 'scope_id' => 3),
-            array('name' => 'Data Review', 'scope_id' => 3),
-            array('name' => 'Right Sizing', 'scope_id' => 3),
-            array('name' => 'Right Costing', 'scope_id' => 3),
-            array('name' => 'TCO Calculation', 'scope_id' => 3),
-            array('name' => 'Report Preparation', 'scope_id' => 3),
-            array('name' => 'Report Presentation - Draft', 'scope_id' => 3),
-            array('name' => 'Report Review', 'scope_id' => 3),
-            array('name' => 'Report Presentation - Final', 'scope_id' => 3),
-            array('name' => 'Final Submission & Sign-off', 'scope_id' => 3),
+            array('name' => 'Microsoft', 'scope' => 'microsoft'),
+            array('name' => 'Pre-Engagement Questionaire', 'scope' => 'microsoft'),
+            array('name' => 'Data Collection', 'scope' => 'microsoft'),
+            array('name' => 'Data Review', 'scope' => 'microsoft'),
+            array('name' => 'Right Sizing', 'scope' => 'microsoft'),
+            array('name' => 'Right Costing', 'scope' => 'microsoft'),
+            array('name' => 'TCO Calculation', 'scope' => 'microsoft'),
+            array('name' => 'Report Preparation', 'scope' => 'microsoft'),
+            array('name' => 'Report Presentation - Draft', 'scope' => 'microsoft'),
+            array('name' => 'Report Review', 'scope' => 'microsoft'),
+            array('name' => 'Report Presentation - Final', 'scope' => 'microsoft'),
+            array('name' => 'Final Submission & Sign-off', 'scope' => 'microsoft'),
         ];
     	DB::table('scope_stages')->insert($scopes);
 
 
         // Vmware
         $scopes = [
-            array('name' => 'Vmware', 'scope_id' => 4),
-            array('name' => 'Pre-Engagement Questionaire', 'scope_id' => 4),
-            array('name' => 'Data Collection', 'scope_id' => 4),
-            array('name' => 'Data Review', 'scope_id' => 4),
-            array('name' => 'Right Sizing', 'scope_id' => 4),
-            array('name' => 'Right Costing', 'scope_id' => 4),
-            array('name' => 'TCO Calculation', 'scope_id' => 4),
-            array('name' => 'Report Preparation', 'scope_id' => 4),
-            array('name' => 'Report Presentation - Draft', 'scope_id' => 4),
-            array('name' => 'Report Review', 'scope_id' => 4),
-            array('name' => 'Report Presentation - Final', 'scope_id' => 4),
-            array('name' => 'Final Submission & Sign-off', 'scope_id' => 4),
+            array('name' => 'Vmware', 'scope' => 'vmware'),
+            array('name' => 'Pre-Engagement Questionaire', 'scope' => 'vmware'),
+            array('name' => 'Data Collection', 'scope' => 'vmware'),
+            array('name' => 'Data Review', 'scope' => 'vmware'),
+            array('name' => 'Right Sizing', 'scope' => 'vmware'),
+            array('name' => 'Right Costing', 'scope' => 'vmware'),
+            array('name' => 'TCO Calculation', 'scope' => 'vmware'),
+            array('name' => 'Report Preparation', 'scope' => 'vmware'),
+            array('name' => 'Report Presentation - Draft', 'scope' => 'vmware'),
+            array('name' => 'Report Review', 'scope' => 'vmware'),
+            array('name' => 'Report Presentation - Final', 'scope' => 'vmware'),
+            array('name' => 'Final Submission & Sign-off', 'scope' => 'vmware'),
         ];
     	DB::table('scope_stages')->insert($scopes);
 
 
         // Sap
         $scopes = [
-            array('name' => 'Sap', 'scope_id' => 5),
-            array('name' => 'Pre-Engagement Questionaire', 'scope_id' => 5),
-            array('name' => 'Data Collection', 'scope_id' => 5),
-            array('name' => 'Data Review', 'scope_id' => 5),
-            array('name' => 'Right Sizing', 'scope_id' => 5),
-            array('name' => 'Right Costing', 'scope_id' => 5),
-            array('name' => 'TCO Calculation', 'scope_id' => 5),
-            array('name' => 'Report Preparation', 'scope_id' => 5),
-            array('name' => 'Report Presentation - Draft', 'scope_id' => 5),
-            array('name' => 'Report Review', 'scope_id' => 5),
-            array('name' => 'Report Presentation - Final', 'scope_id' => 5),
-            array('name' => 'Final Submission & Sign-off', 'scope_id' => 5),
+            array('name' => 'Sap', 'scope' => 'sap'),
+            array('name' => 'Pre-Engagement Questionaire', 'scope' => 'sap'),
+            array('name' => 'Data Collection', 'scope' => 'sap'),
+            array('name' => 'Data Review', 'scope' => 'sap'),
+            array('name' => 'Right Sizing', 'scope' => 'sap'),
+            array('name' => 'Right Costing', 'scope' => 'sap'),
+            array('name' => 'TCO Calculation', 'scope' => 'sap'),
+            array('name' => 'Report Preparation', 'scope' => 'sap'),
+            array('name' => 'Report Presentation - Draft', 'scope' => 'sap'),
+            array('name' => 'Report Review', 'scope' => 'sap'),
+            array('name' => 'Report Presentation - Final', 'scope' => 'sap'),
+            array('name' => 'Final Submission & Sign-off', 'scope' => 'sap'),
         ];
     	DB::table('scope_stages')->insert($scopes);
 

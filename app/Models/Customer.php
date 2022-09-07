@@ -18,6 +18,7 @@ class Customer extends Model
         'name',
         'address',
         'country',
+        'added_by',
     ];
 
     protected $dataTableColumns = [

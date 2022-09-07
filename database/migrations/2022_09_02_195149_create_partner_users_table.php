@@ -16,9 +16,9 @@ class CreatePartnerUsersTable extends Migration
         Schema::create('partner_users', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('user_id')->comment('partner user id');
-            $table->foreign('user_id')->references('id')->on('users');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->unsignedBigInteger('partner_id')->comment('partner id');
-            $table->foreign('partner_id')->references('id')->on('partners');
+            $table->foreign('partner_id')->references('id')->on('partners')->onDelete('cascade');
             $table->timestamps();
         });
     }

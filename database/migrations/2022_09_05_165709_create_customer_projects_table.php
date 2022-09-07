@@ -16,9 +16,9 @@ class CreateCustomerProjectsTable extends Migration
         Schema::create('customer_projects', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('customer_id')->comment('customer id');
-            $table->foreign('customer_id')->references('id')->on('customers');
+            $table->foreign('customer_id')->references('id')->on('customers')->onDelete('cascade');
             $table->unsignedBigInteger('project_id')->comment('project id');
-            $table->foreign('project_id')->references('id')->on('projects');
+            $table->foreign('project_id')->references('id')->on('projects')->onDelete('cascade');
             $table->timestamps();
         });
     }

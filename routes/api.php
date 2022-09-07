@@ -33,4 +33,11 @@ Route::group(['middleware' => ['auth:api']], function () {
     Route::post('users/email-already-exists', [Api\UsersController::class, 'emailAlreadyExists'])->name('users.email-already-exists');
     Route::get('partners',[Api\PartnersController::class, 'index'])->name('users.get');
     Route::get('customers',[Api\CustomersController::class, 'index'])->name('users.get');
+    Route::group(['prefix' => 'scopes', 'as' => 'scopes'], function () {
+        Route::get('/list/byslug',[Api\ScopesController::class, 'listBySlug'])->name('.listbyslug');
+    });
+    Route::group(['prefix' => 'scope-stages', 'as' => 'scope.stages'], function () {
+        Route::get('/list/byscope',[Api\ScopeStagesController::class, 'listByScope'])->name('.listbyscope');
+    });
+    
 });

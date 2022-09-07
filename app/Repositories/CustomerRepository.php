@@ -44,7 +44,7 @@ class CustomerRepository extends BaseRepository implements CustomerContract
             }
         }catch(\Throwable $e){
             DB::rollBack();
-            Log::debug('Customer Repository : ',[ 'error' =>$e ]);
+            \Log::debug('Customer Repository : ',[ 'error' =>$e ]);
         }
         return false;
     }

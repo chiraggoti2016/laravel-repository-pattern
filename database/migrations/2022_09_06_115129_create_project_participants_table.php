@@ -18,9 +18,9 @@ class CreateProjectParticipantsTable extends Migration
             $table->string('pvcot', 25)->default('');
             $table->string('raci', 25)->default('');
             $table->unsignedBigInteger('project_id')->comment('project id');
-            $table->foreign('project_id')->references('id')->on('projects');
+            $table->foreign('project_id')->references('id')->on('projects')->onDelete('cascade');
             $table->unsignedBigInteger('user_id')->comment('user id');
-            $table->foreign('user_id')->references('id')->on('users');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->timestamps();
         });
     }

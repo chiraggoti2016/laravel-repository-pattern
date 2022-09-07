@@ -112,9 +112,18 @@
         </b-container>
 
         <div class="table-responsive">
-          <b-card sub-title="Scope Of Project (select one)">
+          <b-card
+            sub-title="Scope Of Project (select one)"
+            class="form-list"
+            :class="
+              $v.form.scope.$dirty && !$v.form.scope.required
+                ? $v.form.scope.$invalid
+                  ? 'is-invalid'
+                  : 'is-valid'
+                : ''
+            "
+          >
             <b-card-text>
-              {{ SCOPE }}
               <b-form-radio-group
                 v-model="$v.form.scope.$model"
                 :options="scopeOptions"
@@ -125,15 +134,25 @@
                 aria-describedby="scope-live-feedback"
               ></b-form-radio-group>
 
-              <b-form-invalid-feedback id="scope-live-feedback"
-                >This is a required field.</b-form-invalid-feedback
-              >
+              <div class="invalid-feedback" v-if="!$v.form.scope.required">
+                This is a required field.
+              </div>
             </b-card-text>
           </b-card>
         </div>
 
         <div class="table-responsive">
-          <b-card sub-title="Project Participants">
+          <b-card
+            sub-title="Project Participants"
+            class="form-list"
+            :class="
+              $v.form.participants.$dirty
+                ? $v.form.participants.$invalid
+                  ? 'is-invalid'
+                  : 'is-valid'
+                : ''
+            "
+          >
             <b-card-text>
               <div class="d-flex justify-content-end align-items-center mb-1">
                 <a
@@ -151,6 +170,7 @@
 
             <b-card-text>
               <b-table
+                v-if="form.participants.length > 0"
                 id="participants-b-table-id"
                 small
                 :items="form.participants"
@@ -276,6 +296,43 @@
                     name="delete"
                     onlyicon
                     @click="deleteActionButtonClick"
+                  ></action-button>
+                </template>
+              </b-table>
+
+              <p v-if="form.participants.length === 0" class="mb-0">No Data</p>
+              <div
+                class="invalid-feedback"
+                v-if="!$v.form.participants.required"
+              >
+                Please add at least one participants.
+              </div>
+            </b-card-text>
+          </b-card>
+        </div>
+
+        <div class="table-responsive">
+          <b-card sub-title="Stages">
+            <b-card-text>
+              <b-table
+                v-if="form.scope && stagesByScope[form.scope]"
+                id="stages-b-table-id"
+                small
+                :items="stagesByScope[form.scope]"
+                :fields="stageFields"
+                responsive="sm"
+                caption-top
+              >
+                <template #cell(index)="data">
+                  {{ data.index + 1 }}
+                </template>
+
+                <template #cell(actions)="data">
+                  <action-button
+                    :data="data"
+                    :meta="editActionButton.meta"
+                    name="Initiate"
+                    @click="editActionButtonClick"
                   ></action-button>
                 </template>
               </b-table>
@@ -408,7 +465,9 @@ import ActionButton from "./../../components/ActionButton.vue";
 import * as notify from "../../../../utils/notify.js";
 import { validationMixin } from "vuelidate";
 import { required, email, helpers, numeric } from "vuelidate/lib/validators";
-import { SCOPE_OPTIONS, SCOPE_STAGES } from "../../../../mixins/constants";
+import { getScopesBySlug } from "../../../../services/scope";
+import { getStagesByScope } from "../../../../services/scope-stage";
+
 export default {
   name: "CustomersProjectOpen",
   mixins: [validationMixin],
@@ -420,9 +479,18 @@ export default {
   },
   data() {
     return {
+      stagesByScope: {},
       busy: false,
       isDeleteFor: null,
-      scopeOptions: SCOPE_OPTIONS,
+      scopeOptions: [],
+      stageFields: [
+        { key: "index", label: "#" },
+        { key: "name", label: "Stage" },
+        "scope",
+        "start",
+        "end",
+        "actions",
+      ],
       participantFields: [
         { key: "name" },
         { key: "partner", class: "text-center" },
@@ -450,6 +518,7 @@ export default {
         status: null,
         scope: null,
         participants: [],
+        stages: [],
       },
       newparticipant: {
         name: null,
@@ -502,6 +571,9 @@ export default {
       status: {
         required,
       },
+      participants: {
+        required,
+      },
     },
     newparticipant: {
       name: {
@@ -525,12 +597,25 @@ export default {
     },
   },
   async mounted() {
+    await this.getScopes();
+    await this.getStagesByScope();
     const { data } = await this.getData(this.getParam());
     this.form = {
       ...data,
     };
   },
   methods: {
+    async getScopes() {
+      const { data } = await getScopesBySlug();
+      this.scopeOptions = Object.keys(data).map((key) => ({
+        item: data[key].slug,
+        name: data[key].name,
+      }));
+    },
+    async getStagesByScope() {
+      const { data } = await getStagesByScope();
+      this.stagesByScope = { ...data };
+    },
     getParam() {
       return this.$route.params;
     },
