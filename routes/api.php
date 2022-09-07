@@ -25,19 +25,27 @@ Route::get('email/verify/{id}', [Api\Auth\VerifyController::class, 'verify'])->n
 Route::group(['middleware' => ['auth:api']], function () {
     Route::get('user', [Api\Auth\AuthController::class, 'user']);
 
+    Route::group(['prefix' => 'countries', 'as' => 'countries'], function () {
+        Route::get('/list',[Api\CountriesController::class, 'list'])->name('.list');
+    });
+
+    Route::group(['prefix' => 'users', 'as' => 'users'], function () {
+        Route::post('/email-already-exists', [Api\UsersController::class, 'emailAlreadyExists'])->name('.email-already-exists');
+    });
+    
+    Route::group(['prefix' => 'scopes', 'as' => 'scopes'], function () {
+        Route::get('/list/byslug',[Api\ScopesController::class, 'listBySlug'])->name('.listbyslug');
+    });
+
+    Route::group(['prefix' => 'scope-stages', 'as' => 'scope.stages'], function () {
+        Route::get('/list/byscope',[Api\ScopeStagesController::class, 'listByScope'])->name('.listbyscope');
+    });
+
+    // Resources
+    Route::resource('countries',Api\CountriesController::class);
     Route::resource('partners',Api\PartnersController::class);
     Route::resource('customers',Api\CustomersController::class);
     Route::resource('users',Api\UsersController::class);
     Route::resource('projects',Api\ProjectsController::class);
-    Route::get('users',[Api\UsersController::class, 'index'])->name('users.get');
-    Route::post('users/email-already-exists', [Api\UsersController::class, 'emailAlreadyExists'])->name('users.email-already-exists');
-    Route::get('partners',[Api\PartnersController::class, 'index'])->name('users.get');
-    Route::get('customers',[Api\CustomersController::class, 'index'])->name('users.get');
-    Route::group(['prefix' => 'scopes', 'as' => 'scopes'], function () {
-        Route::get('/list/byslug',[Api\ScopesController::class, 'listBySlug'])->name('.listbyslug');
-    });
-    Route::group(['prefix' => 'scope-stages', 'as' => 'scope.stages'], function () {
-        Route::get('/list/byscope',[Api\ScopeStagesController::class, 'listByScope'])->name('.listbyscope');
-    });
     
 });

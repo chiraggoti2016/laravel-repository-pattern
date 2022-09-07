@@ -154,7 +154,34 @@ let router = new Router({
                 requiresAuth: true,
                 layout: AdminLayout
             }
-        }
+        },
+        {
+            path: "/admin/countries/add",
+            name: "countriesadd",
+            component: () => import("./views/admin/countries/add.vue"),
+            meta: {
+                requiresAuth: true,
+                layout: AdminLayout
+            }
+        },
+        {
+            path: "/admin/countries/edit/:id",
+            name: "countriesedit",
+            component: () => import("./views/admin/countries/edit.vue"),
+            meta: {
+                requiresAuth: true,
+                layout: AdminLayout
+            }
+        },
+        {
+            path: "/admin/countries",
+            name: "countries",
+            component: () => import("./views/admin/countries/list.vue"),
+            meta: {
+                requiresAuth: true,
+                layout: AdminLayout
+            }
+        },
     ]
 });
 
@@ -171,19 +198,19 @@ let router = new Router({
 // });
 
 router.beforeEach((to, from, next) => {
-	// document.title = to.meta.title;
-	if (to.meta.middleware) {
-		const middleware = Array.isArray(to.meta.middleware)
-			? to.meta.middleware
-			: [to.meta.middleware];
-		const context = { to, from, next, store };
-		return middleware[0]({
-			...context,
-			next: middlewarePipeline(context, middleware, 1),
-		});
-	} else {
-		return next();
-	}
+    // document.title = to.meta.title;
+    if (to.meta.middleware) {
+        const middleware = Array.isArray(to.meta.middleware)
+            ? to.meta.middleware
+            : [to.meta.middleware];
+        const context = { to, from, next, store };
+        return middleware[0]({
+            ...context,
+            next: middlewarePipeline(context, middleware, 1),
+        });
+    } else {
+        return next();
+    }
 });
 
 

@@ -75,16 +75,15 @@
               <b-col>
                 <b-form-group id="example-input-group-3">
                   <label class="sr-only" for="example-input-3">Country</label>
-                  <b-form-input
+                  <b-form-select
                     id="example-input-3"
                     name="example-input-3"
                     class="mb-2 mr-sm-2 mb-sm-0"
-                    placeholder="Country"
                     v-model="$v.form.country.$model"
+                    :options="countriesOptions"
                     :state="validateState('country')"
                     aria-describedby="input-3-live-feedback"
-                  ></b-form-input>
-
+                  ></b-form-select>
                   <b-form-invalid-feedback id="input-3-live-feedback"
                     >This is a required field.</b-form-invalid-feedback
                   >
@@ -219,9 +218,12 @@
             :state="validateModalState('name')"
             aria-describedby="modal-input-1-live-feedback"
           ></b-form-input>
-          <b-form-invalid-feedback id="modal-input-1-live-feedback"
-            >This is a required field.</b-form-invalid-feedback
-          >
+          <div class="invalid-feedback" v-if="!$v.newuser.name.required">
+            This is a required field.
+          </div>
+          <div class="invalid-feedback" v-if="!$v.newuser.name.isFullname">
+            Full name is require.
+          </div>
         </b-form-group>
 
         <b-form-group
@@ -284,6 +286,7 @@ import * as notify from "../../../utils/notify.js";
 import { reactive, toRefs } from "vue";
 import { validationMixin } from "vuelidate";
 import { required, email, helpers, numeric } from "vuelidate/lib/validators";
+import { getAllCountries } from "../../../services/country";
 
 export default {
   name: "AddPartner",
@@ -301,6 +304,7 @@ export default {
   data() {
     return {
       busy: false,
+      countriesOptions: [],
       userFields: ["index", "name", "email", "phone", "actions"],
       form: {
         name: null,
@@ -361,6 +365,7 @@ export default {
     newuser: {
       name: {
         required,
+        isFullname: helpers.regex("name", /^([A-z0-9]+) ([A-z0-9]+)$/),
       },
       email: {
         required,
@@ -380,6 +385,7 @@ export default {
     },
   },
   async mounted() {
+    await this.getCountries();
     if (this.formtype === "edit") {
       const { data } = await this.getData(this.$route.params.id);
       this.form = {
@@ -388,6 +394,15 @@ export default {
     }
   },
   methods: {
+    async getCountries() {
+      const { data } = await getAllCountries();
+      this.countriesOptions = data
+        ? data.map((each) => ({
+            text: each.country_name,
+            value: each.country_name,
+          }))
+        : [];
+    },
     validateState(name) {
       const { $dirty, $error } = this.$v.form[name];
       return $dirty ? !$error : null;

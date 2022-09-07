@@ -6,17 +6,17 @@
           <div
             class="col-md-10 d-flex justify-content-start align-items-center"
           >
-            <h6 class="m-0 font-weight-bold text-primary">Partners</h6>
+            <h6 class="m-0 font-weight-bold text-primary">Countries</h6>
           </div>
           <div class="col-md-2 float-right d-flex justify-content-end">
             <router-link
               class="btn btn-sm btn-primary btn-icon-split"
-              to="/admin/partners/add"
+              to="/admin/countries/add"
             >
               <span class="icon text-white-50">
                 <i class="fas fa-plus"></i>
               </span>
-              <span class="text">Add Partner</span>
+              <span class="text">Add Country</span>
             </router-link>
           </div>
         </div>
@@ -62,39 +62,31 @@
 import { reactive, toRefs } from "vue";
 import ActionButton from "./../components/ActionButton.vue";
 export default {
-  name: "Partner",
+  name: "Country",
   data() {
     return {
-      url: "https://optima.test/api/partners",
+      url: "https://optima.test/api/countries/list",
       columns: [
         {
-          label: "Partner ID",
+          label: "Country ID",
           name: "id",
           searchable: false,
         },
         {
-          label: "Partner Name",
-          name: "name",
+          label: "Country Name",
+          name: "country_name",
         },
         {
-          label: "No of Users",
-          name: "users_count",
+          label: "Sort Name",
+          name: "sortname",
         },
         {
-          label: "Customers",
-          name: "customers_count",
+          label: "Country Long",
+          name: "country_lng",
         },
         {
-          label: "OLA Engagements",
-          name: "ola_engagements",
-        },
-        {
-          label: "Completed",
-          name: "completed",
-        },
-        {
-          label: "Cancelled",
-          name: "cancelled",
+          label: "Timezone",
+          name: "timezone",
         },
         {
           label: "",
@@ -106,7 +98,7 @@ export default {
             "btn-sm": true,
           },
           meta: {
-            prefixLink: "/admin/partners/edit/",
+            prefixLink: "/admin/countries/edit/",
             icon: {
               has: true,
               classes: {
@@ -118,28 +110,28 @@ export default {
           handler: () => {},
           component: ActionButton,
         },
-        // {
-        //   label: "",
-        //   name: "delete",
-        //   orderable: false,
-        //   classes: {
-        //     btn: true,
-        //     "btn-danger": true,
-        //     "btn-sm": true,
-        //   },
-        //   meta: {
-        //     prefixLink: null,
-        //     icon: {
-        //       has: true,
-        //       classes: {
-        //         "fa-trash": true,
-        //       },
-        //     },
-        //   },
-        //   event: "click",
-        //   handler: this.deleteAction,
-        //   component: ActionButton,
-        // },
+        {
+          label: "",
+          name: "delete",
+          orderable: false,
+          classes: {
+            btn: true,
+            "btn-danger": true,
+            "btn-sm": true,
+          },
+          meta: {
+            prefixLink: null,
+            icon: {
+              has: true,
+              classes: {
+                "fa-trash": true,
+              },
+            },
+          },
+          event: "click",
+          handler: this.deleteAction,
+          component: ActionButton,
+        },
       ],
       headers: {
         ...axiosHeaders,

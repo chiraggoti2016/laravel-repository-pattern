@@ -9,6 +9,7 @@ use App\Contracts\CustomerContract;
 use App\Contracts\ProjectContract;
 use App\Contracts\ScopeContract;
 use App\Contracts\ScopeStageContract;
+use App\Contracts\CountryContract;
 
 use App\Repositories\UserRepository;
 use App\Repositories\PartnerRepository;
@@ -16,6 +17,7 @@ use App\Repositories\CustomerRepository;
 use App\Repositories\ProjectRepository;
 use App\Repositories\ScopeRepository;
 use App\Repositories\ScopeStageRepository;
+use App\Repositories\CountryRepository;
 
 class RepositoryServiceProvider extends ServiceProvider
 {
@@ -32,6 +34,7 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind(ProjectContract::class, ProjectRepository::class);
         $this->app->bind(ScopeContract::class, ScopeRepository::class);
         $this->app->bind(ScopeStageContract::class, ScopeStageRepository::class);
+        $this->app->bind(CountryContract::class, CountryRepository::class);
     }
 
     /**

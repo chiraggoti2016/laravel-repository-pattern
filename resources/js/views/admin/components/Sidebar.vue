@@ -40,6 +40,12 @@
         <span>Partners</span></router-link
       >
     </li>
+    <li class="nav-item" v-if="isAdmin()">
+      <router-link class="nav-link" to="/admin/countries">
+        <i class="fas fa-fw fa-table"></i>
+        <span>Countries</span></router-link
+      >
+    </li>
 
     <!-- Nav Item - Tables -->
     <li class="nav-item" v-if="isPartner()">

@@ -75,15 +75,15 @@
               <b-col>
                 <b-form-group id="example-input-group-3">
                   <label class="sr-only" for="example-input-3">Country</label>
-                  <b-form-input
+                  <b-form-select
                     id="example-input-3"
                     name="example-input-3"
                     class="mb-2 mr-sm-2 mb-sm-0"
-                    placeholder="Country"
                     v-model="$v.form.country.$model"
+                    :options="countriesOptions"
                     :state="validateState('country')"
                     aria-describedby="input-3-live-feedback"
-                  ></b-form-input>
+                  ></b-form-select>
 
                   <b-form-invalid-feedback id="input-3-live-feedback"
                     >This is a required field.</b-form-invalid-feedback
@@ -231,6 +231,7 @@
                     @click="deleteProjectActionButtonClick"
                   ></action-button>
                   <action-button
+                    v-if="!data.item.isNew"
                     :data="data.item"
                     :meta="openActionButton.meta"
                     :classes="openActionButton.classes"
@@ -300,9 +301,12 @@
             :state="validateModalState('name')"
             aria-describedby="modal-input-1-live-feedback"
           ></b-form-input>
-          <b-form-invalid-feedback id="modal-input-1-live-feedback"
-            >This is a required field.</b-form-invalid-feedback
-          >
+          <div class="invalid-feedback" v-if="!$v.newuser.name.required">
+            This is a required field.
+          </div>
+          <div class="invalid-feedback" v-if="!$v.newuser.name.isFullname">
+            Full name is require.
+          </div>
         </b-form-group>
 
         <b-form-group
@@ -438,6 +442,7 @@ import { reactive, toRefs } from "vue";
 import { validationMixin } from "vuelidate";
 import { required, email, helpers, numeric } from "vuelidate/lib/validators";
 import { getScopesBySlug } from "../../../services/scope";
+import { getAllCountries } from "../../../services/country";
 
 export default {
   name: "FormCustomer",
@@ -459,6 +464,7 @@ export default {
       },
       busy: false,
       isDeleteFor: null,
+      countriesOptions: [],
       userFields: ["index", "name", "email", "phone", "actions"],
       projectFields: [
         "index",
@@ -557,6 +563,7 @@ export default {
     newuser: {
       name: {
         required,
+        isFullname: helpers.regex("name", /^([A-z0-9]+) ([A-z0-9]+)$/),
       },
       email: {
         required,
@@ -587,8 +594,11 @@ export default {
     },
   },
   async mounted() {
+    // countries
+    await this.getCountries();
     // load scopes
     await this.getScopes();
+
     if (this.formtype === "edit") {
       const { data } = await this.getData(this.getParamId());
       this.form = {
@@ -597,6 +607,15 @@ export default {
     }
   },
   methods: {
+    async getCountries() {
+      const { data } = await getAllCountries();
+      this.countriesOptions = data
+        ? data.map((each) => ({
+            text: each.country_name,
+            value: each.country_name,
+          }))
+        : [];
+    },
     async getScopes() {
       const { data } = await getScopesBySlug();
       this.scopes = { ...data };
