@@ -556,7 +556,7 @@ export default {
           icon: {
             has: true,
             classes: {
-              "fa-external-link": true,
+              "fa-arrow-up": true,
             },
           },
         },
