@@ -13,3 +13,10 @@ export const RACI_OPTIONS = [
     { text: "I", value: "i" },
 ];
 
+export const RESPONSE_COLLECTOR_OPTIONS = [
+    { text: "Yes/No", value: "YesNo" },
+    { text: "Free Text", value: "FreeText" },
+    { text: "Ticker", value: "Ticker" },
+    { text: "Form", value: "Form" },
+    { text: "Upload", value: "Upload" },
+];

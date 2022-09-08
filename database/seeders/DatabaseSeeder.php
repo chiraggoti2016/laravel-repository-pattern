@@ -17,5 +17,6 @@ class DatabaseSeeder extends Seeder
         $this->call(ScopeSeeder::class);
         $this->call(ScopeStageSeeder::class);
         $this->call(CountrySeeder::class);
+        $this->call(QuestionCategorySeeder::class);
     }
 }

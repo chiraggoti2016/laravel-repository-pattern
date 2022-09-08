@@ -50,22 +50,6 @@
         <span>Partners</span></router-link
       >
     </li>
-    <li
-      class="nav-item"
-      :class="
-        ['countries', 'countries-add', 'countries-edit'].indexOf(
-          currentRouteName
-        ) != -1
-          ? 'active'
-          : ''
-      "
-      v-if="isAdmin()"
-    >
-      <router-link class="nav-link" to="/admin/countries">
-        <i class="fas fa-fw fa-table"></i>
-        <span>Countries</span></router-link
-      >
-    </li>
 
     <!-- Nav Item - Tables -->
     <li
@@ -102,6 +86,67 @@
         <i class="fas fa-fw fa-table"></i> <span>Projects</span>
       </router-link>
     </li>
+
+    <li
+      class="nav-item"
+      :class="
+        [
+          'questions',
+          'questions-add',
+          'questions-edit',
+          'questions-view',
+        ].indexOf(currentRouteName) != -1
+          ? 'active'
+          : ''
+      "
+      v-if="isAdmin()"
+    >
+      <router-link class="nav-link" to="/admin/questions">
+        <i class="fas fa-fw fa-table"></i> <span>Questions</span>
+      </router-link>
+    </li>
+
+    <!-- Divider -->
+    <hr class="sidebar-divider" v-if="isAdmin()" />
+
+    <!-- Nav Item - Tables -->
+    <li
+      class="nav-item"
+      :class="
+        ['countries', 'countries-add', 'countries-edit'].indexOf(
+          currentRouteName
+        ) != -1
+          ? 'active'
+          : ''
+      "
+      v-if="isAdmin()"
+    >
+      <router-link class="nav-link" to="/admin/countries">
+        <i class="fas fa-fw fa-table"></i>
+        <span>Countries</span></router-link
+      >
+    </li>
+
+    <!-- Nav Item - Tables -->
+    <li
+      class="nav-item"
+      :class="
+        [
+          'question-categories',
+          'question-categories-add',
+          'question-categories-edit',
+        ].indexOf(currentRouteName) != -1
+          ? 'active'
+          : ''
+      "
+      v-if="isAdmin()"
+    >
+      <router-link class="nav-link" to="/admin/question/categories">
+        <i class="fas fa-fw fa-table"></i>
+        <span>Question Categories</span></router-link
+      >
+    </li>
+
     <!-- Divider -->
     <hr class="sidebar-divider d-none d-md-block" />
 

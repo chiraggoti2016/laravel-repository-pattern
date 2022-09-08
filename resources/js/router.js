@@ -182,6 +182,63 @@ let router = new Router({
                 layout: AdminLayout
             }
         },
+        {
+            path: "/admin/question/categories/add",
+            name: "question-categories-add",
+            component: () => import("./views/admin/question-categories/add.vue"),
+            meta: {
+                requiresAuth: true,
+                layout: AdminLayout
+            }
+        },
+        {
+            path: "/admin/question/categories/edit/:id",
+            name: "question-categories-edit",
+            component: () => import("./views/admin/question-categories/edit.vue"),
+            meta: {
+                requiresAuth: true,
+                layout: AdminLayout
+            }
+        },
+        {
+            path: "/admin/question/categories",
+            name: "question-categories",
+            component: () => import("./views/admin/question-categories/list.vue"),
+            meta: {
+                requiresAuth: true,
+                layout: AdminLayout
+            }
+        },
+
+
+        {
+            path: "/admin/questions/add",
+            name: "questions-add",
+            component: () => import("./views/admin/questions/add.vue"),
+            meta: {
+                requiresAuth: true,
+                layout: AdminLayout
+            }
+        },
+        {
+            path: "/admin/questions/edit/:id",
+            name: "questions-edit",
+            component: () => import("./views/admin/questions/edit.vue"),
+            meta: {
+                requiresAuth: true,
+                layout: AdminLayout
+            }
+        },
+        {
+            path: "/admin/questions",
+            name: "questions",
+            component: () => import("./views/admin/questions/list.vue"),
+            meta: {
+                requiresAuth: true,
+                layout: AdminLayout
+            }
+        },
+
     ]
 });
 

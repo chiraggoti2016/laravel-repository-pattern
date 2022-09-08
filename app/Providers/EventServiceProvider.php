@@ -9,9 +9,11 @@ use Illuminate\Support\Facades\Event;
 use App\Models\User;
 use App\Models\Customer;
 use App\Models\Project;
+use App\Models\QuestionCategory;
 use App\Observers\UserObserver;
 use App\Observers\CustomerObserver;
 use App\Observers\ProjectObserver;
+use App\Observers\QuestionCategoryObserver;
 
 class EventServiceProvider extends ServiceProvider
 {
@@ -36,5 +38,6 @@ class EventServiceProvider extends ServiceProvider
         User::observe(UserObserver::class);
         Customer::observe(CustomerObserver::class);
         Project::observe(ProjectObserver::class);
+        QuestionCategory::observe(QuestionCategoryObserver::class);
     }
 }

@@ -29,6 +29,10 @@ Route::group(['middleware' => ['auth:api']], function () {
         Route::get('/list',[Api\CountriesController::class, 'list'])->name('.list');
     });
 
+    Route::group(['prefix' => 'question/categories', 'as' => 'question.categories'], function () {
+        Route::get('/list',[Api\CountriesController::class, 'list'])->name('.list');
+    });
+
     Route::group(['prefix' => 'users', 'as' => 'users'], function () {
         Route::post('/email-already-exists', [Api\UsersController::class, 'emailAlreadyExists'])->name('.email-already-exists');
     });
@@ -47,5 +51,7 @@ Route::group(['middleware' => ['auth:api']], function () {
     Route::resource('customers',Api\CustomersController::class);
     Route::resource('users',Api\UsersController::class);
     Route::resource('projects',Api\ProjectsController::class);
+    Route::resource('questions',Api\QuestionsController::class);
+    Route::resource('question/categories',Api\QuestionCategoriesController::class);
     
 });
