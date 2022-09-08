@@ -25,6 +25,6 @@ class Project extends Model
 
     public function participants()
     {
-        return $this->belongsToMany(User::class, 'project_participants');
+        return $this->belongsToMany(User::class, 'project_participants')->withPivot('pvcot', 'raci');
     }
 }

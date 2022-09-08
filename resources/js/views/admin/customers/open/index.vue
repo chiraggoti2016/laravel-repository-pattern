@@ -201,84 +201,102 @@
                 </template>
 
                 <template #cell(partner)="data">
-                  <b-form-checkbox
-                    id="partner"
-                    v-model="data.item.pvcot"
-                    value="partner"
-                    unchecked-value="-"
-                  ></b-form-checkbox>
+                  <b-iconstack font-scale="1">
+                    <b-icon stacked icon="square" font-scale="1"></b-icon>
+                    <b-icon
+                      v-if="data.item.pivot.pvcot === 'partner'"
+                      stacked
+                      icon="check"
+                    ></b-icon>
+                  </b-iconstack>
                 </template>
 
                 <template #cell(vendor)="data">
-                  <b-form-checkbox
-                    id="vendor"
-                    v-model="data.item.pvcot"
-                    value="vendor"
-                    unchecked-value="-"
-                  ></b-form-checkbox>
+                  <b-iconstack font-scale="1">
+                    <b-icon stacked icon="square" font-scale="1"></b-icon>
+                    <b-icon
+                      v-if="data.item.pivot.pvcot === 'vendor'"
+                      stacked
+                      icon="check"
+                    ></b-icon>
+                  </b-iconstack>
                 </template>
 
                 <template #cell(client)="data">
-                  <b-form-checkbox
-                    id="client"
-                    v-model="data.item.pvcot"
-                    value="client"
-                    unchecked-value="-"
-                  ></b-form-checkbox>
+                  <b-iconstack font-scale="1">
+                    <b-icon stacked icon="square" font-scale="1"></b-icon>
+                    <b-icon
+                      v-if="data.item.pivot.pvcot === 'client'"
+                      stacked
+                      icon="check"
+                    ></b-icon>
+                  </b-iconstack>
                 </template>
 
                 <template #cell(others)="data">
-                  <b-form-checkbox
-                    id="others"
-                    v-model="data.item.pvcot"
-                    value="others"
-                    unchecked-value="-"
-                  ></b-form-checkbox>
+                  <b-iconstack font-scale="1">
+                    <b-icon stacked icon="square" font-scale="1"></b-icon>
+                    <b-icon
+                      v-if="data.item.pivot.pvcot === 'others'"
+                      stacked
+                      icon="check"
+                    ></b-icon>
+                  </b-iconstack>
                 </template>
 
                 <template #cell(technical)="data">
-                  <b-form-checkbox
-                    id="technical"
-                    v-model="data.item.pvcot"
-                    value="technical"
-                    unchecked-value="-"
-                  ></b-form-checkbox>
+                  <b-iconstack font-scale="1">
+                    <b-icon stacked icon="square" font-scale="1"></b-icon>
+                    <b-icon
+                      v-if="data.item.pivot.pvcot === 'technical'"
+                      stacked
+                      icon="check"
+                    ></b-icon>
+                  </b-iconstack>
                 </template>
 
                 <template #cell(r)="data">
-                  <b-form-checkbox
-                    id="r"
-                    v-model="data.item.raci"
-                    value="r"
-                    unchecked-value="-"
-                  ></b-form-checkbox>
+                  <b-iconstack font-scale="1">
+                    <b-icon stacked icon="square" font-scale="1"></b-icon>
+                    <b-icon
+                      v-if="data.item.pivot.raci === 'r'"
+                      stacked
+                      icon="check"
+                    ></b-icon>
+                  </b-iconstack>
                 </template>
 
                 <template #cell(a)="data">
-                  <b-form-checkbox
-                    id="a"
-                    v-model="data.item.raci"
-                    value="a"
-                    unchecked-value="-"
-                  ></b-form-checkbox>
+                  <b-iconstack font-scale="1">
+                    <b-icon stacked icon="square" font-scale="1"></b-icon>
+                    <b-icon
+                      v-if="data.item.pivot.raci === 'a'"
+                      stacked
+                      icon="check"
+                    ></b-icon>
+                  </b-iconstack>
                 </template>
 
                 <template #cell(c)="data">
-                  <b-form-checkbox
-                    id="c"
-                    v-model="data.item.raci"
-                    value="c"
-                    unchecked-value="-"
-                  ></b-form-checkbox>
+                  <b-iconstack font-scale="1">
+                    <b-icon stacked icon="square" font-scale="1"></b-icon>
+                    <b-icon
+                      v-if="data.item.pivot.raci === 'c'"
+                      stacked
+                      icon="check"
+                    ></b-icon>
+                  </b-iconstack>
                 </template>
 
                 <template #cell(i)="data">
-                  <b-form-checkbox
-                    id="i"
-                    v-model="data.item.raci"
-                    value="i"
-                    unchecked-value="-"
-                  ></b-form-checkbox>
+                  <b-iconstack font-scale="1">
+                    <b-icon stacked icon="square" font-scale="1"></b-icon>
+                    <b-icon
+                      v-if="data.item.pivot.raci === 'i'"
+                      stacked
+                      icon="check"
+                    ></b-icon>
+                  </b-iconstack>
                 </template>
 
                 <template #cell(actions)="data">
@@ -327,6 +345,12 @@
                   {{ data.index + 1 }}
                 </template>
 
+                <template #cell(scope)="data">
+                  <p v-if="data.item.scope && scopes[data.item.scope]">
+                    {{ scopes[data.item.scope].name }}
+                  </p>
+                </template>
+
                 <template #cell(actions)="data">
                   <action-button
                     :data="data"
@@ -372,10 +396,11 @@
     <b-modal
       id="modal-prevent-closing"
       ref="modal"
-      title="Add User"
+      :title="editUserIndex !== null ? 'Edit Participant' : 'Add Participant'"
       @show="resetModal"
       @hidden="resetModal"
       @ok="handleOk"
+      :ok-title="editUserIndex !== null ? 'Edit' : 'Add'"
     >
       <form ref="form" @submit.stop.prevent="handleAddUserSubmit">
         <b-form-group
@@ -455,6 +480,48 @@
             Enter vaild phone number.
           </div>
         </b-form-group>
+
+        <b-form-group
+          id="example-modal-input-group-4"
+          label="PVCOT"
+          label-for="modal-pvcot-input"
+          v-slot="{ ariaDescribedby }"
+        >
+          <b-form-radio-group
+            id="modal-pvcot-input"
+            name="modal-pvcot-input"
+            v-model="$v.newparticipant.pivot.pvcot.$model"
+            :options="pvcotOptions"
+            :aria-describedby="ariaDescribedby"
+          ></b-form-radio-group>
+          <div
+            class="invalid-feedback"
+            v-if="!$v.newparticipant.pivot.pvcot.required"
+          >
+            This is a required field.
+          </div>
+        </b-form-group>
+
+        <b-form-group
+          id="example-modal-input-group-5"
+          label="RACI"
+          label-for="modal-raci-input"
+          v-slot="{ raciariaDescribedby }"
+        >
+          <b-form-radio-group
+            id="modal-raci-input"
+            name="modal-raci-input"
+            v-model="$v.newparticipant.pivot.raci.$model"
+            :options="raciOptions"
+            :aria-describedby="raciariaDescribedby"
+          ></b-form-radio-group>
+          <div
+            class="invalid-feedback"
+            v-if="!$v.newparticipant.pivot.raci.required"
+          >
+            This is a required field.
+          </div>
+        </b-form-group>
       </form>
     </b-modal>
   </div>
@@ -467,6 +534,7 @@ import { validationMixin } from "vuelidate";
 import { required, email, helpers, numeric } from "vuelidate/lib/validators";
 import { getScopesBySlug } from "../../../../services/scope";
 import { getStagesByScope } from "../../../../services/scope-stage";
+import { PVCOT_OPTIONS, RACI_OPTIONS } from "../../../../mixins/constants";
 
 export default {
   name: "CustomersProjectOpen",
@@ -483,6 +551,8 @@ export default {
       busy: false,
       isDeleteFor: null,
       scopeOptions: [],
+      pvcotOptions: PVCOT_OPTIONS,
+      raciOptions: RACI_OPTIONS,
       stageFields: [
         { key: "index", label: "#" },
         { key: "name", label: "Stage" },
@@ -525,7 +595,10 @@ export default {
         email: null,
         phone: null,
         isNew: true,
-        pvcot: "client",
+        pivot: {
+          pvcot: "client",
+          raci: "a",
+        },
       },
       editActionButton: {
         meta: {
@@ -594,6 +667,14 @@ export default {
         required,
         numbercheck: helpers.regex("phone", /^(\+\d{1,3}[- ]?)?\d{10}$/),
       },
+      pivot: {
+        pvcot: {
+          required,
+        },
+        raci: {
+          required,
+        },
+      },
     },
   },
   async mounted() {
@@ -611,6 +692,7 @@ export default {
         item: data[key].slug,
         name: data[key].name,
       }));
+      this.scopes = data;
     },
     async getStagesByScope() {
       const { data } = await getStagesByScope();
@@ -666,6 +748,10 @@ export default {
         email: "",
         phone: "",
         isNew: true,
+        pivot: {
+          pvcot: "client",
+          raci: "a",
+        },
       };
       this.editUserIndex = null;
 
@@ -713,7 +799,7 @@ export default {
       }
     },
     editActionButtonClick(data) {
-      const { id, name, email, phone } = data.item;
+      const { id, name, email, phone, pivot } = data.item;
       this.$bvModal.show("modal-prevent-closing");
       this.editUserIndex = data.index;
       this.newparticipant = {
@@ -721,6 +807,7 @@ export default {
         name,
         email,
         phone,
+        pivot,
       };
       this.$v.$reset();
     },
