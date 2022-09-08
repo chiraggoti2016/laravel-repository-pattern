@@ -8,13 +8,10 @@
               <div class="p-5">
                 <div v-if="!emailSent">
                   <div class="text-center">
-                    <h1 class="h4 text-gray-900 mb-2">
-                      Forgot Your Password?
-                    </h1>
+                    <h1 class="h4 text-gray-900 mb-2">Forgot Your Password?</h1>
                     <p class="mb-4">
-                      We get it, stuff happens. Just enter your email
-                      address below and we'll send you a link to reset your
-                      password!
+                      We get it, stuff happens. Just enter your email address
+                      below and we'll send you a link to reset your password!
                     </p>
                   </div>
                   <form class="user" @submit.prevent="forgot">
@@ -36,8 +33,8 @@
                 </div>
                 <div v-else>
                   <span class="h4">
-                    <i class="far fa-check-circle text-success"></i> Check
-                    your email!
+                    <i class="far fa-check-circle text-success"></i> Check your
+                    email!
                   </span>
                 </div>
                 <hr />

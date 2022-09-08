@@ -50,7 +50,7 @@ export default {
   name: "AdminLayout",
   components: {
     Topbar,
-    Sidebar
+    Sidebar,
   },
   mounted() {
     sbadmin2.init();
