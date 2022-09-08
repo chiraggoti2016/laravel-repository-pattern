@@ -142,6 +142,14 @@
                   {{ data.index + 1 }}
                 </template>
 
+                <!-- email_verified_at -->
+                <template #cell(email_verified_at)="data">
+                  <b-badge variant="success" v-if="data.item.email_verified_at"
+                    >Yes</b-badge
+                  >
+                  <b-badge v-if="!data.item.email_verified_at">No</b-badge>
+                </template>
+
                 <template #cell(actions)="data">
                   <action-button
                     :data="data"
@@ -306,7 +314,18 @@ export default {
     return {
       busy: false,
       countriesOptions: [],
-      userFields: ["index", "name", "email", "phone", "actions"],
+      userFields: [
+        "index",
+        "name",
+        "email",
+        "phone",
+        {
+          key: "email_verified_at",
+          label: "Email Verified",
+          class: "text-center",
+        },
+        "actions",
+      ],
       form: {
         name: null,
         address: null,
@@ -319,6 +338,7 @@ export default {
         name: null,
         email: null,
         phone: null,
+        email_verified_at: null,
         isNew: true,
       },
       editActionButton: {
@@ -465,6 +485,7 @@ export default {
         name: "",
         email: "",
         phone: "",
+        email_verified_at: null,
         isNew: true,
       };
       this.editUserIndex = null;
@@ -505,7 +526,7 @@ export default {
       }
     },
     editActionButtonClick(data) {
-      const { id, name, email, phone } = data.item;
+      const { id, name, email, phone, email_verified_at } = data.item;
       this.$bvModal.show("modal-prevent-closing");
       this.editUserIndex = data.index;
       this.newuser = {
@@ -513,6 +534,7 @@ export default {
         name,
         email,
         phone,
+        email_verified_at,
       };
       this.$v.$reset();
     },

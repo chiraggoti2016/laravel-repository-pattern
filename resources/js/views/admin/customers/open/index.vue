@@ -836,6 +836,7 @@ export default {
         email: "",
         phone: "",
         isNew: true,
+        email_verified_at: null,
         pivot: {
           pvcot: "client",
           raci: "a",
@@ -887,7 +888,7 @@ export default {
       }
     },
     editActionButtonClick(data) {
-      const { id, name, email, phone, pivot } = data.item;
+      const { id, name, email, phone, pivot, email_verified_at } = data.item;
       this.$bvModal.show("modal-prevent-closing");
       this.editUserIndex = data.index;
       this.newparticipant = {
@@ -896,6 +897,7 @@ export default {
         email,
         phone,
         pivot,
+        email_verified_at,
       };
       this.$v.$reset();
     },
