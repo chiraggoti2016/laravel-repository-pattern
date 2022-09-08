@@ -58,7 +58,7 @@ let router = new Router({
         },
         {
             path: "/admin/partners/add",
-            name: "partnersadd",
+            name: "partners-add",
             component: () => import("./views/admin/partners/add.vue"),
             meta: {
                 requiresAuth: true,
@@ -67,7 +67,7 @@ let router = new Router({
         },
         {
             path: "/admin/partners/edit/:id",
-            name: "partnersedit",
+            name: "partners-edit",
             component: () => import("./views/admin/partners/edit.vue"),
             meta: {
                 requiresAuth: true,
@@ -85,7 +85,7 @@ let router = new Router({
         },
         {
             path: "/admin/customers/add",
-            name: "customersadd",
+            name: "customers-add",
             component: () => import("./views/admin/customers/add.vue"),
             meta: {
                 requiresAuth: true,
@@ -94,7 +94,7 @@ let router = new Router({
         },
         {
             path: "/admin/customers/open/project/:id/:projectid",
-            name: "customersopen",
+            name: "customers-open",
             component: () => import("./views/admin/customers/open/index.vue"),
             meta: {
                 requiresAuth: true,
@@ -103,7 +103,7 @@ let router = new Router({
         },
         {
             path: "/admin/customers/edit/:id",
-            name: "customersedit",
+            name: "customers-edit",
             component: () => import("./views/admin/customers/edit.vue"),
             meta: {
                 requiresAuth: true,
@@ -130,7 +130,7 @@ let router = new Router({
         },
         {
             path: "/admin/projects/add",
-            name: "projectsadd",
+            name: "projects-add",
             component: () => import("./views/admin/projects/add.vue"),
             meta: {
                 requiresAuth: true,
@@ -139,7 +139,7 @@ let router = new Router({
         },
         {
             path: "/admin/projects/edit/:id",
-            name: "projectsedit",
+            name: "projects-edit",
             component: () => import("./views/admin/projects/edit.vue"),
             meta: {
                 requiresAuth: true,
@@ -148,7 +148,7 @@ let router = new Router({
         },
         {
             path: "/admin/projects/view/:id",
-            name: "projectsview",
+            name: "projects-view",
             component: () => import("./views/admin/projects/host-index.vue"),
             meta: {
                 requiresAuth: true,
@@ -157,7 +157,7 @@ let router = new Router({
         },
         {
             path: "/admin/countries/add",
-            name: "countriesadd",
+            name: "countries-add",
             component: () => import("./views/admin/countries/add.vue"),
             meta: {
                 requiresAuth: true,
@@ -166,7 +166,7 @@ let router = new Router({
         },
         {
             path: "/admin/countries/edit/:id",
-            name: "countriesedit",
+            name: "countries-edit",
             component: () => import("./views/admin/countries/edit.vue"),
             meta: {
                 requiresAuth: true,

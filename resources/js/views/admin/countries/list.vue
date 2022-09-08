@@ -22,7 +22,7 @@
         </div>
       </div>
       <div class="card-body">
-        <div class="table-responsive zero-last-action-padding">
+        <div class="table-responsive p0-last-1">
           <data-table :url="url" :columns="columns" :headers="headers">
           </data-table>
         </div>

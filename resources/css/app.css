@@ -7,8 +7,18 @@
 }
 
 /* zero-last-action-padding */
-.zero-last-action-padding table tbody tr td:last-child {
+.p0-last-1 table tbody tr td:last-child {
     padding-left: 0px;
+}
+
+.p0-last-3 table tbody tr td:nth-last-child(3) {
+    padding-right: 0px;
+}
+
+.p0-last-3 table tbody tr td:nth-last-child(1),
+.p0-last-3 table tbody tr td:nth-last-child(2) {
+    padding-left: 0px;
+    padding-right: 0px;
 }
 
 
