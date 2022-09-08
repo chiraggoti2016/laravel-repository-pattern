@@ -83,7 +83,13 @@
                     :options="countriesOptions"
                     :state="validateState('country')"
                     aria-describedby="input-3-live-feedback"
-                  ></b-form-select>
+                  >
+                    <template #first>
+                      <b-form-select-option :value="null" disabled
+                        >Select Country</b-form-select-option
+                      >
+                    </template>
+                  </b-form-select>
                   <b-form-invalid-feedback id="input-3-live-feedback"
                     >This is a required field.</b-form-invalid-feedback
                   >
@@ -152,12 +158,7 @@
                   ></action-button>
                 </template>
               </b-table>
-              <p
-                v-if="$v.form.users.$dirty && $v.form.users.$invalid"
-                class="mb-0"
-              >
-                No Data
-              </p>
+              <p v-if="form.users.length === 0" class="mb-0">No Data</p>
               <div class="invalid-feedback" v-if="!$v.form.users.required">
                 Please add at least one user.
               </div>

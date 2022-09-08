@@ -88,24 +88,13 @@
                   >
                 </b-form-group>
               </b-col>
-              <b-col>
-                <b-form-group id="example-input-group-4">
-                  <label class="sr-only" for="example-input-4">Status</label>
-                  <b-form-input
-                    id="example-input-4"
-                    name="example-input-4"
-                    class="mb-2 mr-sm-2 mb-sm-0"
-                    placeholder="Status"
-                    v-model="$v.form.status.$model"
-                    :state="validateState('status')"
-                    aria-describedby="input-4-live-feedback"
-                    disabled
-                  ></b-form-input>
-
-                  <b-form-invalid-feedback id="input-4-live-feedback"
-                    >This is a required field.</b-form-invalid-feedback
-                  >
-                </b-form-group>
+              <b-col cols="2">
+                <a href="#" class="btn btn-secondary btn-icon-split"
+                  ><span class="icon text-white-50"
+                    ><i class="fas fa-arrow-right"></i
+                  ></span>
+                  <span class="text">{{ form.status }}</span></a
+                >
               </b-col>
             </b-row>
           </b-form>
@@ -351,13 +340,50 @@
                   </p>
                 </template>
 
+                <template #cell(status)="data">
+                  <p v-if="data.item.status">{{ data.item.status }}</p>
+                  <p v-else>-</p>
+                </template>
+
+                <template #cell(start)="data">
+                  <p v-if="data.item.start">{{ data.item.start }}</p>
+                  <p v-else>-</p>
+                </template>
+
+                <template #cell(end)="data">
+                  <p v-if="data.item.end">{{ data.item.end }}</p>
+                  <p v-else>-</p>
+                </template>
+
                 <template #cell(actions)="data">
                   <action-button
                     :data="data"
-                    :meta="editActionButton.meta"
+                    :meta="initActionButton.meta"
+                    :classes="initActionButton.classes"
                     name="Initiate"
-                    @click="editActionButtonClick"
-                  ></action-button>
+                  >
+                  </action-button>
+                  <action-button
+                    :data="data"
+                    :meta="openActionButton.meta"
+                    :classes="openActionButton.classes"
+                    name="Open"
+                  >
+                  </action-button>
+                  <action-button
+                    :data="data"
+                    :meta="notesActionButton.meta"
+                    :classes="notesActionButton.classes"
+                    name="Notes"
+                  >
+                  </action-button>
+                  <action-button
+                    :data="data"
+                    :meta="reminderActionButton.meta"
+                    :classes="reminderActionButton.classes"
+                    name="Reminder"
+                  >
+                  </action-button>
                 </template>
               </b-table>
             </b-card-text>
@@ -556,9 +582,10 @@ export default {
       stageFields: [
         { key: "index", label: "#" },
         { key: "name", label: "Stage" },
-        "scope",
-        "start",
-        "end",
+        { key: "scope", class: "text-center" },
+        { key: "status", class: "text-center" },
+        { key: "start", class: "text-center" },
+        { key: "end", class: "text-center" },
         "actions",
       ],
       participantFields: [
@@ -608,6 +635,66 @@ export default {
               "fa-edit": true,
             },
           },
+        },
+      },
+      initActionButton: {
+        meta: {
+          icon: {
+            has: false,
+            classes: {
+              "fa-arrow-right": true,
+            },
+          },
+        },
+        classes: {
+          btn: true,
+          "btn-secondary": true,
+          "btn-sm": true,
+        },
+      },
+      openActionButton: {
+        meta: {
+          icon: {
+            has: false,
+            classes: {
+              "fa-check": true,
+            },
+          },
+        },
+        classes: {
+          btn: true,
+          "btn-primary": true,
+          "btn-sm": true,
+        },
+      },
+      notesActionButton: {
+        meta: {
+          icon: {
+            has: false,
+            classes: {
+              "fa-clipboard": true,
+            },
+          },
+        },
+        classes: {
+          btn: true,
+          "btn-warning": true,
+          "btn-sm": true,
+        },
+      },
+      reminderActionButton: {
+        meta: {
+          icon: {
+            has: false,
+            classes: {
+              "fa-stopwatch": true,
+            },
+          },
+        },
+        classes: {
+          btn: true,
+          "btn-info": true,
+          "btn-sm": true,
         },
       },
       deleteActionButton: {
@@ -727,12 +814,13 @@ export default {
     },
     async saveProject() {
       try {
-        const id = this.$route.params.id;
-        const response = await axios.put(`customers/${id}`, {
+        const params = this.$route.params;
+        const { id, projectid } = params;
+        const response = await axios.put(`projects/${id}`, {
           ...this.form,
         });
 
-        this.$router.push("/admin/customers");
+        this.$router.push(`/admin/customers/open/project/${id}/${projectid}`);
       } catch (error) {
         notify.authError(error);
       }

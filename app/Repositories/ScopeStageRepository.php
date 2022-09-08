@@ -11,8 +11,8 @@ class ScopeStageRepository extends BaseRepository implements ScopeStageContract
     }
 
 	public function listByScope() {
-        return parent::all()->keyBy('scope')->mapToGroups(function ($item) {
-            return [$item['scope' ] => $item];
+        return $this->model->get()->mapToGroups(function ($item, $key) {
+            return [$item['scope'] => $item];
         });
     }
 }

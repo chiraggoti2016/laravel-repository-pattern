@@ -35,7 +35,7 @@ class ProjectRepository extends BaseRepository implements ProjectContract
         } catch(\Throwable $e){
             dd($e->getMessage());
             DB::rollBack();
-            //Log::debug('Customer Repository : ',[ 'error' =>$e ]);
+            //Log::debug('Project Repository : ',[ 'error' =>$e ]);
         }
         return false;
     }
@@ -43,15 +43,46 @@ class ProjectRepository extends BaseRepository implements ProjectContract
     function update($data, $id) {
         DB::beginTransaction();
         try {
-            if($project = parent::update($data, $id)) {
+            $participants = [];
+            if(isset($data['participants'])) {
+                $participants = $data['participants'];
+                unset($data['participants']);
+            }
+    
+            if(parent::update($data, $id)) {
+                $project = $this->findData($id);
+                $this->createUpdateParticipants($project, $participants);
                 DB::commit();
                 return $project;
             }
         }catch(\Throwable $e){
             DB::rollBack();
-            //Log::debug('Customer Repository : ',[ 'error' =>$e ]);
+            \Log::debug('Project Repository : ',[ 'error' =>$e ]);
         }
         return false;
+    }
+
+    private function createUpdateParticipants($project, $participants) {
+        $participantUserIds = [];
+        foreach($participants as $each) {    
+            $password = '123456';
+            $name = explode(' ', $each['name']);
+            unset($each['name']);
+            $userData = array_merge([
+                'first_name' => isset($name[0]) ? $name[0] : '',
+                'last_name' => isset($name[1]) ? $name[1] : '',
+                'password' => \Hash::make($password),
+                'role'      => 'customer',
+            ], $each);
+            $user = User::updateOrCreate(['id' =>$userData['id']],$userData);
+            $participantUserIds[$user->id] = [ 
+                'pvcot' => $each['pivot']['pvcot'],
+                'raci'  => $each['pivot']['raci'],
+            ];
+        }
+        
+        $project->participants()->sync($participantUserIds);
+        return $participantUserIds;
     }
 
 }

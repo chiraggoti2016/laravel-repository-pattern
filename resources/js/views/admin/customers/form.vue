@@ -83,7 +83,13 @@
                     :options="countriesOptions"
                     :state="validateState('country')"
                     aria-describedby="input-3-live-feedback"
-                  ></b-form-select>
+                  >
+                    <template #first>
+                      <b-form-select-option :value="null" disabled
+                        >Select Country</b-form-select-option
+                      >
+                    </template>
+                  </b-form-select>
 
                   <b-form-invalid-feedback id="input-3-live-feedback"
                     >This is a required field.</b-form-invalid-feedback

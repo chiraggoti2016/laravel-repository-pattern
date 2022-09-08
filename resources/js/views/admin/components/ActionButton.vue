@@ -19,6 +19,7 @@
       :to="meta.prefixLink ? meta.prefixLink + data.id : '#'"
       title="name"
     >
+      <slot></slot>
       <span :v-if="meta.icon.has" class="icon text-white-50">
         <i class="fas" :class="meta.icon.classes"></i>
       </span>
