@@ -16,8 +16,10 @@ class CreateProjectsTable extends Migration
         Schema::create('projects', function (Blueprint $table) {
             $table->id();
             $table->string('name', 25);
-            $table->date('startdate');
-            $table->date('enddate');
+            $table->string('slug', 25);
+            $table->string('folder', 25)->nullable();
+            $table->date('startdate')->nullable();
+            $table->date('enddate')->nullable();
             $table->enum('status', ['pending', 'on-going', 'completed'])->default('pending');
             $table->enum('scope', ['oracle_database', 'oracle_apps', 'microsoft', 'vmware', 'sap'])->default('oracle_database');
             $table->timestamps();

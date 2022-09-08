@@ -4,7 +4,7 @@ namespace App\Http\Requests\Api\Projects;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class UpdateProjectsRequest extends FormRequest
+class AddProjectsRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.

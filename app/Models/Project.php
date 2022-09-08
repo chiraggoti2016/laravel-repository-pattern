@@ -15,6 +15,8 @@ class Project extends Model
      */
     protected $fillable = [
         'name',
+        'slug',
+        'folder',
         'startdate',
         'enddate',
         'status',

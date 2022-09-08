@@ -19,7 +19,7 @@ class UserTableSeeder extends Seeder
                 'last_name' => 'Admin',
                 'email' => 'admin@admin.com',
                 'password' => \Hash::make('admin@123'), // password 
-                'type'  => 'admin',
+                'role'  => 'admin',
             ]);
     }
 }

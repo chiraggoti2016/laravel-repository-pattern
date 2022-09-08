@@ -49,6 +49,12 @@
       >
     </li>
 
+    <div class="sidebar-heading">Lists</div>
+    <li class="nav-item">
+        <router-link class="nav-link" to="/admin/projects">
+            <i class="fas fa-fw fa-table"></i> <span>Projects</span>
+        </router-link>
+    </li>
     <!-- Divider -->
     <hr class="sidebar-divider d-none d-md-block" />
 

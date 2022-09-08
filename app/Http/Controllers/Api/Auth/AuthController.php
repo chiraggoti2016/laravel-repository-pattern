@@ -36,6 +36,7 @@ class AuthController extends Controller
                 ]);
             }
         } catch (\Exception $e) {
+            dd($e->getMessage());
             return response([
                 'message' => 'Internal error, please try again later.' //$e->getMessage()
             ], 400);

@@ -118,6 +118,42 @@ let router = new Router({
                 requiresAuth: true,
                 layout: AdminLayout
             }
+        },
+        {
+            path: "/admin/projects",
+            name: "projects",
+            component: () => import("./views/admin/projects/index.vue"),
+            meta: {
+                requiresAuth: true,
+                layout: AdminLayout
+            }
+        },
+        {
+            path: "/admin/projects/add",
+            name: "projectsadd",
+            component: () => import("./views/admin/projects/add.vue"),
+            meta: {
+                requiresAuth: true,
+                layout: AdminLayout
+            }
+        },
+        {
+            path: "/admin/projects/edit/:id",
+            name: "projectsedit",
+            component: () => import("./views/admin/projects/edit.vue"),
+            meta: {
+                requiresAuth: true,
+                layout: AdminLayout
+            }
+        },
+        {
+            path: "/admin/projects/view/:id",
+            name: "projectsview",
+            component: () => import("./views/admin/projects/host-index.vue"),
+            meta: {
+                requiresAuth: true,
+                layout: AdminLayout
+            }
         }
     ]
 });
