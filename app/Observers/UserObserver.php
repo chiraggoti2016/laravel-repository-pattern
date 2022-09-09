@@ -3,6 +3,9 @@
 namespace App\Observers;
 
 use App\Models\User;
+use App\Models\UserVerify;
+use Mail;
+use Str;
 
 class UserObserver
 {
@@ -14,7 +17,18 @@ class UserObserver
      */
     public function created(User $user)
     {
-        //
+        $token = Str::random(64);
+
+        UserVerify::create([
+            'user_id' => $user->id, 
+            'token' => $token
+        ]);
+
+        Mail::send('Mails.verification', ['token' => $token], function($message) use($user){
+            $message->to($user->email);
+            $message->subject('Email Verification Mail');
+        });
+        return $user;
     }
 
     /**

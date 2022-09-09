@@ -24,6 +24,7 @@ class UserTableSeeder extends Seeder
                 'first_name' => 'Optima',
                 'last_name' => 'Admin',
                 'password' => \Hash::make('admin@123'), // password 
+                'email_verified_at' => date('Y-m-d'),
         ]);
     }
 }

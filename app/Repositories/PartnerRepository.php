@@ -8,6 +8,7 @@ use App\Http\Resources\Partner as PartnerResource;
 use Illuminate\Http\Request;
 use DataTableCollectionResource;
 use DB;
+use Log;
 
 class PartnerRepository extends BaseRepository implements PartnerContract
 {

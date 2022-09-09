@@ -53,4 +53,9 @@ class UsersController extends Controller
 	public function emailAlreadyExists(EmailAlreadyExistsRequest $request) { 
 		return $this->sendResponse(); 
 	}
+
+	public function resend(ResendRequest $request, $user) { 
+		$res=$this->userService->resend($request, $user);
+		return $this->sendResponse($res); 
+	}
 }

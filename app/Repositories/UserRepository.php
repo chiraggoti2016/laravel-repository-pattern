@@ -11,6 +11,19 @@ class UserRepository extends BaseRepository implements UserContract
         parent::__construct(new User);
     }
 
+    public function resend(Request $request, $user)
+    {
+        if ($user->hasVerifiedEmail()) {
+
+            return ['message' => 'User already have verified email!', 'status' => 422];
+
+        }
+
+        $request->user()->sendEmailVerificationNotification();
+
+        return ['message' => 'The notification has been resubmitted'];
+    }
+
 }
 
 ?>
