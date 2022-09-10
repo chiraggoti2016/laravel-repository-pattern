@@ -30,7 +30,7 @@ Route::group(['middleware' => ['auth:api']], function () {
     });
 
     Route::group(['prefix' => 'question/categories', 'as' => 'question.categories'], function () {
-        Route::get('/list',[Api\CountriesController::class, 'list'])->name('.list');
+        Route::get('/list',[Api\QuestionCategoriesController::class, 'list'])->name('.list');
     });
 
     Route::group(['prefix' => 'users', 'as' => 'users'], function () {

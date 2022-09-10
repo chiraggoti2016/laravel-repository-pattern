@@ -65,7 +65,7 @@ export default {
   name: "Question",
   data() {
     return {
-      url: "https://optima.test/api/questions",
+      url: "/api/questions",
       columns: [
         {
           label: "ID",

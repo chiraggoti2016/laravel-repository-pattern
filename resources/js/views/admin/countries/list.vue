@@ -65,7 +65,7 @@ export default {
   name: "Country",
   data() {
     return {
-      url: "https://optima.test/api/countries/list",
+      url: "/api/countries/list",
       columns: [
         {
           label: "Country ID",

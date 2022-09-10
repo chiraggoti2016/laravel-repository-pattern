@@ -67,7 +67,7 @@ export default {
   name: "QuestionCategory",
   data() {
     return {
-      url: "https://optima.test/api/question/categories",
+      url: "/api/question/categories/list",
       columns: [
         {
           label: "Category ID",

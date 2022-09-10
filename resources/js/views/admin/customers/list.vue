@@ -65,7 +65,7 @@ export default {
   name: "Customer",
   data() {
     return {
-      url: "https://optima.test/api/customers",
+      url: "/api/customers",
       columns: [
         {
           label: "Customer ID",

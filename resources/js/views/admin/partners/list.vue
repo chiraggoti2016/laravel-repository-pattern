@@ -65,7 +65,7 @@ export default {
   name: "Partner",
   data() {
     return {
-      url: "https://optima.test/api/partners",
+      url: "/api/partners",
       columns: [
         {
           label: "Partner ID",
