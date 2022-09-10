@@ -8,7 +8,7 @@ phases:
          - yum update -y
          - yum install -y amazon-linux-extras php7.3
          - yum install -y php-curl php-mbstring php-intl php-opcache php-soap php-gd php-xml php-mysqli
-         - curl -sS <https://getcomposer.org/installer> | php -- --install-dir=/usr/local/bin --filename=composer
+         - curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
    pre_build:
      commands:
          - composer install
