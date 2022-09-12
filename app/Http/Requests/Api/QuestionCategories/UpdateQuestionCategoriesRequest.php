@@ -3,6 +3,7 @@
 namespace App\Http\Requests\Api\QuestionCategories;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class UpdateQuestionCategoriesRequest extends FormRequest
 {
@@ -24,7 +25,10 @@ class UpdateQuestionCategoriesRequest extends FormRequest
     public function rules()
     {
         return [
-            //
+            'category' => [
+                'required',
+                Rule::unique('question_categories')->ignore($this->id),
+            ]
         ];
     }
 }

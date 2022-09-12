@@ -21,7 +21,7 @@ class CreateQuestionsTable extends Migration
             $table->enum('response_collector', ['YesNo', 'FreeText', 'Ticker', 'Form', 'Upload']);
             $table->string('scope', 50)->index()->comment('scope slug');
             $table->foreign('scope')->references('slug')->on('scopes')->onDelete('cascade');
-            $table->string('category', 40)->unique()->comment('category slug');
+            $table->string('category', 40)->index()->comment('category slug');
             $table->foreign('category')->references('slug')->on('question_categories')->onDelete('cascade');
             $table->timestamps();
         });
