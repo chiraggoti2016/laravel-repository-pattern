@@ -38,7 +38,7 @@
             <b-row>
               <b-col>
                 <b-form-group id="example-input-group-1">
-                  <label class="sr-only" for="input-question">Question</label>
+                  <label class="require" for="input-question">Question</label>
                   <b-form-input
                     id="input-question"
                     name="input-question"
@@ -58,9 +58,7 @@
             <b-row>
               <b-col>
                 <b-form-group id="example-input-group-2">
-                  <label class="sr-only" for="example-input-2"
-                    >Sub Question</label
-                  >
+                  <label for="example-input-2">Sub Question</label>
                   <b-form-input
                     id="example-input-2"
                     name="example-input-2"
@@ -80,7 +78,7 @@
             <b-row>
               <b-col>
                 <b-form-group id="example-input-group-3">
-                  <label class="sr-only" for="example-input-3"
+                  <label class="require" for="example-input-3"
                     >Information</label
                   >
                   <b-form-input
@@ -102,7 +100,7 @@
             <b-row>
               <b-col>
                 <b-form-group id="example-input-group-4">
-                  <label class="sr-only" for="example-input-4"
+                  <label class="require" for="example-input-4"
                     >Response Collector</label
                   >
                   <b-form-select
@@ -128,7 +126,7 @@
               </b-col>
               <b-col>
                 <b-form-group id="example-input-group-5">
-                  <label class="sr-only" for="example-input-5">Scope</label>
+                  <label class="require" for="example-input-5">Scope</label>
                   <b-form-select
                     id="example-input-3"
                     name="example-input-3"
@@ -152,7 +150,7 @@
               </b-col>
               <b-col>
                 <b-form-group id="example-input-group-6">
-                  <label class="sr-only" for="example-input-6">Category</label>
+                  <label class="require" for="example-input-6">Category</label>
                   <b-form-select
                     id="example-input-6"
                     name="example-input-6"
@@ -226,9 +224,7 @@ export default {
       question: {
         required,
       },
-      sub_question: {
-        required,
-      },
+      sub_question: {},
       information: {
         required,
       },
@@ -278,10 +274,12 @@ export default {
     },
     resetForm() {
       this.form = {
-        name: null,
-        address: null,
-        country: null,
-        users: [],
+        question: null,
+        sub_question: null,
+        information: null,
+        response_collector: null,
+        scope: null,
+        category: null,
       };
 
       this.$nextTick(() => {
@@ -327,43 +325,6 @@ export default {
       const { $dirty, $error } = this.$v.newuser[name];
       return $dirty ? !$error : null;
     },
-    resetModal() {
-      this.newuser = {
-        id: null,
-        name: "",
-        email: "",
-        phone: "",
-        isNew: true,
-      };
-      this.editUserIndex = null;
-
-      this.$v.$reset();
-    },
-    handleOk(bvModalEvent) {
-      // Prevent modal from closing
-      bvModalEvent.preventDefault();
-      // Trigger submit handler
-      this.handleAddUserSubmit();
-    },
-    handleAddUserSubmit() {
-      this.$v.newuser.$touch();
-      if (this.$v.newuser.$anyError) {
-        return;
-      }
-
-      // Push / Update
-      if (this.editUserIndex != null && this.editUserIndex != -1) {
-        this.form.users[this.editUserIndex] = { ...this.newuser, isNew: false };
-      } else this.form.users.push({ ...this.newuser, isNew: true, id: null });
-
-      this.$root.$emit("bv::refresh::table", "users-b-table-id");
-      this.resetModal();
-
-      // Hide the modal manually
-      this.$nextTick(() => {
-        this.$bvModal.hide("modal-prevent-closing");
-      });
-    },
     async getData(id) {
       try {
         const response = await axios.get(`questions/${id}`);
@@ -371,34 +332,6 @@ export default {
       } catch (error) {
         notify.authError(error);
       }
-    },
-    editActionButtonClick(data) {
-      const { id, name, email, phone } = data.item;
-      this.$bvModal.show("modal-prevent-closing");
-      this.editUserIndex = data.index;
-      this.newuser = {
-        id,
-        name,
-        email,
-        phone,
-      };
-      this.$v.$reset();
-    },
-    deleteActionButtonClick(data) {
-      this.editUserIndex = data.index;
-      this.busy = true;
-    },
-
-    onOverlayCancel() {
-      this.busy = false;
-    },
-    onOverlayOK() {
-      if (this.editUserIndex > -1) {
-        this.form.users.splice(this.editUserIndex, 1);
-      }
-      this.$root.$emit("bv::refresh::table", "users-b-table-id");
-
-      this.busy = false;
     },
   },
   components: {

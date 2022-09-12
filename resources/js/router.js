@@ -102,6 +102,16 @@ let router = new Router({
             }
         },
         {
+            path: "/admin/customers/open/project/questionnaire/:id/:projectid",
+            name: "customers-open-questionnaire",
+            component: () => import("./views/admin/customers/open/questionnaire/index.vue"),
+            meta: {
+                requiresAuth: true,
+                layout: AdminLayout
+            }
+        },
+        // questionnaire
+        {
             path: "/admin/customers/edit/:id",
             name: "customers-edit",
             component: () => import("./views/admin/customers/edit.vue"),

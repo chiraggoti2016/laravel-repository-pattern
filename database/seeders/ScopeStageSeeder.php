@@ -20,7 +20,6 @@ class ScopeStageSeeder extends Seeder
 
         // Oracle Database
         $scopes = [
-    		array('name' => 'Oracle Database', 'scope' => 'oracle_database'),
             array('name' => 'Pre-Engagement Questionaire', 'scope' => 'oracle_database'),
             array('name' => 'Data Collection', 'scope' => 'oracle_database'),
             array('name' => 'Data Review', 'scope' => 'oracle_database'),
@@ -37,7 +36,6 @@ class ScopeStageSeeder extends Seeder
 
         // Oracle Apps
         $scopes = [
-    		array('name' => 'Oracle Apps', 'scope' => 'oracle_apps'),
             array('name' => 'Pre-Engagement Questionaire', 'scope' => 'oracle_apps'),
             array('name' => 'Data Collection', 'scope' => 'oracle_apps'),
             array('name' => 'Data Review', 'scope' => 'oracle_apps'),
@@ -55,7 +53,6 @@ class ScopeStageSeeder extends Seeder
 
         // Microsoft
         $scopes = [
-            array('name' => 'Microsoft', 'scope' => 'microsoft'),
             array('name' => 'Pre-Engagement Questionaire', 'scope' => 'microsoft'),
             array('name' => 'Data Collection', 'scope' => 'microsoft'),
             array('name' => 'Data Review', 'scope' => 'microsoft'),
@@ -73,7 +70,6 @@ class ScopeStageSeeder extends Seeder
 
         // Vmware
         $scopes = [
-            array('name' => 'Vmware', 'scope' => 'vmware'),
             array('name' => 'Pre-Engagement Questionaire', 'scope' => 'vmware'),
             array('name' => 'Data Collection', 'scope' => 'vmware'),
             array('name' => 'Data Review', 'scope' => 'vmware'),
@@ -91,7 +87,6 @@ class ScopeStageSeeder extends Seeder
 
         // Sap
         $scopes = [
-            array('name' => 'Sap', 'scope' => 'sap'),
             array('name' => 'Pre-Engagement Questionaire', 'scope' => 'sap'),
             array('name' => 'Data Collection', 'scope' => 'sap'),
             array('name' => 'Data Review', 'scope' => 'sap'),

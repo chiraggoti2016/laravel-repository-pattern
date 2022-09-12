@@ -38,7 +38,7 @@
             <b-row>
               <b-col>
                 <b-form-group id="example-input-group-1">
-                  <label class="sr-only" for="example-input-1"
+                  <label class="require" for="example-input-1"
                     >Category Name</label
                   >
                   <b-form-input

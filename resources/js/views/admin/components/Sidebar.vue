@@ -60,6 +60,7 @@
           'customers-add',
           'customers-edit',
           'customers-open',
+          'customers-open-questionnaire',
         ].indexOf(currentRouteName) != -1
           ? 'active'
           : ''

@@ -48,4 +48,9 @@ class QuestionsController extends Controller
 		$res=$this->questionService->delete($id);
 		return $this->sendResponse($res);
     }
+
+	public function listByCategory($scope) {
+		$res=$this->questionService->listByCategory($scope);
+		return $this->sendResponse($res);
+	}
 }

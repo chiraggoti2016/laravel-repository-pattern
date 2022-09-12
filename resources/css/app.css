@@ -42,3 +42,10 @@
 .form-list.is-invalid .invalid-feedback {
     display: block;
 }
+
+/* form label */
+label.require::after, .require-h6 h6::after{
+    content: '*';
+    color: #e74a3b;
+}
+

@@ -29,6 +29,10 @@ Route::group(['middleware' => ['auth:api']], function () {
         Route::get('/list',[Api\CountriesController::class, 'list'])->name('.list');
     });
 
+    Route::group(['prefix' => 'questions', 'as' => 'questions'], function () {
+        Route::get('list/bycategory/{scope}',[Api\QuestionsController::class, 'listByCategory'])->name('.bycategory');
+    });
+
     Route::group(['prefix' => 'question/categories', 'as' => 'question.categories'], function () {
         Route::get('/list',[Api\QuestionCategoriesController::class, 'list'])->name('.list');
     });

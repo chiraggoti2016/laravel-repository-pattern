@@ -25,6 +25,12 @@ class QuestionRepository extends BaseRepository implements QuestionContract
         return new DataTableCollectionResource($data);
     }
 
+    function listByCategory($scope) {
+        return $this->model->where('scope', $scope)->get()->mapToGroups(function ($item, $key) {
+            return [$item['category'] => $item];
+        });
+    }
+
 }
 
 ?>

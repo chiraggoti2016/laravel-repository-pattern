@@ -16,7 +16,7 @@ class CreateQuestionsTable extends Migration
         Schema::create('questions', function (Blueprint $table) {
             $table->id();
             $table->text('question');
-            $table->text('sub_question');
+            $table->text('sub_question')->nullable();
             $table->text('information');
             $table->enum('response_collector', ['YesNo', 'FreeText', 'Ticker', 'Form', 'Upload']);
             $table->string('scope', 50)->index()->comment('scope slug');

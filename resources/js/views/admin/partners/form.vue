@@ -38,7 +38,7 @@
             <b-row>
               <b-col>
                 <b-form-group id="example-input-group-1">
-                  <label class="sr-only" for="example-input-1">Name</label>
+                  <label class="require" for="example-input-1">Name</label>
                   <b-form-input
                     id="example-input-1"
                     name="example-input-1"
@@ -56,7 +56,7 @@
               </b-col>
               <b-col cols="6">
                 <b-form-group id="example-input-group-2">
-                  <label class="sr-only" for="example-input-2">Address</label>
+                  <label class="require" for="example-input-2">Address</label>
                   <b-form-input
                     id="example-input-2"
                     name="example-input-2"
@@ -74,7 +74,7 @@
               </b-col>
               <b-col>
                 <b-form-group id="example-input-group-3">
-                  <label class="sr-only" for="example-input-3">Country</label>
+                  <label class="require" for="example-input-3">Country</label>
                   <b-form-select
                     id="example-input-3"
                     name="example-input-3"
@@ -217,6 +217,7 @@
           id="example-modal-input-group-1"
           label="Name"
           label-for="modal-name-input"
+          label-class="require"
         >
           <b-form-input
             id="modal-name-input"
@@ -239,6 +240,7 @@
           id="example-modal-input-group-2"
           label="Email"
           label-for="modal-email-input"
+          label-class="require"
         >
           <b-form-input
             id="modal-email-input"
@@ -400,7 +402,6 @@ export default {
         },
       },
       phone: {
-        required,
         numbercheck: helpers.regex("phone", /^(\+\d{1,3}[- ]?)?\d{10}$/),
       },
     },

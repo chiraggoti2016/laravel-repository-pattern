@@ -26,7 +26,7 @@
             <b-row>
               <b-col cols="5">
                 <b-form-group id="example-input-group-1">
-                  <label class="sr-only" for="example-input-1">Name</label>
+                  <label class="require" for="example-input-1">Name</label>
                   <b-form-input
                     id="example-input-1"
                     name="example-input-1"
@@ -43,7 +43,7 @@
               </b-col>
               <b-col>
                 <b-form-group id="example-input-group-2">
-                  <label class="sr-only" for="startdate-input"
+                  <label class="require" for="startdate-input"
                     >Start Date</label
                   >
 
@@ -68,7 +68,7 @@
               </b-col>
               <b-col>
                 <b-form-group id="example-input-group-3">
-                  <label class="sr-only" for="enddate-input">End Date</label>
+                  <label class="require" for="enddate-input">End Date</label>
                   <b-form-datepicker
                     id="enddate-input"
                     name="enddate-input"
@@ -89,6 +89,7 @@
                 </b-form-group>
               </b-col>
               <b-col cols="2">
+                <label> Status </label>
                 <a href="#" class="btn btn-secondary btn-icon-split"
                   ><span class="icon text-white-50"
                     ><i class="fas fa-arrow-right"></i
@@ -104,6 +105,7 @@
           <b-card
             sub-title="Scope Of Project (select one)"
             class="form-list"
+            body-class="require-h6"
             :class="
               $v.form.scope.$dirty && !$v.form.scope.required
                 ? $v.form.scope.$invalid
@@ -134,6 +136,7 @@
           <b-card
             sub-title="Project Participants"
             class="form-list"
+            body-class="require-h6"
             :class="
               $v.form.participants.$dirty
                 ? $v.form.participants.$invalid
@@ -358,7 +361,10 @@
                 <template #cell(actions)="data">
                   <action-button
                     :data="data"
-                    :meta="initActionButton.meta"
+                    :meta="{
+                      ...initActionButton.meta,
+                      prefixLink: `/admin/customers/open/project/questionnaire/${$route.params.id}/${$route.params.projectid}`,
+                    }"
                     :classes="initActionButton.classes"
                     name="Initiate"
                   >
@@ -433,6 +439,7 @@
           id="example-modal-input-group-1"
           label="Name"
           label-for="modal-name-input"
+          label-class="require"
         >
           <b-form-input
             id="modal-name-input"
@@ -452,6 +459,7 @@
           id="example-modal-input-group-2"
           label="Email"
           label-for="modal-email-input"
+          label-class="require"
         >
           <b-form-input
             id="modal-email-input"
@@ -509,8 +517,9 @@
 
         <b-form-group
           id="example-modal-input-group-4"
-          label="PVCOT"
+          label="User Type"
           label-for="modal-pvcot-input"
+          label-class="require"
           v-slot="{ ariaDescribedby }"
         >
           <b-form-radio-group
@@ -532,6 +541,7 @@
           id="example-modal-input-group-5"
           label="RACI"
           label-for="modal-raci-input"
+          label-class="require"
           v-slot="{ raciariaDescribedby }"
         >
           <b-form-radio-group
@@ -617,6 +627,7 @@ export default {
         participants: [],
         stages: [],
       },
+      editUserIndex: null,
       newparticipant: {
         name: null,
         email: null,
@@ -751,7 +762,6 @@ export default {
         },
       },
       phone: {
-        required,
         numbercheck: helpers.regex("phone", /^(\+\d{1,3}[- ]?)?\d{10}$/),
       },
       pivot: {

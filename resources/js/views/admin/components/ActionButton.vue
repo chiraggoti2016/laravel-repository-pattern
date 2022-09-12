@@ -16,7 +16,7 @@
       v-if="meta.prefixLink"
       :class="classes"
       class="btn btn-icon-split"
-      :to="meta.prefixLink ? meta.prefixLink + data.id : '#'"
+      :to="meta.prefixLink ? meta.prefixLink + (data.id ? data.id : '') : '#'"
       title="name"
     >
       <slot></slot>
