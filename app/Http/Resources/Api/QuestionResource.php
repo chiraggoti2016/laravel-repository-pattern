@@ -22,6 +22,7 @@ class QuestionResource extends JsonResource
             'response_collector'    =>  $this->response_collector,
             'scope'                 =>  $this->scope,
             'category'              =>  $this->category,
+            'fields'                =>  $this->fields,
         ];
     }
 }

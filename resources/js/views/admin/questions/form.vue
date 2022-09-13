@@ -57,26 +57,6 @@
             </b-row>
             <b-row>
               <b-col>
-                <b-form-group id="example-input-group-2">
-                  <label for="example-input-2">Sub Question</label>
-                  <b-form-input
-                    id="example-input-2"
-                    name="example-input-2"
-                    class="mb-2 mr-sm-2 mb-sm-0"
-                    placeholder="Sub Question"
-                    v-model="$v.form.sub_question.$model"
-                    :state="validateState('sub_question')"
-                    aria-describedby="input-2-live-feedback"
-                  ></b-form-input>
-
-                  <b-form-invalid-feedback id="input-2-live-feedback"
-                    >This is a required field.</b-form-invalid-feedback
-                  >
-                </b-form-group>
-              </b-col>
-            </b-row>
-            <b-row>
-              <b-col>
                 <b-form-group id="example-input-group-3">
                   <label class="require" for="example-input-3"
                     >Information</label
@@ -173,6 +153,125 @@
                 </b-form-group>
               </b-col>
             </b-row>
+            <!-- YesNo -->
+            <b-row v-if="form.response_collector === 'YesNo'">
+              <b-col>
+                <b-form-group id="example-input-group-2">
+                  <label for="example-input-2">Sub Question</label>
+                  <b-form-input
+                    id="example-input-2"
+                    name="example-input-2"
+                    class="mb-2 mr-sm-2 mb-sm-0"
+                    placeholder="Sub Question"
+                    v-model="$v.form.sub_question.$model"
+                    :state="validateState('sub_question')"
+                    aria-describedby="input-2-live-feedback"
+                  ></b-form-input>
+
+                  <b-form-invalid-feedback id="input-2-live-feedback"
+                    >This is a required field.</b-form-invalid-feedback
+                  >
+                </b-form-group>
+              </b-col>
+            </b-row>
+            <!-- Form -->
+            <b-row v-if="form.response_collector === 'Form'">
+              <div class="table-responsive">
+                <b-card
+                  sub-title="Form Fields"
+                  class="form-list"
+                  :class="
+                    $v.form.fields.$dirty
+                      ? $v.form.fields.$invalid
+                        ? 'is-invalid'
+                        : 'is-valid'
+                      : ''
+                  "
+                >
+                  <b-card-text>
+                    <b-table
+                      responsive="sm"
+                      borderless
+                      small
+                      :items="form.fields"
+                      :fields="formFields"
+                    >
+                      <!-- email_verified_at -->
+                      <template #cell(input)="data">
+                        <b-form-input
+                          :id="'modal-name-input' + data.index"
+                          :name="'modal-name-input' + data.index"
+                          class="mb-2 mr-sm-2 mb-sm-0"
+                          placeholder="Enter Input"
+                          v-model="data.item.input"
+                          :state="
+                            validateEachState('fields', data.index, 'input')
+                          "
+                          aria-describedby="modal-input-1-live-feedback"
+                          size="sm"
+                        ></b-form-input>
+
+                        <b-form-invalid-feedback
+                          v-if="
+                            !$v.form.fields.$each[data.index].input.required
+                          "
+                          >input is required</b-form-invalid-feedback
+                        >
+                      </template>
+                      <template #cell(type)="data">
+                        <b-form-select
+                          :id="'input-type' + data.index"
+                          :name="'input-type' + data.index"
+                          class="mb-2 mr-sm-2 mb-sm-0"
+                          v-model="data.item.type"
+                          :options="typeOptions"
+                          :state="
+                            validateEachState('fields', data.index, 'type')
+                          "
+                          aria-describedby="input-3-live-feedback"
+                          size="sm"
+                        >
+                          <template #first>
+                            <b-form-select-option :value="null" disabled
+                              >Select Type</b-form-select-option
+                            >
+                          </template>
+                        </b-form-select>
+                        <b-form-invalid-feedback
+                          v-if="!$v.form.fields.$each[data.index].type.required"
+                          >type is required</b-form-invalid-feedback
+                        >
+                      </template>
+
+                      <template #cell(actions)="data">
+                        <action-button
+                          :data="data"
+                          :meta="addActionButton.meta"
+                          :classes="addActionButton.classes"
+                          name="Add"
+                          @click="addActionButtonClick"
+                        ></action-button>
+
+                        <action-button
+                          v-if="data.index > 0"
+                          :data="data"
+                          :meta="deleteActionButton.meta"
+                          :classes="deleteActionButton.classes"
+                          name="Delete"
+                          @click="deleteActionButtonClick"
+                        ></action-button>
+                      </template>
+                    </b-table>
+                    <div
+                      class="invalid-feedback"
+                      v-if="!$v.form.fields.$invalid"
+                    >
+                      Please add at least one field.
+                    </div>
+                  </b-card-text>
+                </b-card>
+              </div>
+            </b-row>
           </b-form>
         </b-container>
       </div>
@@ -188,7 +287,10 @@ import { validationMixin } from "vuelidate";
 import { required, email, helpers, numeric } from "vuelidate/lib/validators";
 import { getScopesBySlug } from "../../../services/scope";
 import { getAllQuestionCategories } from "../../../services/question-categories";
-import { RESPONSE_COLLECTOR_OPTIONS } from "../../../mixins/constants";
+import {
+  INPUT_TYPE_OPTIONS,
+  RESPONSE_COLLECTOR_OPTIONS,
+} from "../../../mixins/constants";
 
 export default {
   name: "AddQuestion",
@@ -209,6 +311,17 @@ export default {
       responseCollectorOptions: RESPONSE_COLLECTOR_OPTIONS,
       scopesOptions: [],
       questionCategoriesOptions: [],
+      typeOptions: INPUT_TYPE_OPTIONS,
+      formFields: [
+        "input",
+        "type",
+        {
+          key: "actions",
+          label: "Actions",
+          stickyColumn: true,
+          class: "w20p",
+        },
+      ],
       form: {
         question: null,
         sub_question: null,
@@ -216,6 +329,37 @@ export default {
         response_collector: null,
         scope: null,
         category: null,
+        fields: [{ input: null, type: null }],
+      },
+      addActionButton: {
+        meta: {
+          icon: {
+            has: true,
+            classes: {
+              "fa-plus": true,
+            },
+          },
+        },
+        classes: {
+          btn: true,
+          "btn-secondary": true,
+          "btn-sm": true,
+        },
+      },
+      deleteActionButton: {
+        meta: {
+          icon: {
+            has: true,
+            classes: {
+              "fa-trash": true,
+            },
+          },
+        },
+        classes: {
+          btn: true,
+          "btn-danger": true,
+          "btn-sm": true,
+        },
       },
     };
   },
@@ -236,6 +380,16 @@ export default {
       },
       category: {
         required,
+      },
+      fields: {
+        $each: {
+          input: {
+            required,
+          },
+          type: {
+            required,
+          },
+        },
       },
     },
   },
@@ -272,6 +426,10 @@ export default {
       const { $dirty, $error } = this.$v.form[name];
       return $dirty ? !$error : null;
     },
+    validateEachState(name, index, each) {
+      const { $dirty, $error } = this.$v.form[name].$each[index][each];
+      return $dirty ? !$error : null;
+    },
     resetForm() {
       this.form = {
         question: null,
@@ -280,6 +438,7 @@ export default {
         response_collector: null,
         scope: null,
         category: null,
+        fields: [{ input: null, type: null }],
       };
 
       this.$nextTick(() => {
@@ -331,6 +490,16 @@ export default {
         return response;
       } catch (error) {
         notify.authError(error);
+      }
+    },
+    deleteActionButtonClick(data) {
+      if (data.index > -1) {
+        this.form.fields.splice(data.index, 1);
+      }
+    },
+    addActionButtonClick(data) {
+      if (data.index > -1) {
+        this.form.fields.splice(data.index + 1, 0, { input: null, type: null });
       }
     },
   },

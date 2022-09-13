@@ -21,5 +21,15 @@ class Question extends Model
         'response_collector',
         'scope',
         'category',
+        'fields',
+    ];
+
+    /**
+     * The attributes that should be cast to native types.
+     *
+     * @var array
+     */
+    protected $casts = [
+        'fields' => 'array',
     ];
 }
