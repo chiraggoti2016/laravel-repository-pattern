@@ -23,7 +23,7 @@ class CustomerRepository extends BaseRepository implements CustomerContract
         $orderByDir = $request->input('dir', 'asc');
         $searchValue = $request->input('search');
         
-        $query = Customer::eloquentQuery($orderBy, $orderByDir, $searchValue)->withCount(['users', 'projects']);
+        $query = Customer::eloquentQuery($orderBy, $orderByDir, $searchValue)->withCount(['users', 'projects'])->where('added_by', $request->user()->id);
         $data = $query->paginate($length);
         return new DataTableCollectionResource($data);
     }

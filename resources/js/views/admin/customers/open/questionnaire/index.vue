@@ -72,22 +72,104 @@
               v-for="(question, index) in questions"
               :key="index"
             >
-              <b-form-radio-group
-                v-model="form.questions"
-                :options="[
-                  { name: 'Yes', id: 'yes' },
-                  { name: 'No', id: 'no' },
-                ]"
-                class="mb-3"
-                value-field="id"
-                text-field="name"
-                :state="validateState('questions')"
-                :aria-describedby="questionsLiveFeedback"
-              ></b-form-radio-group>
+              <!-- FreeText -->
+              <b-form-input
+                v-if="question.response_collector === 'FreeText'"
+                :id="'modal-name-input' + index"
+                :name="'modal-name-input' + index"
+                class="mb-2 mr-sm-2 mb-sm-0"
+                placeholder="Enter Input"
+                v-model="$v.form.questions[category].$each[index].input.$model"
+                :state="
+                  validateEachState('questions', category, index, 'input')
+                "
+                :aria-describedby="'modal-input-' + index + '-live-feedback'"
+                size="sm"
+              ></b-form-input>
 
-              <div class="invalid-feedback" v-if="!$v.form.emailTo.required">
-                This is a required field.
+              <!-- YesNo -->
+              <div v-if="question.response_collector === 'YesNo'">
+                <b-form-radio-group
+                  v-model="
+                    $v.form.questions[category].$each[index].input.$model
+                  "
+                  :options="yesNoOptions"
+                  class="mb-3"
+                  value-field="id"
+                  text-field="name"
+                  :state="
+                    validateEachState('questions', category, index, 'input')
+                  "
+                  :aria-describedby="questionsLiveFeedback"
+                ></b-form-radio-group>
+
+                <b-form-group
+                  v-if="
+                    $v.form.questions[category].$each[index].input.$model ===
+                    'yes'
+                  "
+                  :id="'modal-name-input-question-group-' + index"
+                >
+                  <label
+                    class="require"
+                    :for="'modal-name-input-question-' + index"
+                    >{{ index + 1 + "." + 1 + ". " + question.question }}</label
+                  >
+                  <b-form-input
+                    :id="'modal-name-input-question-' + index"
+                    :name="'modal-name-input-question-' + index"
+                    class="mb-2 mr-sm-2 mb-sm-0"
+                    placeholder="If yes then ...."
+                    v-model="
+                      $v.form.questions[category].$each[index].depend.$model
+                    "
+                    :state="
+                      validateEachState('questions', category, index, 'depend')
+                    "
+                    :aria-describedby="
+                      'modal-input-' + index + '-live-feedback'
+                    "
+                    size="sm"
+                  ></b-form-input>
+                </b-form-group>
               </div>
+
+              <!-- Ticker -->
+              <div v-if="question.response_collector === 'Ticker'">Ticker</div>
+
+              <!-- Form -->
+              <div v-if="question.response_collector === 'Form'">
+                <q-form
+                  :ref="'qform'"
+                  :key="index"
+                  v-model="
+                    $v.form.questions[category].$each[index].input.$model
+                  "
+                  :index="index"
+                  :question="question"
+                  :category="category"
+                  :state="
+                    validateEachState('questions', category, index, 'input')
+                  "
+                />
+              </div>
+
+              <!-- Upload -->
+              <b-form-file
+                v-if="question.response_collector === 'Upload'"
+                v-model="$v.form.questions[category].$each[index].input.$model"
+                :state="
+                  validateEachState('questions', category, index, 'input')
+                "
+                placeholder="Choose a file or drop it here..."
+                drop-placeholder="Drop file here..."
+                :aria-describedby="questionsLiveFeedback"
+              ></b-form-file>
+
+              <b-form-invalid-feedback
+                v-if="!$v.form.questions[category].$each[index].input.required"
+                >input is required</b-form-invalid-feedback
+              >
             </b-form-group>
           </b-card>
         </div>
@@ -99,18 +181,21 @@
 <script>
 import * as notify from "../../../../../utils/notify.js";
 import { validationMixin } from "vuelidate";
-import { required } from "vuelidate/lib/validators";
+import { required, requiredIf } from "vuelidate/lib/validators";
 import { getQuestionsListByCategory } from "../../../../../services/questions";
+import { YESNO_OPTION } from "../../../../../mixins/constants.js";
+import QForm from "./form.vue";
 
 export default {
   name: "CustomersProjectQuestionare",
   mixins: [validationMixin],
   data() {
     return {
+      yesNoOptions: YESNO_OPTION,
       form: {
         name: null,
         emailTo: [],
-        questions: {},
+        questions: [],
       },
       project: {
         name: null,
@@ -124,16 +209,40 @@ export default {
       questionsbycategory: {},
     };
   },
-  validations: {
-    form: {
-      name: {
-        required,
+  validations() {
+    return {
+      form: {
+        name: {
+          required,
+        },
+        emailTo: {
+          required,
+        },
+        questions:
+          this.questionsbycategory !== undefined &&
+          Object.keys(this.questionsbycategory).length > 0
+            ? Object.entries(this.questionsbycategory).reduce(function (
+                obj,
+                each
+              ) {
+                return {
+                  ...obj,
+                  [each[0]]: {
+                    $each: {
+                      input: {
+                        required,
+                      },
+                      depend: {
+                        required: requiredIf((value) => value.input === "yes"),
+                      },
+                    },
+                  },
+                };
+              },
+              {})
+            : { required },
       },
-      emailTo: {
-        required,
-      },
-      questions: {},
-    },
+    };
   },
   async mounted() {
     const { data } = await this.getData(this.getParam());
@@ -145,13 +254,30 @@ export default {
   methods: {
     async getQuestionsListByCategory(scope) {
       const { data } = await getQuestionsListByCategory(scope);
+
+      const temp = {};
+      for (const [key, value] of Object.entries(data)) {
+        temp[key] = value
+          ? value.map((v) => ({
+              input: v.response_collector == "YesNo" ? "no" : "",
+              depend: "",
+            }))
+          : [];
+      }
+
       this.questionsbycategory = { ...data };
+      this.form.questions = { ...temp };
     },
     getParam() {
       return this.$route.params;
     },
     validateState(name) {
       const { $dirty, $error } = this.$v.form[name];
+      return $dirty ? !$error : null;
+    },
+    validateEachState(name, category, index, each) {
+      const { $dirty, $error } =
+        this.$v.form[name][category].$each[index][each];
       return $dirty ? !$error : null;
     },
     resetForm() {
@@ -168,6 +294,16 @@ export default {
     },
     onSubmit() {
       this.$v.form.$touch();
+
+      if (
+        this.$refs.qform &&
+        !this.$refs.qform.every((each) => {
+          return each.onSubmit();
+        })
+      ) {
+        return;
+      }
+
       if (this.$v.form.$anyError) {
         return;
       }
@@ -197,6 +333,8 @@ export default {
       }
     },
   },
-  components: {},
+  components: {
+    QForm,
+  },
 };
 </script>
