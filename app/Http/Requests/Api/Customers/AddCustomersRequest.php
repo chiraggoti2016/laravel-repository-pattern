@@ -24,7 +24,11 @@ class AddCustomersRequest extends FormRequest
     public function rules()
     {
         return [
-            //
+            'name'      => 'required',
+            'address'   => 'required',
+            'country'   => 'required',
+            'users'     => 'required|array',
+            'projects'  => 'required|array',
         ];
     }
 }

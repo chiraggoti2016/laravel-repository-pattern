@@ -24,7 +24,13 @@ class AddQuestionsRequest extends FormRequest
     public function rules()
     {
         return [
-            //
+            'category'              => "required",
+            'fields'                => "nullable",
+            'information'           => "required",
+            'question'              => "required",
+            'response_collector'    => "required",
+            'scope'                 => "required",
+            'sub_question'          => "nullable",
         ];
     }
 }

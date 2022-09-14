@@ -24,7 +24,10 @@ class AddPartnersRequest extends FormRequest
     public function rules()
     {
         return [
-            //
+            'name'      => 'required',
+            'address'   => 'required',
+            'country'   => 'required',
+            'users'     => 'required|array',
         ];
     }
 }

@@ -24,7 +24,11 @@ class UpdateCountriesRequest extends FormRequest
     public function rules()
     {
         return [
-            //
+            'country_name'  => 'required',
+            'sortname'      => 'required',
+            'timezone'      => 'required',
+            'country_lat'   => 'required',
+            'country_lng'   => 'required',
         ];
     }
 }

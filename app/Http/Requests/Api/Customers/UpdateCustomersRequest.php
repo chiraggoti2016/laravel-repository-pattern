@@ -24,7 +24,12 @@ class UpdateCustomersRequest extends FormRequest
     public function rules()
     {
         return [
-            //
+            'id'        => 'required',
+            'name'      => 'required',
+            'address'   => 'required',
+            'country'   => 'required',
+            'users'     => 'required|array',
+            'projects'  => 'required|array',
         ];
     }
 }
