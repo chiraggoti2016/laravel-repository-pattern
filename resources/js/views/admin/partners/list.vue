@@ -23,7 +23,12 @@
       </div>
       <div class="card-body">
         <div class="table-responsive p0-last-1">
-          <data-table :url="url" :columns="columns" :headers="headers">
+          <data-table
+            :url="url"
+            :columns="columns"
+            :headers="headers"
+            ref="myTable"
+          >
           </data-table>
         </div>
       </div>
@@ -61,11 +66,14 @@
 <script>
 import { reactive, toRefs } from "vue";
 import ActionButton from "./../components/ActionButton.vue";
+import DeleteButton from "./../components/DeleteButton.vue";
+import * as notify from "../../../utils/notify.js";
 export default {
   name: "Partner",
   data() {
     return {
       url: "/api/partners",
+      deleteId: null,
       columns: [
         {
           label: "Partner ID",
@@ -118,28 +126,28 @@ export default {
           handler: () => {},
           component: ActionButton,
         },
-        // {
-        //   label: "",
-        //   name: "delete",
-        //   orderable: false,
-        //   classes: {
-        //     btn: true,
-        //     "btn-danger": true,
-        //     "btn-sm": true,
-        //   },
-        //   meta: {
-        //     prefixLink: null,
-        //     icon: {
-        //       has: true,
-        //       classes: {
-        //         "fa-trash": true,
-        //       },
-        //     },
-        //   },
-        //   event: "click",
-        //   handler: this.deleteAction,
-        //   component: ActionButton,
-        // },
+        {
+          label: "",
+          name: "delete",
+          orderable: false,
+          classes: {
+            btn: true,
+            "btn-danger": true,
+            "btn-sm": true,
+          },
+          meta: {
+            prefixLink: null,
+            icon: {
+              has: true,
+              classes: {
+                "fa-trash": true,
+              },
+            },
+          },
+          event: "click",
+          handler: this.deleteAction,
+          component: DeleteButton,
+        },
       ],
       headers: {
         ...axiosHeaders,
@@ -149,16 +157,25 @@ export default {
   },
   components: {
     ActionButton,
+    DeleteButton,
   },
   methods: {
     onOverlayCancel() {
       this.busy = false;
     },
-    onOverlayOK() {
+    async onOverlayOK() {
+      try {
+        const id = this.$route.params.id;
+        const response = await axios.delete(`partners/${this.deleteId}`);
+        this.$refs.myTable.getData();
+      } catch (error) {
+        notify.authError(error);
+      }
+      this.deleteId = null;
       this.busy = false;
     },
     deleteAction(data) {
-      console.log("delete action");
+      this.deleteId = data.id;
       this.busy = true;
     },
   },
