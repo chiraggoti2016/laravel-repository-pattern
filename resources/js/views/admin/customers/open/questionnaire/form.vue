@@ -9,12 +9,14 @@
       >
         <b-form-group>
           <label
-            class="require"
+            :class="field.isOptional === 'no' ? 'require' : ''"
             :for="'input-' + index + '-field' + fieldIndex"
             >{{ field.input }}</label
           >
 
           <b-form-input
+            v-if="['select', 'radio', 'checkbox'].indexOf(field.type) == -1"
+            :type="field.type"
             :id="'input-' + index + '-field' + fieldIndex"
             :name="'input-' + index + '-field' + fieldIndex"
             class="mb-2 mr-sm-2 mb-sm-0"
@@ -38,7 +40,7 @@
 
 <script>
 import { validationMixin } from "vuelidate";
-import { required } from "vuelidate/lib/validators";
+import { required, requiredIf } from "vuelidate/lib/validators";
 
 export default {
   name: "CustomersProjectQuestionareForm",
@@ -58,7 +60,7 @@ export default {
     return {
       form: {
         fields: this.question.fields
-          ? this.question.fields.map((field) => ({ input: null }))
+          ? this.question.fields.map((field) => ({ input: null, field }))
           : [],
       },
     };
@@ -69,7 +71,10 @@ export default {
         fields: {
           $each: {
             input: {
-              required,
+              // required,
+              required: requiredIf(function (nestedModel) {
+                return nestedModel.field.isOptional === "no";
+              }),
             },
           },
         },

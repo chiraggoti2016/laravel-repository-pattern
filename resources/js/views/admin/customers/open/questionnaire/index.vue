@@ -9,21 +9,25 @@
             </h6>
           </div>
           <div class="col-md-3 d-flex justify-content-end align-items-center">
-            <a href="#" class="btn btn-sm btn-secondary btn-icon-split">
+            <a
+              href="#"
+              class="btn btn-sm btn-primary btn-icon-split"
+              @click="onSubmit()"
+            >
               <span class="icon text-white-50">
-                <i class="fas fa-paper-plane-top"></i>
+                <i class="fas fa-arrow-right"></i>
               </span>
               <span class="text">Send</span>
             </a>
             <a
               href="#"
-              class="btn btn-sm btn-primary btn-icon-split ml-2"
-              @click="onSubmit()"
+              class="btn btn-sm btn-secondary btn-icon-split ml-2"
+              @click="onSaveDraft()"
             >
               <span class="icon text-white-50">
                 <i class="fas fa-save"></i>
               </span>
-              <span class="text">Submit</span>
+              <span class="text">Save As Draft</span>
             </a>
           </div>
         </div>
@@ -245,10 +249,20 @@ export default {
     };
   },
   async mounted() {
-    const { data } = await this.getData(this.getParam());
+    const params = this.getParam();
+    const { data } = await this.getData(params);
+    const { id, projectid } = params;
+
     this.project = {
       ...data,
     };
+    const formJsonString = localStorage.getItem(
+      "questionnaire-" + id + "-" + projectid
+    );
+    const form = formJsonString !== "" ? JSON.parse(formJsonString) : this.form;
+
+    this.form = { ...form };
+
     await this.getQuestionsListByCategory(this.project.scope);
   },
   methods: {
@@ -291,6 +305,17 @@ export default {
       this.$nextTick(() => {
         this.$v.$reset();
       });
+    },
+    onSaveDraft() {
+      const params = this.$route.params;
+      const { id, projectid } = params;
+      const data = {
+        ...this.form,
+      };
+      localStorage.setItem(
+        "questionnaire-" + id + "-" + projectid,
+        JSON.stringify(data)
+      );
     },
     onSubmit() {
       this.$v.form.$touch();

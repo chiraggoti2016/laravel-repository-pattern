@@ -218,6 +218,7 @@
                           >input is required</b-form-invalid-feedback
                         >
                       </template>
+
                       <template #cell(type)="data">
                         <b-form-select
                           :id="'input-type' + data.index"
@@ -240,6 +241,41 @@
                         <b-form-invalid-feedback
                           v-if="!$v.form.fields.$each[data.index].type.required"
                           >type is required</b-form-invalid-feedback
+                        >
+                      </template>
+
+                      <!-- isOptional -->
+                      <template #cell(isOptional)="data">
+                        <b-form-select
+                          :id="'input-isOptional' + data.index"
+                          :name="'input-isOptional' + data.index"
+                          class="mb-2 mr-sm-2 mb-sm-0"
+                          v-model="data.item.isOptional"
+                          :options="yesNoOptions"
+                          value-field="id"
+                          text-field="name"
+                          :state="
+                            validateEachState(
+                              'fields',
+                              data.index,
+                              'isOptional'
+                            )
+                          "
+                          aria-describedby="input-3-live-feedback"
+                          size="sm"
+                        >
+                          <template #first>
+                            <b-form-select-option :value="null" disabled
+                              >Select Type</b-form-select-option
+                            >
+                          </template>
+                        </b-form-select>
+                        <b-form-invalid-feedback
+                          v-if="
+                            !$v.form.fields.$each[data.index].isOptional
+                              .required
+                          "
+                          >is optional is required</b-form-invalid-feedback
                         >
                       </template>
 
@@ -290,6 +326,7 @@ import { getAllQuestionCategories } from "../../../services/question-categories"
 import {
   INPUT_TYPE_OPTIONS,
   RESPONSE_COLLECTOR_OPTIONS,
+  YESNO_OPTION,
 } from "../../../mixins/constants";
 
 export default {
@@ -312,9 +349,11 @@ export default {
       scopesOptions: [],
       questionCategoriesOptions: [],
       typeOptions: INPUT_TYPE_OPTIONS,
+      yesNoOptions: YESNO_OPTION,
       formFields: [
         "input",
         "type",
+        "isOptional",
         {
           key: "actions",
           label: "Actions",
@@ -329,7 +368,7 @@ export default {
         response_collector: null,
         scope: null,
         category: null,
-        fields: [{ input: null, type: null }],
+        fields: [{ input: null, type: null, isOptional: "no" }],
       },
       addActionButton: {
         meta: {
@@ -389,6 +428,9 @@ export default {
           type: {
             required,
           },
+          isOptional: {
+            required,
+          },
         },
       },
     },
@@ -438,7 +480,7 @@ export default {
         response_collector: null,
         scope: null,
         category: null,
-        fields: [{ input: null, type: null }],
+        fields: [{ input: null, type: null, isOptional: "no" }],
       };
 
       this.$nextTick(() => {
@@ -499,7 +541,11 @@ export default {
     },
     addActionButtonClick(data) {
       if (data.index > -1) {
-        this.form.fields.splice(data.index + 1, 0, { input: null, type: null });
+        this.form.fields.splice(data.index + 1, 0, {
+          input: null,
+          type: null,
+          isOptional: "no",
+        });
       }
     },
   },
