@@ -4,24 +4,21 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use LaravelVueDatatableTrait;
 
-class Question extends Model
+class QuestionaireQuestion extends Model
 {
-    use HasFactory, LaravelVueDatatableTrait;
+    use HasFactory;
+    
     /**
      * The attributes that are mass assignable.
      *
      * @var array
      */
     protected $fillable = [
-        'question',
-        'sub_question',
-        'information',
-        'response_collector',
-        'scope',
-        'category',
-        'fields',
+        'input',
+        'depend',
+        'question_id',
+        'questionaire_id',
     ];
 
     /**
@@ -30,12 +27,16 @@ class Question extends Model
      * @var array
      */
     protected $casts = [
-        'fields' => 'array',
+        'input' => 'array',
     ];
 
-    public function questionaire_question()
+    public function question()
     {
-        return $this->hasOne(QuestionaireQuestion::class);
+        return $this->belongsTo(Question::class);
     }
 
+    public function questionaire()
+    {
+        return $this->belongsTo(Questionaire::class);
+    }
 }

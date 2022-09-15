@@ -3,8 +3,8 @@ import axios from "../axios";
 
 
 export const getQuestionsListByCategory =
-    function (scope) {
-        return axios.get(`questions/list/bycategory/${scope}`);
+    function (scope, params) {
+        return axios.post(`questions/list/bycategory/${scope}`, params);
     }
 
 

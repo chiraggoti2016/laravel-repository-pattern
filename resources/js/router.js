@@ -3,6 +3,7 @@ import Vue from "vue";
 import Router from "vue-router";
 import store from "./vuex";
 import AdminLayout from "./views/admin/layout/index";
+import FrontLayout from "./views/frontend/layout/index";
 
 Vue.use(Router);
 
@@ -248,37 +249,46 @@ let router = new Router({
                 layout: AdminLayout
             }
         },
+        {
+            path: "/frontend/questionnaire/:projectid",
+            name: "customers-open-questionnaire",
+            component: () => import("./views/frontend/questionnaire/index.vue"),
+            meta: {
+                requiresAuth: false,
+                layout: FrontLayout
+            }
+        },
 
     ]
 });
 
-// router.beforeEach((to, from, next) => {
-//     if (to.matched.some(record => record.meta.requiresAuth)) {
-//         if (store.getters.user) {
-//             next();
-//             return;
-//         }
-//         next("/");
-//     } else {
-//         next();
-//     }
-// });
-
 router.beforeEach((to, from, next) => {
-    // document.title = to.meta.title;
-    if (to.meta.middleware) {
-        const middleware = Array.isArray(to.meta.middleware)
-            ? to.meta.middleware
-            : [to.meta.middleware];
-        const context = { to, from, next, store };
-        return middleware[0]({
-            ...context,
-            next: middlewarePipeline(context, middleware, 1),
-        });
+    if (to.matched.some(record => record.meta.requiresAuth)) {
+        if (store.getters.user) {
+            next();
+            return;
+        }
+        next("/");
     } else {
-        return next();
+        next();
     }
 });
+
+// router.beforeEach((to, from, next) => {
+//     // document.title = to.meta.title;
+//     if (to.meta.middleware) {
+//         const middleware = Array.isArray(to.meta.middleware)
+//             ? to.meta.middleware
+//             : [to.meta.middleware];
+//         const context = { to, from, next, store };
+//         return middleware[0]({
+//             ...context,
+//             next: middlewarePipeline(context, middleware, 1),
+//         });
+//     } else {
+//         return next();
+//     }
+// });
 
 
 export default router;

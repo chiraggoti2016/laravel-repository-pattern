@@ -27,6 +27,7 @@
             :aria-describedby="
               'input-' + index + '-field' + fieldIndex + '-live-feedback'
             "
+            :disabled="disabled"
           ></b-form-input>
 
           <b-form-select
@@ -40,6 +41,7 @@
             :aria-describedby="
               'input-' + index + '-field' + fieldIndex + '-live-feedback'
             "
+            :disabled="disabled"
           >
             <template #first>
               <b-form-select-option :value="null" disabled>{{
@@ -60,6 +62,7 @@
             :aria-describedby="
               'input-' + index + '-field' + fieldIndex + '-live-feedback'
             "
+            :disabled="disabled"
           ></b-form-radio-group>
 
           <!-- checkbox -->
@@ -74,6 +77,7 @@
             :aria-describedby="
               'input-' + index + '-field' + fieldIndex + '-live-feedback'
             "
+            :disabled="disabled"
           ></b-form-checkbox-group>
 
           <b-form-invalid-feedback
@@ -94,12 +98,12 @@ import {
   INPUT_RADIO,
   INPUT_SELECT,
   OPTIONS_REQUIRE_INPUT,
-} from "../../../../../mixins/constants";
+} from "../../../mixins/constants";
 
 export default {
   name: "CustomersProjectQuestionareForm",
   mixins: [validationMixin],
-  props: ["value", "question", "category", "index", "state"],
+  props: ["value", "question", "category", "index", "state", "disabled"],
   computed: {
     inputVal: {
       get() {

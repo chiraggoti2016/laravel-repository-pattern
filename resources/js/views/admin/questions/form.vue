@@ -244,6 +244,36 @@
                         >
                       </template>
 
+                      <!-- options -->
+                      <template #cell(options)="data">
+                        <b-form-tags
+                          class="mb-2 mr-sm-2 mb-sm-0"
+                          :id="'input-options' + data.index"
+                          :name="'input-options' + data.index"
+                          :input-id="'input-options' + data.index"
+                          v-model="data.item.options"
+                          :state="
+                            validateEachState('fields', data.index, 'options')
+                          "
+                          :tag-validator="tagValidator"
+                          :input-attrs="{
+                            'aria-describedby': 'tags-validation-help',
+                          }"
+                          separator=" "
+                          aria-describedby="input-options-live-feedback"
+                          size="sm"
+                          :disabled="
+                            optionsRequireInput.indexOf(data.item.type) === -1
+                          "
+                        ></b-form-tags>
+                        <b-form-invalid-feedback
+                          v-if="
+                            !$v.form.fields.$each[data.index].options.required
+                          "
+                          >options is required</b-form-invalid-feedback
+                        >
+                      </template>
+
                       <!-- isOptional -->
                       <template #cell(isOptional)="data">
                         <b-form-select
@@ -320,11 +350,18 @@ import ActionButton from "./../components/ActionButton.vue";
 import * as notify from "../../../utils/notify.js";
 import { reactive, toRefs } from "vue";
 import { validationMixin } from "vuelidate";
-import { required, email, helpers, numeric } from "vuelidate/lib/validators";
+import {
+  required,
+  requiredIf,
+  email,
+  helpers,
+  numeric,
+} from "vuelidate/lib/validators";
 import { getScopesBySlug } from "../../../services/scope";
 import { getAllQuestionCategories } from "../../../services/question-categories";
 import {
   INPUT_TYPE_OPTIONS,
+  OPTIONS_REQUIRE_INPUT,
   RESPONSE_COLLECTOR_OPTIONS,
   YESNO_OPTION,
 } from "../../../mixins/constants";
@@ -350,9 +387,15 @@ export default {
       questionCategoriesOptions: [],
       typeOptions: INPUT_TYPE_OPTIONS,
       yesNoOptions: YESNO_OPTION,
+      optionsRequireInput: OPTIONS_REQUIRE_INPUT,
       formFields: [
         "input",
         "type",
+        {
+          key: "options",
+          label: "Options",
+          class: "w40p",
+        },
         "isOptional",
         {
           key: "actions",
@@ -368,7 +411,7 @@ export default {
         response_collector: null,
         scope: null,
         category: null,
-        fields: [{ input: null, type: null, isOptional: "no" }],
+        fields: [{ input: null, type: null, isOptional: "no", options: [] }],
       },
       addActionButton: {
         meta: {
@@ -431,6 +474,11 @@ export default {
           isOptional: {
             required,
           },
+          options: {
+            required: requiredIf(function (nestedModel) {
+              return OPTIONS_REQUIRE_INPUT.indexOf(nestedModel.type) != -1;
+            }),
+          },
         },
       },
     },
@@ -480,7 +528,7 @@ export default {
         response_collector: null,
         scope: null,
         category: null,
-        fields: [{ input: null, type: null, isOptional: "no" }],
+        fields: [{ input: null, type: null, isOptional: "no", options: [] }],
       };
 
       this.$nextTick(() => {
@@ -545,8 +593,12 @@ export default {
           input: null,
           type: null,
           isOptional: "no",
+          options: [],
         });
       }
+    },
+    tagValidator(tag) {
+      return tag === tag.toLowerCase() && tag.length > 1 && tag.length < 15;
     },
   },
   components: {

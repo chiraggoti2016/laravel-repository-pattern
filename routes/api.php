@@ -30,7 +30,7 @@ Route::group(['middleware' => ['auth:api']], function () {
     });
 
     Route::group(['prefix' => 'questions', 'as' => 'questions'], function () {
-        Route::get('list/bycategory/{scope}',[Api\QuestionsController::class, 'listByCategory'])->name('.bycategory');
+        Route::post('list/bycategory/{scope}',[Api\QuestionsController::class, 'listByCategory'])->name('.bycategory');
     });
 
     Route::group(['prefix' => 'question/categories', 'as' => 'question.categories'], function () {
@@ -47,6 +47,10 @@ Route::group(['middleware' => ['auth:api']], function () {
 
     Route::group(['prefix' => 'scope-stages', 'as' => 'scope.stages'], function () {
         Route::get('/list/byscope',[Api\ScopeStagesController::class, 'listByScope'])->name('.listbyscope');
+    });
+
+    Route::group(['prefix' => 'questionaires', 'as' => 'questionaires'], function () {
+        Route::post('/send/{project_id}',[Api\QuestionairesController::class, 'send'])->name('.send');
     });
 
     // Resources

@@ -46,6 +46,9 @@
 .w20p {
     width: 20%;
 }
+.w40p{
+    width: 40%;
+}
 
 /* form label */
 label.require::after, .require-h6 h6::after{

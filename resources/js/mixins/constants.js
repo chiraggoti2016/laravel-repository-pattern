@@ -23,6 +23,9 @@ export const RESPONSE_COLLECTOR_OPTIONS = [
 
 export const INPUT_TYPE_OPTIONS = [
     { text: "Text", value: "text" },
+    { text: "Select", value: "select" },
+    { text: "Radio", value: "radio" },
+    { text: "Checkbox", value: "checkbox" },
     { text: "Number", value: "number" },
     { text: "Email", value: "email" },
     { text: "Password", value: "password" },
@@ -34,6 +37,11 @@ export const INPUT_TYPE_OPTIONS = [
     { text: "Range", value: "range" },
     { text: "Color", value: "color" },
 ];
+
+export const OPTIONS_REQUIRE_INPUT = ['select', 'radio', 'checkbox'];
+export const INPUT_SELECT = 'select';
+export const INPUT_RADIO = 'radio';
+export const INPUT_CHECKBOX = 'checkbox';
 
 export const YESNO_OPTION = [
     { name: 'Yes', id: 'yes' },

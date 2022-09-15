@@ -4,68 +4,11 @@
       <div class="card-header py-3">
         <div class="row">
           <div class="col-md-9 d-flex justify-content-start align-items-center">
-            <h6 class="m-0 font-weight-bold text-primary">
-              Pre-Engagement Questionnaire
-            </h6>
-          </div>
-          <div class="col-md-3 d-flex justify-content-end align-items-center">
-            <a
-              href="#"
-              class="btn btn-sm btn-primary btn-icon-split"
-              @click="onSubmit()"
-            >
-              <span class="icon text-white-50">
-                <i class="fas fa-arrow-right"></i>
-              </span>
-              <span class="text">Send</span>
-            </a>
-            <a
-              href="#"
-              class="btn btn-sm btn-secondary btn-icon-split ml-2"
-              @click="onSaveDraft()"
-            >
-              <span class="icon text-white-50">
-                <i class="fas fa-save"></i>
-              </span>
-              <span class="text">Save As Draft</span>
-            </a>
+            <h6 class="m-0 font-weight-bold text-primary">Questionnaire</h6>
           </div>
         </div>
       </div>
       <div class="card-body">
-        <div class="table-responsive">
-          <b-card
-            sub-title="Email To (select client name to send)"
-            class="form-list"
-            body-class="require-h6"
-            :class="
-              $v.form.emailTo.$dirty && !$v.form.emailTo.required
-                ? $v.form.emailTo.$invalid
-                  ? 'is-invalid'
-                  : 'is-valid'
-                : ''
-            "
-          >
-            <b-card-text>
-              <b-form-group v-slot="{ ariaemailToDescribedby }">
-                <b-form-checkbox-group
-                  v-model="$v.form.emailTo.$model"
-                  :options="project.participants"
-                  :aria-describedby="ariaemailToDescribedby"
-                  name="emailTo"
-                  value-field="id"
-                  text-field="name"
-                  :state="validateState('emailTo')"
-                  class="mb-3"
-                ></b-form-checkbox-group>
-              </b-form-group>
-
-              <div class="invalid-feedback" v-if="!$v.form.emailTo.required">
-                This is a required field.
-              </div>
-            </b-card-text>
-          </b-card>
-        </div>
         <div class="table-responsive">
           <b-card
             :header="category.toUpperCase()"
@@ -92,6 +35,7 @@
                 "
                 :aria-describedby="'modal-input-' + index + '-live-feedback'"
                 size="sm"
+                disabled="true"
               ></b-form-input>
 
               <!-- YesNo -->
@@ -108,6 +52,7 @@
                     validateEachState('questions', category, index, 'input')
                   "
                   :aria-describedby="questionsLiveFeedback"
+                  disabled="true"
                 ></b-form-radio-group>
 
                 <b-form-group
@@ -137,6 +82,7 @@
                       'modal-input-' + index + '-live-feedback'
                     "
                     size="sm"
+                    disabled="true"
                   ></b-form-input>
                 </b-form-group>
               </div>
@@ -162,6 +108,7 @@
                   :state="
                     validateEachState('questions', category, index, 'input')
                   "
+                  disabled="true"
                 />
               </div>
 
@@ -190,11 +137,11 @@
 </template>
 
 <script>
-import * as notify from "../../../../../utils/notify.js";
+import * as notify from "../../..//utils/notify.js";
 import { validationMixin } from "vuelidate";
 import { required, requiredIf } from "vuelidate/lib/validators";
-import { getQuestionsListByCategory } from "../../../../../services/questions";
-import { YESNO_OPTION } from "../../../../../mixins/constants.js";
+import { getQuestionsListByCategory } from "../../../services/questions";
+import { YESNO_OPTION } from "../../../mixins/constants.js";
 import QForm from "./form.vue";
 
 export default {
