@@ -120,8 +120,9 @@ export default {
         fields: this.question.fields
           ? this.question.fields.map((field, fieldIndex) => ({
               input:
+                this.question.questionaire_question &&
                 this.question.questionaire_question.input[fieldIndex] !==
-                undefined
+                  undefined
                   ? this.question.questionaire_question.input[fieldIndex].input
                   : null,
               field,

@@ -21,6 +21,8 @@ export const RESPONSE_COLLECTOR_OPTIONS = [
     { text: "Upload", value: "Upload" },
 ];
 
+export const RESPONSE_COLLECTOR_FORM = 'Form';
+
 export const INPUT_TYPE_OPTIONS = [
     { text: "Text", value: "text" },
     { text: "Select", value: "select" },

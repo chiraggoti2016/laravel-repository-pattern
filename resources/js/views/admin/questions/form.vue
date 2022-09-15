@@ -364,6 +364,7 @@ import {
   OPTIONS_REQUIRE_INPUT,
   RESPONSE_COLLECTOR_OPTIONS,
   YESNO_OPTION,
+  RESPONSE_COLLECTOR_FORM,
 } from "../../../mixins/constants";
 
 export default {
@@ -466,13 +467,19 @@ export default {
       fields: {
         $each: {
           input: {
-            required,
+            required: requiredIf(function () {
+              return RESPONSE_COLLECTOR_FORM === this.form.response_collector;
+            }),
           },
           type: {
-            required,
+            required: requiredIf(function () {
+              return RESPONSE_COLLECTOR_FORM === this.form.response_collector;
+            }),
           },
           isOptional: {
-            required,
+            required: requiredIf(function () {
+              return RESPONSE_COLLECTOR_FORM === this.form.response_collector;
+            }),
           },
           options: {
             required: requiredIf(function (nestedModel) {
