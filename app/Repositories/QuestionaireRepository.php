@@ -22,13 +22,17 @@ class QuestionaireRepository extends BaseRepository implements QuestionaireContr
             ],[
                 'status'    => $data['status']
             ])) {
-                
-                QuestionaireUser::updateOrCreate([
-                    'questionaire_id' => $questionaire->id,
-                ],
-                [
-                    'user_id'   => $data['emailTo'],
-                ]);
+                                
+                // users
+                foreach($data['emailTo'] as $userId) {
+                    QuestionaireUser::updateOrCreate([
+                        'questionaire_id' => $questionaire->id,
+                    ],
+                    [
+                        'user_id'   => $userId,
+                    ]);
+                }
+
                 foreach($data['questions'] as $questioncategory => $answers) {
                     foreach($answers as $answer) {
                         QuestionaireQuestion::updateOrCreate([

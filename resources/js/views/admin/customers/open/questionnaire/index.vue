@@ -8,7 +8,14 @@
               Pre-Engagement Questionnaire
             </h6>
           </div>
-          <div class="col-md-3 d-flex justify-content-end align-items-center">
+          <div
+            class="col-md-3 d-flex justify-content-end align-items-center"
+            v-if="
+              project.questionaire === null ||
+              (project.questionaire !== null &&
+                project.questionaire.status !== 'send')
+            "
+          >
             <a
               href="#"
               class="btn btn-sm btn-primary btn-icon-split"
@@ -260,12 +267,11 @@ export default {
     this.project = {
       ...data,
     };
-    const formJsonString = localStorage.getItem(
-      "questionnaire-" + id + "-" + projectid
-    );
-    const form = formJsonString !== "" ? JSON.parse(formJsonString) : this.form;
 
-    this.form = { ...form };
+    this.form.emailTo =
+      data.questionaire !== null && data.questionaire.users !== undefined
+        ? data.questionaire.users.map((user) => user.id)
+        : [];
 
     await this.getQuestionsListByCategory(this.project.scope, params);
   },

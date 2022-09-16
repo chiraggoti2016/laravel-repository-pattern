@@ -25,6 +25,7 @@ class ProjectResource extends JsonResource
             'scope'         =>  $this->scope,
             'isNew'         =>  false,
             'participants'  =>  $this->participants ?? [],
+            'questionaire'  =>  $this->questionaire,
         ];
     }
 }

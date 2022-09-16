@@ -23,8 +23,15 @@ class Project extends Model
         'scope',
     ];
 
+    protected $with = ['questionaire', 'questionaire.users'];
+
     public function participants()
     {
         return $this->belongsToMany(User::class, 'project_participants')->withPivot('pvcot', 'raci');
+    }
+
+    public function questionaire()
+    {
+        return $this->hasOne(Questionaire::class);
     }
 }

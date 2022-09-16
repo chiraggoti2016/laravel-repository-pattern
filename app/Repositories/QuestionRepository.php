@@ -26,7 +26,12 @@ class QuestionRepository extends BaseRepository implements QuestionContract
     }
 
     function listByCategory($scope) {
-        return $this->model->with(['questionaire_question'])->where('scope', $scope)->get()->mapToGroups(function ($item, $key) {
+        return $this->model->with(['questionaire_question' => function($q) {
+            return $q->whereHas('questionaire', function($sq) {
+                return $sq->where('project_id', request('project_id'));
+            });
+        }])
+        ->where('scope', $scope)->get()->mapToGroups(function ($item, $key) {
             return [$item['category'] => $item];
         });
     }

@@ -21,7 +21,15 @@ Route::post('forgot', [Api\Auth\ForgotController::class, 'forgot']);
 Route::post('reset', [Api\Auth\ForgotController::class, 'reset']);
 Route::get('email/resend/{user}', [Api\Auth\VerifyController::class, 'resend'])->name('verification.resend');
 Route::get('email/verify/{id}', [Api\Auth\VerifyController::class, 'verify'])->name('verification.verify');; // Make sure to keep this as your route name
-    
+
+Route::group(['prefix' => 'projects', 'as' => 'projects'], function () {
+    Route::get('/{id}',[Api\ProjectsController::class, 'show']);
+});
+
+Route::group(['prefix' => 'questions', 'as' => 'questions'], function () {
+    Route::post('list/bycategory/{scope}',[Api\QuestionsController::class, 'listByCategory'])->name('.bycategory');
+});
+
 Route::group(['middleware' => ['auth:api']], function () {
     Route::get('user', [Api\Auth\AuthController::class, 'user']);
 
@@ -29,9 +37,9 @@ Route::group(['middleware' => ['auth:api']], function () {
         Route::get('/list',[Api\CountriesController::class, 'list'])->name('.list');
     });
 
-    Route::group(['prefix' => 'questions', 'as' => 'questions'], function () {
-        Route::post('list/bycategory/{scope}',[Api\QuestionsController::class, 'listByCategory'])->name('.bycategory');
-    });
+    // Route::group(['prefix' => 'questions', 'as' => 'questions'], function () {
+    //     Route::post('list/bycategory/{scope}',[Api\QuestionsController::class, 'listByCategory'])->name('.bycategory');
+    // });
 
     Route::group(['prefix' => 'question/categories', 'as' => 'question.categories'], function () {
         Route::get('/list',[Api\QuestionCategoriesController::class, 'list'])->name('.list');

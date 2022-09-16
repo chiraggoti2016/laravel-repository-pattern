@@ -49,15 +49,6 @@ let router = new Router({
             }
         },
         {
-            path: "/admin/pages/page-not-found",
-            name: "page-not-found",
-            component: () => import("./views/admin/page-not-found.vue"),
-            meta: {
-                requiresAuth: true,
-                layout: AdminLayout
-            }
-        },
-        {
             path: "/admin/partners/add",
             name: "partners-add",
             component: () => import("./views/admin/partners/add.vue"),
@@ -250,6 +241,15 @@ let router = new Router({
             }
         },
         {
+            path: "*",
+            name: "page-not-found",
+            component: () => import("./views/admin/page-not-found.vue"),
+            meta: {
+                requiresAuth: true,
+                layout: AdminLayout
+            }
+        },
+        {
             path: "/frontend/questionnaire/:projectid",
             name: "customers-open-questionnaire",
             component: () => import("./views/frontend/questionnaire/index.vue"),
@@ -270,7 +270,12 @@ router.beforeEach((to, from, next) => {
         }
         next("/");
     } else {
-        next();
+        console.log("---else", from.name, to.name, store.getters.user);
+        if (store.getters.user !== null && to.name === 'login') {
+            next('/admin');
+        } else {
+            next();
+        }
     }
 });
 

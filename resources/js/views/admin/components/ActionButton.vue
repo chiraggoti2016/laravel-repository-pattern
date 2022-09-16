@@ -1,11 +1,12 @@
 <template>
   <span>
     <button
-      v-if="!meta.prefixLink"
+      v-if="disabled || !meta.prefixLink"
       :class="classes"
       class="btn btn-icon-split"
       type="button"
       @click="$emit('click', data)"
+      :disabled="disabled"
     >
       <span :v-if="meta.icon.has" class="icon text-white-50">
         <i class="fas" :class="meta.icon.classes"></i>
@@ -13,11 +14,12 @@
       <span v-if="!onlyicon" class="text">{{ name }}</span>
     </button>
     <router-link
-      v-if="meta.prefixLink"
+      v-else
       :class="classes"
       class="btn btn-icon-split"
       :to="meta.prefixLink ? meta.prefixLink + (data.id ? data.id : '') : '#'"
       title="name"
+      :disabled="disabled"
     >
       <slot></slot>
       <span :v-if="meta.icon.has" class="icon text-white-50">
@@ -33,6 +35,10 @@ export default {
     data: {},
     name: {},
     onlyicon: {
+      type: Boolean,
+      default: false,
+    },
+    disabled: {
       type: Boolean,
       default: false,
     },

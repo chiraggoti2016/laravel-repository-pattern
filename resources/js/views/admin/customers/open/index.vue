@@ -344,7 +344,17 @@
                 </template>
 
                 <template #cell(status)="data">
-                  <p v-if="data.item.status">{{ data.item.status }}</p>
+                  <p v-if="data.item.status">
+                    {{ data.item.status }}
+                  </p>
+                  <p
+                    v-else-if="
+                      form.questionaire !== null &&
+                      data.item.name === 'Pre-Engagement Questionaire'
+                    "
+                  >
+                    {{ form.questionaire.status }}
+                  </p>
                   <p v-else>-</p>
                 </template>
 
@@ -363,17 +373,35 @@
                     :data="data"
                     :meta="{
                       ...initActionButton.meta,
-                      prefixLink: `/admin/customers/open/project/questionnaire/${$route.params.id}/${$route.params.projectid}`,
+                      prefixLink:
+                        data.item.name === 'Pre-Engagement Questionaire'
+                          ? `/admin/customers/open/project/questionnaire/${$route.params.id}/${$route.params.projectid}`
+                          : null,
                     }"
                     :classes="initActionButton.classes"
                     name="Initiate"
+                    :disabled="
+                      data.item.name === 'Pre-Engagement Questionaire' &&
+                      form.questionaire !== null
+                    "
                   >
                   </action-button>
                   <action-button
                     :data="data"
-                    :meta="openActionButton.meta"
+                    :meta="{
+                      ...openActionButton.meta,
+                      prefixLink:
+                        data.item.name === 'Pre-Engagement Questionaire' &&
+                        form.questionaire !== null
+                          ? `/admin/customers/open/project/questionnaire/${$route.params.id}/${$route.params.projectid}`
+                          : null,
+                    }"
                     :classes="openActionButton.classes"
                     name="Open"
+                    :disabled="
+                      data.item.name === 'Pre-Engagement Questionaire' &&
+                      form.questionaire === null
+                    "
                   >
                   </action-button>
                   <action-button
@@ -626,6 +654,7 @@ export default {
         scope: null,
         participants: [],
         stages: [],
+        questionaire: null,
       },
       editUserIndex: null,
       newparticipant: {
