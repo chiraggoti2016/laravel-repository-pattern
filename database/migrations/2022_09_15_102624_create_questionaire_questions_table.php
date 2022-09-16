@@ -15,7 +15,7 @@ class CreateQuestionaireQuestionsTable extends Migration
     {
         Schema::create('questionaire_questions', function (Blueprint $table) {
             $table->id();
-            $table->text('input');
+            $table->text('input')->nullable();
             $table->text('depend')->nullable();
             $table->unsignedBigInteger('question_id')->comment('question id');
             $table->foreign('question_id')->references('id')->on('questions')->onDelete('cascade');

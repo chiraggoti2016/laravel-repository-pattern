@@ -43,10 +43,10 @@ class Customer extends Model
         'sap',
     ];
     
-    public function getOracleAttribute() { return true; }
-    public function getMicrosoftAttribute() { return false; }
-    public function getVmwareAttribute() { return false; }
-    public function getSapAttribute() { return false; }
+    public function getOracleAttribute() { return $this->projects()->whereIn('scope', ['oracle_database','oracle_apps'])->count(); }
+    public function getMicrosoftAttribute() { return $this->projects()->where('scope', 'microsoft')->count(); }
+    public function getVmwareAttribute() { return $this->projects()->where('scope', 'vmware')->count(); }
+    public function getSapAttribute() { return $this->projects()->where('scope', 'sap')->count(); }
 
     public function users()
     {

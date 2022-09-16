@@ -16,6 +16,8 @@ class Questionaire extends Model
      */
     protected $fillable = [
         'status',
+        'startdate',
+        'enddate',
         'project_id',
     ];
 

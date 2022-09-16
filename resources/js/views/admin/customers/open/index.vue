@@ -359,11 +359,29 @@
                 </template>
 
                 <template #cell(start)="data">
-                  <p v-if="data.item.start">{{ data.item.start }}</p>
+                  <p
+                    v-if="
+                      data.item.name === 'Pre-Engagement Questionaire' &&
+                      form.questionaire &&
+                      form.questionaire.startdate
+                    "
+                  >
+                    {{ form.questionaire.startdate }}
+                  </p>
+                  <p v-else-if="data.item.start">{{ data.item.start }}</p>
                   <p v-else>-</p>
                 </template>
 
                 <template #cell(end)="data">
+                  <p
+                    v-if="
+                      data.item.name === 'Pre-Engagement Questionaire' &&
+                      form.questionaire &&
+                      form.questionaire.enddate
+                    "
+                  >
+                    {{ form.questionaire.enddate }}
+                  </p>
                   <p v-if="data.item.end">{{ data.item.end }}</p>
                   <p v-else>-</p>
                 </template>
@@ -783,7 +801,12 @@ export default {
         required,
         email,
         isEmailAlreadyExists: (value, vm) => {
-          if (value === "" || value === null) return true;
+          if (
+            value === "" ||
+            value === null ||
+            /[a-z0-9]+@[a-z]+\.[a-z]{2,3}/.test(value) === false
+          )
+            return true;
           return axios.post("users/email-already-exists", {
             email: value,
             id: vm.id,

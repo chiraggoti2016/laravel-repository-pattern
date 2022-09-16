@@ -22,6 +22,15 @@ class QuestionaireRepository extends BaseRepository implements QuestionaireContr
             ],[
                 'status'    => $data['status']
             ])) {
+                if($questionaire->startdate === null) {
+                    $questionaire->startdate = date('Y-m-d h:i:s');
+                }
+
+                if($questionaire->status === 'send' && $questionaire->enddate !== null) {
+                    $questionaire->enddate = date('Y-m-d h:i:s');
+                }
+                
+                $questionaire->save();
                                 
                 // users
                 foreach($data['emailTo'] as $userId) {

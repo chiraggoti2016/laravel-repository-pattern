@@ -13,7 +13,7 @@
             v-if="
               project.questionaire === null ||
               (project.questionaire !== null &&
-                project.questionaire.status !== 'send')
+                project.questionaire?.status !== 'send')
             "
           >
             <a
@@ -127,7 +127,9 @@
                   <label
                     class="require"
                     :for="'modal-name-input-question-' + index"
-                    >{{ index + 1 + "." + 1 + ". " + question.question }}</label
+                    >{{
+                      index + 1 + "." + 1 + ". " + question.sub_question
+                    }}</label
                   >
                   <b-form-input
                     :id="'modal-name-input-question-' + index"
@@ -370,9 +372,7 @@ export default {
           status: draft ? "draft" : "send",
         });
 
-        this.$router.push(
-          `/admin/customers/open/project/questionnaire/${id}/${projectid}`
-        );
+        this.$router.push(`/admin/customers/open/project/${id}/${projectid}`);
       } catch (error) {
         notify.authError(error);
       }

@@ -597,7 +597,12 @@ export default {
         required,
         email,
         isEmailAlreadyExists: (value, vm) => {
-          if (value === "" || value === null) return true;
+          if (
+            value === "" ||
+            value === null ||
+            /[a-z0-9]+@[a-z]+\.[a-z]{2,3}/.test(value) === false
+          )
+            return true;
           return axios.post("users/email-already-exists", {
             email: value,
             id: vm.id,
