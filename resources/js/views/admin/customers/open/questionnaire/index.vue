@@ -10,11 +10,7 @@
           </div>
           <div
             class="col-md-3 d-flex justify-content-end align-items-center"
-            v-if="
-              project.questionaire === null ||
-              (project.questionaire !== null &&
-                project.questionaire?.status !== 'send')
-            "
+            v-if="isProjectQuestionaireSend"
           >
             <a
               href="#"
@@ -40,7 +36,7 @@
         </div>
       </div>
       <div class="card-body">
-        <div class="table-responsive">
+        <div class="table-responsive" v-if="isProjectQuestionaireSend">
           <b-card
             sub-title="Email To (select client name to send)"
             class="form-list"
@@ -276,6 +272,15 @@ export default {
         : [];
 
     await this.getQuestionsListByCategory(this.project.scope, params);
+  },
+  computed: {
+    isProjectQuestionaireSend() {
+      return (
+        this.project?.questionaire === null ||
+        (this.project.questionaire !== null &&
+          this.project.questionaire?.status !== "send")
+      );
+    },
   },
   methods: {
     async getQuestionsListByCategory(scope, params) {
