@@ -29,6 +29,12 @@ class AuthController extends Controller
                     ], 401);
                 }
 
+                if (!in_array($user->role, ['admin','partner'])) {
+                    return response([
+                        'message' => 'Login not permited.'
+                    ], 401);
+                }
+
                 return response([
                     'message' => 'success',
                     'token' => $token,
@@ -36,7 +42,7 @@ class AuthController extends Controller
                 ]);
             }
         } catch (\Exception $e) {
-            dd($e->getMessage());
+            // dd($e->getMessage());
             return response([
                 'message' => 'Internal error, please try again later.' //$e->getMessage()
             ], 400);

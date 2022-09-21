@@ -77,11 +77,18 @@
             :key="category"
           >
             <b-form-group
-              :label="index + 1 + '. ' + question.question"
               v-slot="{ questionsLiveFeedback }"
               v-for="(question, index) in questions"
               :key="index"
             >
+              <label
+                >{{ index + 1 + ". " + question.question }}
+                <i
+                  v-if="question.information !== ''"
+                  class="fas fa-info-circle"
+                  v-b-popover.hover.top="question.information"
+                ></i
+              ></label>
               <!-- FreeText -->
               <b-form-input
                 v-if="question.response_collector === 'FreeText'"
@@ -297,6 +304,8 @@ export default {
                 ? v.questionaire_question.input
                 : v.response_collector == "YesNo"
                 ? "no"
+                : v.response_collector == "Upload"
+                ? null
                 : "",
               depend: v.questionaire_question
                 ? v.questionaire_question.depend

@@ -59,4 +59,19 @@ class User extends Authenticatable implements MustVerifyEmail
     public function getNameAttribute() { 
         return $this->first_name . ' ' . $this->last_name;
     }
+
+    public function user_verify()
+    {
+        return $this->hasOne(UserVerify::class);
+    }
+
+    public function partners()
+    {
+        return $this->belongsToMany(Partner::class, 'partner_users');
+    }
+
+    public function getPartnerAttribute()
+    {
+        return $this->partners()->first();
+    }
 }

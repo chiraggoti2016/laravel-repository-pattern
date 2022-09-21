@@ -36,24 +36,33 @@ class Partner extends Model
     ];
 
     protected $appends = [
-        'customers_count',
         'ola_engagements_count',
         'completed',
         'cancelled',
     ];
     
-    public function getCustomersCountAttribute() { return 0; }
+
     public function getOlaEngagementsCountAttribute() { return 0; }
-    public function getCompletedAttribute() { return 0; }
-    public function getCancelledAttribute() { return 0; }
+    
+    public function getCompletedAttribute() { 
+        return $this->customers()->withCount('projects')->whereHas('projects', function($q){
+            return $q->where('status', 'completed');
+        })->get()->sum('projects_count'); 
+    }
+
+    public function getCancelledAttribute() {     
+        return $this->customers()->withCount('projects')->whereHas('projects', function($q){
+            return $q->where('status', 'cancelled');
+        })->get()->sum('projects_count'); 
+    }
 
     public function users()
     {
         return $this->belongsToMany(User::class, 'partner_users');
     }
 
-    // public function customers()
-    // {
-    //     return $this->belongsToMany(User::class, 'partner_customers');
-    // }
+    public function customers()
+    {
+        return $this->belongsToMany(Customer::class, 'partner_customers');
+    }
 }

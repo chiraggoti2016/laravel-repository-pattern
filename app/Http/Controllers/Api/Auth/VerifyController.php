@@ -7,23 +7,34 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use App\Models\User;
-
+use Str;
+use Mail;
 
 class VerifyController extends Controller
 {
-    public function verify($userId, Request $request)
+    public function verify($token, Request $request)
     {
-        if (!$request->hasValidSignature()) {
-            return redirect('/login?verification_status=error');
-        }
+        // if (!$request->hasValidSignature()) {
+        //     return redirect('/admin/login?verification_status=error');
+        // }
 
-        $user = User::findOrFail($userId);
+        $user = User::whereHas('user_verify', function($q) use($token){
+            return $q->where('token', $token);
+        })->first();
 
-        if (!$user->hasVerifiedEmail()) {
+        if ($user && !$user->hasVerifiedEmail()) {
             $user->markEmailAsVerified();
+            $password = Str::random(8);
+
+            $user->update(['password' => \Hash::make($password)]);
+
+            Mail::send('Mails.newpassword', ['user' => $user, 'password' => $password], function($message) use($user){
+                $message->to($user->email);
+                $message->subject('New Password');
+            }); 
         }
 
-        return redirect('/login?verification_status=success');
+        return redirect('/admin/login?verification_status=success');
     }
 
     public function resend(User $user)

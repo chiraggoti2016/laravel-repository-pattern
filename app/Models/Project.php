@@ -23,7 +23,7 @@ class Project extends Model
         'scope',
     ];
 
-    protected $with = ['questionaire', 'questionaire.users'];
+    protected $with = ['questionaire', 'questionaire.users', 'customers'];
 
     public function participants()
     {
@@ -37,5 +37,15 @@ class Project extends Model
 
     public function hostname() {
         return $this->hasOne(Hostname::class);
+    }
+    
+    public function customers()
+    {
+        return $this->belongsToMany(Customer::class, 'customer_projects');
+    }
+
+    public function getCustomerAttribute()
+    {
+        return $this->customers()->first();
     }
 }
