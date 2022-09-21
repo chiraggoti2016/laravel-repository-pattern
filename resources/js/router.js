@@ -149,9 +149,36 @@ let router = new Router({
             }
         },
         {
-            path: "/admin/projects/view/:id",
-            name: "projects-view",
+            path: "/admin/project/hosts/:slug",
+            name: "projects-hosts",
             component: () => import("./views/admin/projects/host-index.vue"),
+            meta: {
+                requiresAuth: true,
+                layout: AdminLayout
+            }
+        },
+        {
+            path: "/admin/project/host-details/:slug",
+            name: "projects-host-detail",
+            component: () => import("./views/admin/projects/host-details.vue"),
+            meta: {
+                requiresAuth: true,
+                layout: AdminLayout
+            }
+        },
+        {
+            path: "/admin/project/:slug/database-details/:host_id",
+            name: "projects-database-details",
+            component: () => import("./views/admin/projects/database-details.vue"),
+            meta: {
+                requiresAuth: true,
+                layout: AdminLayout
+            }
+        },
+        {
+            path: "/admin/project/:database_id/database-details",
+            name: "projects-database-details",
+            component: () => import("./views/admin/projects/specific-database-details.vue"),
             meta: {
                 requiresAuth: true,
                 layout: AdminLayout

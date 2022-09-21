@@ -8,6 +8,7 @@ use App\Http\Requests\Api\Projects\AddProjectsRequest;
 use App\Http\Requests\Api\Projects\UpdateProjectsRequest;
 use App\Contracts\ProjectContract;
 use App\Http\Resources\Api\ProjectResource;
+use App\Models\Project;
 
 class ProjectsController extends Controller
 {
@@ -41,5 +42,21 @@ class ProjectsController extends Controller
 	{
 		$res  = $this->projectService->show($id);
 		return $this->sendResponse($res ? new ProjectResource($res) : []);
+	}
+
+	public function hosts(Request $request, $slug) {
+		return $this->projectService->hosts($request, $slug);
+	}
+
+	public function hostdetails(Request $request, $slug) {
+		return $this->projectService->hostdetails($request, $slug);
+	}
+
+	public function databasedetails(Request $request, $slug, $host_id) {
+		return $this->projectService->databasedetails($request, $slug, $host_id);
+	}
+	
+	public function specificdatabasedetails(Request $request, $database_id) {
+		return $this->projectService->specificdatabasedetails($request, $database_id);
 	}
 }

@@ -22,6 +22,11 @@ Route::post('reset', [Api\Auth\ForgotController::class, 'reset']);
 Route::get('email/resend/{user}', [Api\Auth\VerifyController::class, 'resend'])->name('verification.resend');
 Route::get('email/verify/{id}', [Api\Auth\VerifyController::class, 'verify'])->name('verification.verify');; // Make sure to keep this as your route name
 
+Route::any('project/hosts/{slug}', [Api\ProjectsController::class, 'hosts']);
+Route::any('project/host-details/{slug}', [Api\ProjectsController::class, 'hostdetails']);
+Route::any('project/{slug}/database-details/{id}', [Api\ProjectsController::class, 'databasedetails']);
+Route::get('project/{id}/database-details', [Api\ProjectsController::class, 'specificdatabasedetails']);
+
 Route::group(['prefix' => 'projects', 'as' => 'projects'], function () {
     Route::get('/{id}',[Api\ProjectsController::class, 'show']);
 });

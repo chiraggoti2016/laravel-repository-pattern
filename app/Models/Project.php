@@ -34,4 +34,8 @@ class Project extends Model
     {
         return $this->hasOne(Questionaire::class);
     }
+
+    public function hostname() {
+        return $this->hasOne(Hostname::class);
+    }
 }
