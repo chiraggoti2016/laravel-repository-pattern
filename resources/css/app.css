@@ -56,3 +56,9 @@ label.require::after, .require-h6 h6::after{
     color: #e74a3b;
 }
 
+/* info-icon */
+.info-icon::after{
+    font-family: "Font Awesome 5 Free";
+    font-weight: 900;
+    content:"\f129";
+}

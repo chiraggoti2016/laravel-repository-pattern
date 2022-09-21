@@ -22,6 +22,7 @@ const store = new Vuex.Store({
     },
     mutations: {
         user: (state, user) => {
+            setAuthToken();
             state.user = user;
         }
     },
