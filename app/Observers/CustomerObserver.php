@@ -3,6 +3,7 @@
 namespace App\Observers;
 
 use App\Models\Customer;
+use App\Models\PartnerCustomer;
 
 class CustomerObserver
 {
@@ -19,46 +20,22 @@ class CustomerObserver
     }
 
     /**
-     * Handle the Customer "updated" event.
+     * Handle the Customer "created" event.
      *
      * @param  \App\Models\Customer  $customer
      * @return void
      */
-    public function updated(Customer $customer)
+    public function created(Customer $customer)
     {
-        //
+        $user = auth()->user() ?? null;
+        $partner = $user ? $user->partner : null;
+        if($partner) {
+            PartnerCustomer::create([
+                'partner_id'    => $partner->id,
+                'customer_id'   => $customer->id,
+            ]);    
+        }
+        return $customer;
     }
 
-    /**
-     * Handle the Customer "deleted" event.
-     *
-     * @param  \App\Models\Customer  $customer
-     * @return void
-     */
-    public function deleted(Customer $customer)
-    {
-        //
-    }
-
-    /**
-     * Handle the Customer "restored" event.
-     *
-     * @param  \App\Models\Customer  $customer
-     * @return void
-     */
-    public function restored(Customer $customer)
-    {
-        //
-    }
-
-    /**
-     * Handle the Customer "force deleted" event.
-     *
-     * @param  \App\Models\Customer  $customer
-     * @return void
-     */
-    public function forceDeleted(Customer $customer)
-    {
-        //
-    }
 }

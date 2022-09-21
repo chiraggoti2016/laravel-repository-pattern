@@ -27,6 +27,7 @@
             :url="url"
             :columns="columns"
             :headers="headers"
+            :classes="classes"
             ref="myTable"
           >
           </data-table>
@@ -74,6 +75,11 @@ export default {
     return {
       url: "/api/partners",
       deleteId: null,
+      classes: {
+        td: {
+          "text-center": true,
+        },
+      },
       columns: [
         {
           label: "Partner ID",
@@ -87,6 +93,9 @@ export default {
         {
           label: "No of Users",
           name: "users_count",
+          classes: {
+            "text-center": true,
+          },
         },
         {
           label: "Customers",

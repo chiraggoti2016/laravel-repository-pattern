@@ -15,7 +15,7 @@ class AddColumnsInUsersTable extends Migration
     {
         Schema::table('users', function (Blueprint $table) {
             $table->text('phone')->nullable();
-            $table->enum('role', ['admin','partner'])->default('partner');
+            $table->enum('role', ['admin','partner','customer'])->default('partner');
         });
     }
 

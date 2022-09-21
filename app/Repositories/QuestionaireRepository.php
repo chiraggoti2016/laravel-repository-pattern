@@ -55,12 +55,12 @@ class QuestionaireRepository extends BaseRepository implements QuestionaireContr
 
                 $questionaire = $this->findData($questionaire->id);
                 if($data['status'] === 'send'){
-                    // foreach($questionaire->users as $user) {
-                    //     \Mail::send('Mails.send-questionaires', ['user' => $user, 'project_id' => $project_id], function($message) use($user){
-                    //         $message->to($user->email);
-                    //         $message->subject('Send Questionaires');
-                    //     });
-                    // }
+                    foreach($questionaire->users as $user) {
+                        \Mail::send('Mails.send-questionaires', ['user' => $user, 'project_id' => $project_id], function($message) use($user){
+                            $message->to($user->email);
+                            $message->subject('Send Questionaires');
+                        });
+                    }
                 }
 
                 return $questionaire;

@@ -65,7 +65,7 @@ class ProjectRepository extends BaseRepository implements ProjectContract
     private function createUpdateParticipants($project, $participants) {
         $participantUserIds = [];
         foreach($participants as $each) {    
-            $password = '123456';
+            $password = '';
             $name = explode(' ', $each['name']);
             unset($each['name']);
             $userData = array_merge([

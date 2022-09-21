@@ -73,7 +73,7 @@ class CustomerRepository extends BaseRepository implements CustomerContract
 
     function createUpdateUsers($customer, $users) {
         $userIds = array_map(function($each){
-            $password = '123456';
+            $password = '';
             $name = explode(' ', $each['name']);
             unset($each['name']);
             $userData = array_merge([

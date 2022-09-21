@@ -22,7 +22,7 @@ class PartnerRepository extends BaseRepository implements PartnerContract
         $orderByDir = $request->input('dir', 'asc');
         $searchValue = $request->input('search');
 
-        $query = Partner::eloquentQuery($orderBy, $orderByDir, $searchValue)->withCount(['users']);
+        $query = Partner::eloquentQuery($orderBy, $orderByDir, $searchValue)->withCount(['users','customers']);
         $data = $query->paginate($length);
         return new DataTableCollectionResource($data);
     }
@@ -64,7 +64,7 @@ class PartnerRepository extends BaseRepository implements PartnerContract
 
     function createUpdateUsers($partner, $users) {
         $userIds = array_map(function($each){
-            $password = '123456';
+            $password = '';
             $name = explode(' ', $each['name']);
             unset($each['name']);
             $userData = array_merge([
