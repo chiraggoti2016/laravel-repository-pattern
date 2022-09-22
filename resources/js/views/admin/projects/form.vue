@@ -19,10 +19,17 @@
                   href="#"
                   class="btn btn-sm btn-primary btn-icon-split"
                   @click="onSubmit()"
+                  :class="loading ? 'pe-none' : ''"
                 >
-                  <span class="icon text-white-50"
-                    ><i class="fas fa-save"></i
-                  ></span>
+                  <span class="icon text-white-50">
+                    <b-icon
+                      v-if="loading"
+                      icon="arrow-clockwise"
+                      animation="spin-pulse"
+                      font-scale="1"
+                    ></b-icon>
+                    <i v-else class="fas fa-save"></i>
+                  </span>
                   <span v-if="formtype === 'add'" class="text">Save</span>
                   <span v-if="formtype === 'edit'" class="text">Update</span>
                 </a>
@@ -151,6 +158,7 @@ export default {
   },
   data() {
     return {
+      loading: false,
       busy: false,
       form: {
         name: null,
@@ -212,6 +220,8 @@ export default {
         return;
       }
 
+      this.loading = true;
+
       if (this.formtype === "add") {
         this.addProject();
       } else {
@@ -223,6 +233,7 @@ export default {
         const response = await axios.post("projects", {
           ...this.form,
         });
+        this.loading = false;
 
         this.$router.push("/admin/projects");
       } catch (error) {
@@ -235,6 +246,7 @@ export default {
         const response = await axios.put(`projects/${id}`, {
           ...this.form,
         });
+        this.loading = false;
 
         this.$router.push("/admin/projects");
       } catch (error) {
