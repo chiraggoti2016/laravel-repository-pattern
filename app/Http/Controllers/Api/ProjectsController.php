@@ -59,4 +59,8 @@ class ProjectsController extends Controller
 	public function specificdatabasedetails(Request $request, $database_id) {
 		return $this->projectService->specificdatabasedetails($request, $database_id);
 	}
+
+	public function specificdatabasefeaturedetails(Request $request, $database_id) {
+		return $this->projectService->specificdatabasefeaturedetails($request, $database_id);
+	}
 }

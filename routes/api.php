@@ -26,6 +26,7 @@ Route::any('project/hosts/{slug}', [Api\ProjectsController::class, 'hosts']);
 Route::any('project/host-details/{slug}', [Api\ProjectsController::class, 'hostdetails']);
 Route::any('project/{slug}/database-details/{id}', [Api\ProjectsController::class, 'databasedetails']);
 Route::get('project/{id}/database-details', [Api\ProjectsController::class, 'specificdatabasedetails']);
+Route::get('database-feature-details', [Api\ProjectsController::class, 'specificdatabasefeaturedetails']);
 
 Route::group(['prefix' => 'projects', 'as' => 'projects'], function () {
     Route::get('/{id}',[Api\ProjectsController::class, 'show']);

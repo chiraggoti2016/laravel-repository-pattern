@@ -20,6 +20,12 @@
 <script>
 import { reactive, toRefs } from "vue";
 import DbLink from "./../components/DbLink.vue";
+import CBDStatus from "./../components/CBDStatus.vue";
+import PBDStatus from "./../components/PBDStatus.vue";
+import RACStatus from "./../components/RACStatus.vue";
+import PartioningStatus from "./../components/PartioningStatus.vue";
+import DiagonosticsStatus from "./../components/DiagonosticsStatus.vue";
+import TuningStatus from "./../components/TuningStatus.vue";
 
 export default {
     name: "Project",
@@ -31,12 +37,12 @@ export default {
                 { label: "Version", name: 'version' },
                 { label: "Edition", name: 'banner' },
                 { label: "Role", name: 'db_role' },
-                { label: "CBD", name: 'cbdpbd' },
-                { label: "PBD", name: 'cbdpbd' },
-                { label: "RAC", name: 'rac' },
-                { label: "Partioning", name: 'partioning' },
-                { label: "Diagonostics", name: 'diagnostics' },
-                { label: "Tuning", name: 'tuning' },
+                { label: "CBD", name: 'cbdpbd', component: CBDStatus },
+                { label: "PBD", name: 'cbdpbd', component: PBDStatus },
+                { label: "RAC", name: 'rac', component: RACStatus },
+                { label: "Partioning", name: 'partioning', component: PartioningStatus },
+                { label: "Diagonostics", name: 'diagnostics', component: DiagonosticsStatus },
+                { label: "Tuning", name: 'tuning', component: TuningStatus },
             ],
             headers: {
                 ...axiosHeaders,
@@ -45,7 +51,13 @@ export default {
         };
     },
     components: {
-        DbLink
+        DbLink,
+        CBDStatus, 
+        PBDStatus,
+        RACStatus,
+        PartioningStatus,
+        DiagonosticsStatus,
+        TuningStatus
     },
     async mounted() {
         //console.log(this.$route.params);

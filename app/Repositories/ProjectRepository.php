@@ -151,10 +151,23 @@ class ProjectRepository extends BaseRepository implements ProjectContract
         $data  = OptionsPacksProduct::where('cpu_count_database_detail_id', $database_id)
                     ->orderByRaw("FIELD(`usage`, 'CURRENT_USAGE', 'PAST_USAGE', 'NO_USAGE')")
                     ->paginate($length);
-        //$feature_products = OptionsPacksProductDetail::where('cpu_count_database_detail_id', $id)->orderByRaw("FIELD(`usage`, 'CURRENT_USAGE', 'PAST_USAGE', 'NO_CURRENT_USAGE', 'SUPPRESSED_DUE_TO_BUG')")->get();
 
         return new DataTableCollectionResource($data);
     }
+
+    function specificdatabasefeaturedetails(Request $request, $database_id) {
+        $length = $request->input('length');
+        $orderBy = $request->input('column'); //Index
+        $orderByDir = $request->input('dir', 'asc');
+        $searchValue = $request->input('search');
+
+        $data = OptionsPacksProductDetail::where('cpu_count_database_detail_id', $id)
+                    ->orderByRaw("FIELD(`usage`, 'CURRENT_USAGE', 'PAST_USAGE', 'NO_CURRENT_USAGE', 'SUPPRESSED_DUE_TO_BUG')")
+                    ->paginate($length);
+
+        return new DataTableCollectionResource($data);
+    }
+    
 }
 
 ?>

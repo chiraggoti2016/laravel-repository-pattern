@@ -14,6 +14,20 @@
                 </div>
             </div>
         </div>
+
+        <b-modal id="modal-prevent-closing" ref="modal" title="Edit Host Details" @show="resetModal" @hidden="resetModal" @ok="handleOk" ok-title="Update" >
+            <form ref="form" @submit.stop.prevent="handleAddUserSubmit">
+                <b-form-group id="example-modal-input-group-1" label="Cluster-Name" label-for="modal-cluster-input" label-class="require" >
+                    <b-form-input id="modal-cluster-input" name="modal-cluster-input" class="mb-2 mr-sm-2 mb-sm-0" placeholder="Cluster Name" aria-describedby="modal-input-1-live-feedback" ></b-form-input>                    
+                </b-form-group>
+                <b-form-group id="example-modal-input-group-1" label="Server-Identifier" label-for="modal-server-input" label-class="require" >
+                    <b-form-input id="modal-server-input" name="modal-server-input" class="mb-2 mr-sm-2 mb-sm-0" placeholder="Server Identifier" aria-describedby="modal-input-1-live-feedback" ></b-form-input>                    
+                </b-form-group>
+                <b-form-group id="example-modal-input-group-1" label="Environment" label-for="modal-env-input" label-class="require" >
+                    <b-form-input id="modal-env-input" name="modal-env-input" class="mb-2 mr-sm-2 mb-sm-0" placeholder="Environment" aria-describedby="modal-input-1-live-feedback" ></b-form-input>                    
+                </b-form-group>
+            </form>
+        </b-modal>
     </div>
 </template>
 
@@ -25,6 +39,7 @@ import RamDetails from "./../components/RamDetails.vue";
 import CpuUtil from "./../components/CpuUtil.vue";
 import NoDatabase from "./../components/NoDatabase.vue";
 import TotalCores from "./../components/TotalCores.vue";
+import ActionModalPopup from './../components/ActionModalPopup.vue';
 
 export default {
     name: "Project",
@@ -61,7 +76,7 @@ export default {
                     },
                     event: "click",
                     handler: () => {},
-                    component: ActionButton,
+                    component: ActionModalPopup,
                 },
             ],
             headers: {
@@ -76,11 +91,17 @@ export default {
         RamDetails,
         CpuUtil,
         NoDatabase,
-        TotalCores
+        TotalCores,
+        ActionModalPopup
     },
     async mounted() {
         //console.log(this.$route.params);
     },
-    methods: {},
+    methods: {
+        resetModal() {
+        },
+        handleOk(bvModalEvent) {
+        }
+    },
 };
 </script>
