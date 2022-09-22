@@ -10,10 +10,17 @@
             <a
               href="#"
               class="btn btn-sm btn-primary btn-icon-split"
+              :class="loading ? 'pe-none' : ''"
               @click="onSubmit()"
             >
               <span class="icon text-white-50">
-                <i class="fas fa-save"></i>
+                <b-icon
+                  v-if="loading"
+                  icon="arrow-clockwise"
+                  animation="spin-pulse"
+                  font-scale="1"
+                ></b-icon>
+                <i v-else class="fas fa-save"></i>
               </span>
               <span v-if="formtype === 'add'" class="text">Save</span>
               <span v-if="formtype === 'edit'" class="text">Update</span>
@@ -475,6 +482,7 @@ export default {
   },
   data() {
     return {
+      loading: false,
       scopes: {
         oracle_database: { id: 1, name: "Oracle Database" },
       },
@@ -677,6 +685,9 @@ export default {
       if (this.$v.form.$anyError) {
         return;
       }
+
+      this.loading = true;
+
       if (this.formtype === "add") {
         this.addCustomer();
       } else {
@@ -688,6 +699,7 @@ export default {
         const response = await axios.post("customers", {
           ...this.form,
         });
+        this.loading = false;
 
         this.$router.push("/admin/customers");
       } catch (error) {
@@ -700,6 +712,7 @@ export default {
         const response = await axios.put(`customers/${id}`, {
           ...this.form,
         });
+        this.loading = false;
 
         this.$router.push("/admin/customers");
       } catch (error) {
