@@ -34,10 +34,7 @@ class ForgotController extends Controller
             ]);
 
             //send email
-            Mail::send('Mails.forgot', ['token' => $token], function(Message $message) use ($email){
-                $message->to($email);
-                $message->subject('Reset your password');
-            });
+            dispatch(new \App\Jobs\ForgotMailJob($user->email, ['token' => $token]));
 
             return response([
                 'message' => 'Check your email!'

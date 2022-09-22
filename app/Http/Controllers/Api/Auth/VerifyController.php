@@ -28,10 +28,7 @@ class VerifyController extends Controller
 
             $user->update(['password' => \Hash::make($password)]);
 
-            Mail::send('Mails.newpassword', ['user' => $user, 'password' => $password], function($message) use($user){
-                $message->to($user->email);
-                $message->subject('New Password');
-            }); 
+            dispatch(new \App\Jobs\NewPasswordMailJob($user->email, ['user' => $user, 'password' => $password]));
         }
 
         return redirect('/admin/login?verification_status=success');
