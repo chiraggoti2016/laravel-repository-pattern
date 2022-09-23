@@ -172,6 +172,14 @@
                     name="delete"
                     @click="deleteActionButtonClick"
                   ></action-button>
+                  <action-button
+                    v-if="!data.item.email_verified_at"
+                    :data="data"
+                    :meta="verifyActionButton.meta"
+                    :classes="verifyActionButton.classes"
+                    name="send verify mail"
+                    @click="verifyActionButtonClick"
+                  ></action-button>
                 </template>
               </b-table>
               <p v-if="form.users.length === 0" class="mb-0">No Data</p>
@@ -525,6 +533,8 @@ export default {
         projects: [],
       },
       editUserIndex: null,
+      userData: null,
+      overlayFor: null,
       newuser: {
         name: null,
         email: null,
@@ -549,6 +559,7 @@ export default {
               "fa-edit": true,
             },
           },
+          onlyicon: true,
         },
       },
       deleteActionButton: {
@@ -559,10 +570,27 @@ export default {
               "fa-trash": true,
             },
           },
+          onlyicon: true,
         },
         classes: {
           btn: true,
           "btn-danger": true,
+          "btn-sm": true,
+        },
+      },
+      verifyActionButton: {
+        meta: {
+          icon: {
+            has: true,
+            classes: {
+              "fa-paper-plane": true,
+            },
+          },
+          onlyicon: true,
+        },
+        classes: {
+          btn: true,
+          "btn-info": true,
           "btn-sm": true,
         },
       },
@@ -576,6 +604,7 @@ export default {
               "fa-arrow-up": true,
             },
           },
+          onlyicon: true,
         },
         classes: {
           btn: true,
@@ -840,6 +869,7 @@ export default {
       this.$v.$reset();
     },
     deleteActionButtonClick(data) {
+      this.overlayFor = "delete";
       this.isDeleteFor = "user";
       this.editUserIndex = data.index;
       this.busy = true;
@@ -860,16 +890,31 @@ export default {
       this.$v.$reset();
     },
     deleteProjectActionButtonClick(data) {
+      this.overlayFor = "delete";
       this.isDeleteFor = "project";
       this.editProjectIndex = data.index;
+      this.busy = true;
+    },
+    verifyActionButtonClick(data) {
+      this.userData = data.item;
+      this.overlayFor = "verify";
       this.busy = true;
     },
 
     onOverlayCancel() {
       this.isDeleteFor = null;
       this.busy = false;
+      this.overlayFor = null;
+      this.userData = null;
     },
     onOverlayOK() {
+      if (this.overlayFor === "delete") this.onDeleteOk();
+      else if (this.overlayFor === "verify") this.onVerifyOk();
+
+      this.onOverlayCancel();
+    },
+
+    onDeleteOk() {
       if (this.isDeleteFor == "user") {
         if (this.editUserIndex > -1) {
           this.form.users.splice(this.editUserIndex, 1);
@@ -879,11 +924,27 @@ export default {
         if (this.editProjectIndex > -1) {
           this.form.projects.splice(this.editProjectIndex, 1);
         }
-        this.$root.$emit("bv::refresh::table", "users-b-table-id");
+        this.$root.$emit("bv::refresh::table", "projects-b-table-id");
       }
+    },
+    onVerifyOk() {
+      this.sendVerifyMail(this.userData);
+    },
+    async sendVerifyMail(data) {
+      this.isLoading = true;
+      try {
+        const response = await axios.post(`email/resend/${data.id}`);
 
-      this.busy = false;
-      this.isDeleteFor = null;
+        let toast = this.$toasted.show(response.data.message, {
+          theme: "toasted-primary",
+          position: "top-right",
+          duration: 5000,
+        });
+        this.$root.$emit("bv::refresh::table", "users-b-table-id");
+      } catch (error) {
+        notify.authError(error);
+      }
+      this.isLoading = false;
     },
   },
   components: {

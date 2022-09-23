@@ -718,6 +718,7 @@ export default {
               "fa-check": true,
             },
           },
+          onlyicon: true,
         },
         classes: {
           btn: true,
@@ -733,6 +734,7 @@ export default {
               "fa-clipboard": true,
             },
           },
+          onlyicon: true,
         },
         classes: {
           btn: true,
@@ -748,6 +750,7 @@ export default {
               "fa-stopwatch": true,
             },
           },
+          onlyicon: true,
         },
         classes: {
           btn: true,
@@ -763,6 +766,7 @@ export default {
               "fa-trash": true,
             },
           },
+          onlyicon: true,
         },
         classes: {
           btn: true,
