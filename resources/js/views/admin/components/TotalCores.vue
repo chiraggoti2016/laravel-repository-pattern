@@ -10,7 +10,7 @@ export default {
 	},
 	methods: {
 		totalCores(data) {
-			return data.details.cores_per_socket;
+			return data.details.cores_per_socket * data.details.sockets;
 		}
 	}
 };

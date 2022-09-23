@@ -185,6 +185,33 @@ let router = new Router({
             }
         },
         {
+            path: "/admin/project/cpu-count/:slug",
+            name: "projects-cpu-count-upload",
+            component: () => import("./views/admin/projects/upload-cpu-count.vue"),
+            meta: {
+                requiresAuth: true,
+                layout: AdminLayout
+            }
+        },
+        {
+            path: "/admin/project/cpu-usage/:slug",
+            name: "projects-cpu-usage-upload",
+            component: () => import("./views/admin/projects/upload-cpu-usage.vue"),
+            meta: {
+                requiresAuth: true,
+                layout: AdminLayout
+            }
+        },
+        {
+            path: "/admin/project/options-packs/:slug",
+            name: "projects-options-packs-upload",
+            component: () => import("./views/admin/projects/upload-options-packs.vue"),
+            meta: {
+                requiresAuth: true,
+                layout: AdminLayout
+            }
+        },
+        {
             path: "/admin/countries/add",
             name: "countries-add",
             component: () => import("./views/admin/countries/add.vue"),

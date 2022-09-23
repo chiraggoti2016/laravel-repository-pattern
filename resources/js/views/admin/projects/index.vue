@@ -36,7 +36,6 @@ export default {
             columns: [
                 { label: "Index", name: "id", searchable: false },
                 { label: "Project Name", name: "name" },
-                { label: "Slug", name: "slug" },
                 { label: "Status", name: "status" },
                 { label: "Scope", name: "scope" },
                 { label: "Created By", name: "folder" },

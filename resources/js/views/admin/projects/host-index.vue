@@ -7,17 +7,17 @@
                         <h6 class="m-0 font-weight-bold text-primary">Server/Host Details</h6>
                     </div>
                     <div class="col-md-6 float-right d-flex justify-content-end">
-                        <router-link class="btn btn-sm btn-primary btn-icon-split" to="/admin/projects/add" >
+                        <router-link class="btn btn-sm btn-primary btn-icon-split" target="_blank" :to="'/admin/project/cpu-count/'+this.$route.params.slug" >
                             <span class="icon text-white-50" ><i class="fas fa-plus"></i></span>
                             <span class="text">Upload CPU Counts</span>
                         </router-link>
                         &nbsp;
-                        <router-link class="btn btn-sm btn-primary btn-icon-split" to="/admin/projects/add" >
+                        <router-link class="btn btn-sm btn-primary btn-icon-split" target="_blank" :to="'/admin/project/options-packs/'+this.$route.params.slug" >
                             <span class="icon text-white-50" ><i class="fas fa-plus"></i ></span>
-                            <span class="text">Upload CPU Options</span>
+                            <span class="text">Upload Options Packs</span>
                         </router-link>
                         &nbsp;
-                        <router-link class="btn btn-sm btn-primary btn-icon-split" to="/admin/projects/add" >
+                        <router-link class="btn btn-sm btn-primary btn-icon-split" target="_blank" :to="'/admin/project/cpu-usage/'+this.$route.params.slug" >
                             <span class="icon text-white-50" ><i class="fas fa-plus"></i></span>
                             <span class="text">Upload CPU Usage</span>
                         </router-link>
