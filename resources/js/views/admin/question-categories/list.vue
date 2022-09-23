@@ -30,8 +30,11 @@
             :columns="columns"
             :headers="headers"
             ref="myTable"
+            @loading="isLoading = true"
+            @finished-loading="isLoading = false"
           >
           </data-table>
+          <loading :is-full-page="true" :active.sync="isLoading"> </loading>
         </div>
       </div>
     </div>
@@ -74,6 +77,7 @@ export default {
   name: "QuestionCategory",
   data() {
     return {
+      isLoading: false,
       url: "/api/question/categories/list",
       columns: [
         {

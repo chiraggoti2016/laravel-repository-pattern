@@ -29,8 +29,11 @@
             :headers="headers"
             :classes="classes"
             ref="myTable"
+            @loading="isLoading = true"
+            @finished-loading="isLoading = false"
           >
           </data-table>
+          <loading :is-full-page="true" :active.sync="isLoading"> </loading>
         </div>
       </div>
     </div>
@@ -75,6 +78,7 @@ export default {
     return {
       url: "/api/partners",
       deleteId: null,
+      isLoading: false,
       classes: {
         td: {
           "text-center": true,

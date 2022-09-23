@@ -31,6 +31,7 @@
         "datatables.net-dt": "^1.1.0",
         "laravel-vue-datatable": "^0.6.0",
         "startbootstrap-sb-admin-2": "^4.1.4",
+        "vue-loading-overlay": "^2.0.4",
         "vue-router": "^3.5.2",
         "vue-toasted": "^1.1.28",
         "vuelidate": "^0.7.7",

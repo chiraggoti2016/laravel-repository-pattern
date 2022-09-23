@@ -28,8 +28,11 @@
             :columns="columns"
             :headers="headers"
             ref="myTable"
+            @loading="isLoading = true"
+            @finished-loading="isLoading = false"
           >
           </data-table>
+          <loading :is-full-page="true" :active.sync="isLoading"> </loading>
         </div>
       </div>
     </div>
@@ -72,6 +75,7 @@ export default {
   name: "Country",
   data() {
     return {
+      isLoading: false,
       url: "/api/countries/list",
       columns: [
         {
