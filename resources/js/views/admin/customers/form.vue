@@ -270,6 +270,12 @@
         </div>
       </div>
     </div>
+    <loading
+      v-if="formtype !== 'add'"
+      :is-full-page="true"
+      :active.sync="isLoading"
+    >
+    </loading>
 
     <b-overlay :show="busy" no-wrap>
       <template #overlay>
@@ -483,6 +489,7 @@ export default {
   data() {
     return {
       loading: false,
+      isLoading: false,
       scopes: {
         oracle_database: { id: 1, name: "Oracle Database" },
       },
@@ -634,6 +641,7 @@ export default {
     },
   },
   async mounted() {
+    this.isLoading = true;
     // countries
     await this.getCountries();
     // load scopes
@@ -645,6 +653,8 @@ export default {
         ...data,
       };
     }
+
+    this.isLoading = false;
   },
   methods: {
     async getCountries() {

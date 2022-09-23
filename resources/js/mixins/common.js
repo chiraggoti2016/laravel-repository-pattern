@@ -22,13 +22,13 @@ export default {
             }
         },
         isAdmin() {
-            if (store.state.user.role == 'admin') {
+            if (store.state.user && store.state.user.role == 'admin') {
                 return true;
             }
             return false;
         },
         isPartner() {
-            if (store.state.user.role == 'partner') {
+            if (store.state.user && store.state.user.role == 'partner') {
                 return true;
             }
             return false;

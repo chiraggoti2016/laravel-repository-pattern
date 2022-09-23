@@ -68,6 +68,12 @@
         </b-container>
       </div>
     </div>
+    <loading
+      v-if="formtype !== 'add'"
+      :is-full-page="true"
+      :active.sync="isLoading"
+    >
+    </loading>
   </div>
 </template>
 
@@ -92,6 +98,7 @@ export default {
   data() {
     return {
       loading: false,
+      isLoading: false,
       form: {
         category: null,
       },
@@ -106,10 +113,12 @@ export default {
   },
   async mounted() {
     if (this.formtype === "edit") {
+      this.isLoading = false;
       const { data } = await this.getData(this.$route.params.id);
       this.form = {
         ...data,
       };
+      this.isLoading = false;
     }
   },
   methods: {

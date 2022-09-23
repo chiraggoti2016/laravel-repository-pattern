@@ -1,6 +1,12 @@
 <template>
   <ul
-    class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion"
+    class="
+      navbar-nav
+      bg-gradient-primary
+      sidebar sidebar-dark
+      accordion
+      toggled
+    "
     id="accordionSidebar"
   >
     <!-- Sidebar - Brand -->

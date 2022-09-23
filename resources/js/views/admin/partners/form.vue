@@ -182,6 +182,12 @@
         </div>
       </div>
     </div>
+    <loading
+      v-if="formtype !== 'add'"
+      :is-full-page="true"
+      :active.sync="isLoading"
+    >
+    </loading>
 
     <b-overlay :show="busy" no-wrap>
       <template #overlay>
@@ -322,6 +328,7 @@ export default {
   data() {
     return {
       loading: false,
+      isLoading: false,
       busy: false,
       countriesOptions: [],
       userFields: [
@@ -420,6 +427,7 @@ export default {
     },
   },
   async mounted() {
+    this.isLoading = true;
     await this.getCountries();
     if (this.formtype === "edit") {
       const { data } = await this.getData(this.$route.params.id);
@@ -427,6 +435,7 @@ export default {
         ...data,
       };
     }
+    this.isLoading = false;
   },
   methods: {
     async getCountries() {

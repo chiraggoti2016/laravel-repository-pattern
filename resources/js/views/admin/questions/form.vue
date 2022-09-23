@@ -349,6 +349,12 @@
         </b-container>
       </div>
     </div>
+    <loading
+      v-if="formtype !== 'add'"
+      :is-full-page="true"
+      :active.sync="isLoading"
+    >
+    </loading>
   </div>
 </template>
 
@@ -390,6 +396,7 @@ export default {
   data() {
     return {
       loading: false,
+      isLoading: false,
       busy: false,
       responseCollectorOptions: RESPONSE_COLLECTOR_OPTIONS,
       scopesOptions: [],
@@ -499,6 +506,7 @@ export default {
     },
   },
   async mounted() {
+    this.isLoading = true;
     await this.getScopesBySlug();
     await this.getQuestionCategories();
     if (this.formtype === "edit") {
@@ -507,6 +515,7 @@ export default {
         ...data,
       };
     }
+    this.isLoading = false;
   },
   methods: {
     async getScopesBySlug() {
