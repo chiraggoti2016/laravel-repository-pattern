@@ -66,6 +66,7 @@ class CpuUsageController extends Controller
                 dd('Invalide file data.');
             }
         } catch (Exception $e) {
+            dd($e->getMessage());
             DB::rollback();
             return redirect()->back()->with('error', $e->getMessage());
         }
