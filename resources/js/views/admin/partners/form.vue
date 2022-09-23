@@ -10,10 +10,17 @@
             <a
               href="#"
               class="btn btn-sm btn-primary btn-icon-split"
+              :class="loading ? 'pe-none' : ''"
               @click="onSubmit()"
             >
               <span class="icon text-white-50">
-                <i class="fas fa-save"></i>
+                <b-icon
+                  v-if="loading"
+                  icon="arrow-clockwise"
+                  animation="spin-pulse"
+                  font-scale="1"
+                ></b-icon>
+                <i v-else class="fas fa-save"></i>
               </span>
               <span v-if="formtype === 'add'" class="text">Save</span>
               <span v-if="formtype === 'edit'" class="text">Update</span>
@@ -314,6 +321,7 @@ export default {
   },
   data() {
     return {
+      loading: false,
       busy: false,
       countriesOptions: [],
       userFields: [
@@ -452,6 +460,8 @@ export default {
         return;
       }
 
+      this.loading = true;
+
       if (this.formtype === "add") {
         this.addPartner();
       } else {
@@ -463,7 +473,7 @@ export default {
         const response = await axios.post("partners", {
           ...this.form,
         });
-
+        this.loading = false;
         this.$router.push("/admin/partners");
       } catch (error) {
         notify.authError(error);
@@ -475,7 +485,7 @@ export default {
         const response = await axios.put(`partners/${id}`, {
           ...this.form,
         });
-
+        this.loading = false;
         this.$router.push("/admin/partners");
       } catch (error) {
         notify.authError(error);

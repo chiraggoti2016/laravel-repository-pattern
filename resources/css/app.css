@@ -62,3 +62,7 @@ label.require::after, .require-h6 h6::after{
     font-weight: 900;
     content:"\f129";
 }
+
+.pe-none {
+    pointer-events: none;
+}

@@ -24,10 +24,8 @@ class UserObserver
             'token' => $token
         ]);
 
-        Mail::send('Mails.verification', ['token' => $token, 'user' => $user], function($message) use($user){
-            $message->to($user->email);
-            $message->subject('Email Verification');
-        });
+        dispatch(new \App\Jobs\VerifyMailJob($user->email, ['token' => $token, 'user' => $user]));
+
         return $user;
     }
 
