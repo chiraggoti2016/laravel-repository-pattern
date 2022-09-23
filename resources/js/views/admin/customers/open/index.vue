@@ -296,7 +296,6 @@
                     :data="data"
                     :meta="editActionButton.meta"
                     name="edit"
-                    onlyicon
                     @click="editActionButtonClick"
                   ></action-button>
                   <action-button
@@ -304,7 +303,6 @@
                     :meta="deleteActionButton.meta"
                     :classes="deleteActionButton.classes"
                     name="delete"
-                    onlyicon
                     @click="deleteActionButtonClick"
                   ></action-button>
                 </template>
@@ -693,6 +691,7 @@ export default {
               "fa-edit": true,
             },
           },
+          onlyicon: true,
         },
       },
       initActionButton: {
@@ -703,6 +702,7 @@ export default {
               "fa-arrow-right": true,
             },
           },
+          onlyicon: true,
         },
         classes: {
           btn: true,

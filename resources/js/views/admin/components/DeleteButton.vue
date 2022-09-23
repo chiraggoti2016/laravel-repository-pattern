@@ -10,7 +10,7 @@
       <span :v-if="meta.icon.has" class="icon text-white-50">
         <i class="fas" :class="meta.icon.classes"></i>
       </span>
-      <span v-if="!onlyicon" class="text">{{ name }}</span>
+      <span v-if="!meta.onlyicon" class="text">{{ name }}</span>
     </button>
     <router-link
       v-if="meta.prefixLink"
@@ -24,7 +24,7 @@
       <span :v-if="meta.icon.has" class="icon text-white-50">
         <i class="fas" :class="meta.icon.classes"></i>
       </span>
-      <span v-if="!onlyicon" class="text">{{ name }}</span>
+      <span v-if="!meta.onlyicon" class="text">{{ name }}</span>
     </router-link>
   </span>
 </template>
@@ -34,10 +34,6 @@ export default {
   props: {
     data: {},
     name: {},
-    onlyicon: {
-      type: Boolean,
-      default: false,
-    },
     click: {
       type: Function,
       default: () => {},
@@ -58,6 +54,7 @@ export default {
           has: false,
           classes: null,
         },
+        onlyicon: false,
       }),
     },
   },
