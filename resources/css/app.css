@@ -49,6 +49,9 @@
 .w40p{
     width: 40%;
 }
+.w-15 {
+    width: 15% !important;
+}
 
 /* form label */
 label.require::after, .require-h6 h6::after{
@@ -65,4 +68,16 @@ label.require::after, .require-h6 h6::after{
 
 .pe-none {
     pointer-events: none;
+}
+
+/* Chrome, Safari, Edge, Opera */
+.ticker input::-webkit-outer-spin-button,
+.ticker input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+.ticker input[type=number] {
+  -moz-appearance: textfield;
 }

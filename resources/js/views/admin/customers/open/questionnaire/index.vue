@@ -154,7 +154,59 @@
               </div>
 
               <!-- Ticker -->
-              <div v-if="question.response_collector === 'Ticker'">Ticker</div>
+              <b-input-group
+                v-if="question.response_collector === 'Ticker'"
+                class="mt-3 w-15 ticker"
+              >
+                <b-input-group-prepend>
+                  <b-button
+                    variant="outline-info"
+                    class="btn-sm"
+                    @click="
+                      $v.form.questions[category].$each[index].input.$model =
+                        parseFloat(
+                          $v.form.questions[category].$each[index].input.$model
+                        ) - 1
+                    "
+                  >
+                    <span class="icon">
+                      <i class="fas fa-minus"></i>
+                    </span>
+                  </b-button>
+                </b-input-group-prepend>
+
+                <b-form-input
+                  :id="'modal-name-input' + index"
+                  :name="'modal-name-input' + index"
+                  class="mb-2 mb-sm-0"
+                  v-model="
+                    $v.form.questions[category].$each[index].input.$model
+                  "
+                  :state="
+                    validateEachState('questions', category, index, 'input')
+                  "
+                  :aria-describedby="'modal-input-' + index + '-live-feedback'"
+                  size="sm"
+                  type="number"
+                ></b-form-input>
+
+                <b-input-group-append>
+                  <b-button
+                    variant="outline-secondary"
+                    class="btn-sm"
+                    @click="
+                      $v.form.questions[category].$each[index].input.$model =
+                        parseFloat(
+                          $v.form.questions[category].$each[index].input.$model
+                        ) + 1
+                    "
+                  >
+                    <span class="icon">
+                      <i class="fas fa-plus"></i>
+                    </span>
+                  </b-button>
+                </b-input-group-append>
+              </b-input-group>
 
               <!-- Form -->
               <div v-if="question.response_collector === 'Form'">
@@ -306,6 +358,8 @@ export default {
                 ? "no"
                 : v.response_collector == "Upload"
                 ? null
+                : v.response_collector == "Ticker"
+                ? 0
                 : "",
               depend: v.questionaire_question
                 ? v.questionaire_question.depend
