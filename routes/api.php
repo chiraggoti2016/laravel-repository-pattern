@@ -67,6 +67,10 @@ Route::group(['middleware' => ['auth:api']], function () {
         Route::post('/send/{project_id}',[Api\QuestionairesController::class, 'send'])->name('.send');
     });
 
+    Route::group(['prefix' => 'uploads', 'as' => 'uploads'], function () {
+        Route::post('/file',[Api\UploadsController::class, 'file'])->name('.file');
+    });
+
     // Resources
     Route::resource('countries',Api\CountriesController::class);
     Route::resource('partners',Api\PartnersController::class);

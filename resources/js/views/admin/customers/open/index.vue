@@ -380,7 +380,7 @@
                   >
                     {{ form.questionaire.enddate }}
                   </p>
-                  <p v-if="data.item.end">{{ data.item.end }}</p>
+                  <p v-else-if="data.item.end">{{ data.item.end }}</p>
                   <p v-else>-</p>
                 </template>
 

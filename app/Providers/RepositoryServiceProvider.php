@@ -13,6 +13,7 @@ use App\Contracts\CountryContract;
 use App\Contracts\QuestionContract;
 use App\Contracts\QuestionCategoryContract;
 use App\Contracts\QuestionaireContract;
+use App\Contracts\UploadContract;
 
 use App\Repositories\UserRepository;
 use App\Repositories\PartnerRepository;
@@ -24,6 +25,7 @@ use App\Repositories\CountryRepository;
 use App\Repositories\QuestionRepository;
 use App\Repositories\QuestionCategoryRepository;
 use App\Repositories\QuestionaireRepository;
+use App\Repositories\UploadRepository;
 
 class RepositoryServiceProvider extends ServiceProvider
 {
@@ -44,6 +46,8 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind(QuestionContract::class, QuestionRepository::class);
         $this->app->bind(QuestionCategoryContract::class, QuestionCategoryRepository::class);
         $this->app->bind(QuestionaireContract::class, QuestionaireRepository::class);
+        $this->app->bind(UploadContract::class, UploadRepository::class);
+        
     }
 
     /**

@@ -230,16 +230,57 @@
               </div>
 
               <!-- Upload -->
-              <b-form-file
-                v-if="question.response_collector === 'Upload'"
-                v-model="$v.form.questions[category].$each[index].input.$model"
-                :state="
-                  validateEachState('questions', category, index, 'input')
-                "
-                placeholder="Choose a file or drop it here..."
-                drop-placeholder="Drop file here..."
-                :aria-describedby="questionsLiveFeedback"
-              ></b-form-file>
+              <div v-if="question.response_collector === 'Upload'">
+                <b-form-file
+                  :state="
+                    validateEachState('questions', category, index, 'input')
+                  "
+                  @change="
+                    onChangeUploadEachState(
+                      $event,
+                      'questions',
+                      category,
+                      index,
+                      'input'
+                    )
+                  "
+                  :no-traverse="true"
+                  placeholder="Choose a file or drop it here..."
+                  drop-placeholder="Drop file here..."
+                  :aria-describedby="questionsLiveFeedback"
+                ></b-form-file>
+
+                <div
+                  v-if="
+                    $v.form.questions[category].$each[index].input.$model !==
+                      null ||
+                    $v.form.questions[category].$each[index].input.$model !==
+                      undefined ||
+                    $v.form.questions[category].$each[index].input.$model !==
+                      {} ||
+                    $v.form.questions[category].$each[index].input.$model
+                      .length !== []
+                  "
+                >
+                  <b-img
+                    v-if="
+                      $v.form.questions[category].$each[index].input.$model
+                        .type !== undefined &&
+                      $v.form.questions[category].$each[
+                        index
+                      ].input.$model.type.match(/image/) !== ''
+                    "
+                    :src="
+                      $v.form.questions[category].$each[index].input.$model
+                        ? $v.form.questions[category].$each[index].input.$model
+                            .file_url
+                        : ''
+                    "
+                    fluid
+                    alt="Responsive image"
+                  ></b-img>
+                </div>
+              </div>
 
               <b-form-invalid-feedback
                 v-if="!$v.form.questions[category].$each[index].input.required"
@@ -258,6 +299,7 @@ import * as notify from "../../../../../utils/notify.js";
 import { validationMixin } from "vuelidate";
 import { required, requiredIf } from "vuelidate/lib/validators";
 import { getQuestionsListByCategory } from "../../../../../services/questions";
+import { uploadFile } from "../../../../../services/upload";
 import { YESNO_OPTION } from "../../../../../mixins/constants.js";
 import QForm from "./form.vue";
 
@@ -383,6 +425,22 @@ export default {
       const { $dirty, $error } =
         this.$v.form[name][category].$each[index][each];
       return $dirty ? !$error : null;
+    },
+    async onChangeUploadEachState($event, name, category, index, each) {
+      const { $model } = this.$v.form[name][category].$each[index][each];
+      const { target } = $event;
+      const fileList = target.files;
+      const formData = new FormData();
+      if (!fileList.length) return;
+
+      Array.from(Array(fileList.length).keys()).map((x) => {
+        formData.append("file", fileList[x], fileList[x].name);
+      });
+
+      const response = await uploadFile(formData);
+      const { data } = response;
+      console.log("response---", $model, data);
+      this.form[name][category][index][each] = data; //data.file;
     },
     resetForm() {
       this.form = {
