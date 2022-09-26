@@ -45,6 +45,7 @@ let router = new Router({
             component: () => import("./views/admin/dashboard.vue"),
             meta: {
                 requiresAuth: true,
+                permissions: ['admin', 'partner'],
                 layout: AdminLayout
             }
         },
@@ -54,6 +55,7 @@ let router = new Router({
             component: () => import("./views/admin/partners/add.vue"),
             meta: {
                 requiresAuth: true,
+                permissions: ['admin'],
                 layout: AdminLayout
             }
         },
@@ -63,6 +65,7 @@ let router = new Router({
             component: () => import("./views/admin/partners/edit.vue"),
             meta: {
                 requiresAuth: true,
+                permissions: ['admin'],
                 layout: AdminLayout
             }
         },
@@ -72,6 +75,7 @@ let router = new Router({
             component: () => import("./views/admin/partners/list.vue"),
             meta: {
                 requiresAuth: true,
+                permissions: ['admin'],
                 layout: AdminLayout
             }
         },
@@ -81,6 +85,7 @@ let router = new Router({
             component: () => import("./views/admin/customers/add.vue"),
             meta: {
                 requiresAuth: true,
+                permissions: ['partner'],
                 layout: AdminLayout
             }
         },
@@ -90,6 +95,7 @@ let router = new Router({
             component: () => import("./views/admin/customers/open/index.vue"),
             meta: {
                 requiresAuth: true,
+                permissions: ['partner'],
                 layout: AdminLayout
             }
         },
@@ -99,6 +105,7 @@ let router = new Router({
             component: () => import("./views/admin/customers/open/questionnaire/index.vue"),
             meta: {
                 requiresAuth: true,
+                permissions: ['partner'],
                 layout: AdminLayout
             }
         },
@@ -109,6 +116,7 @@ let router = new Router({
             component: () => import("./views/admin/customers/edit.vue"),
             meta: {
                 requiresAuth: true,
+                permissions: ['partner'],
                 layout: AdminLayout
             }
         },
@@ -118,6 +126,7 @@ let router = new Router({
             component: () => import("./views/admin/customers/list.vue"),
             meta: {
                 requiresAuth: true,
+                permissions: ['partner'],
                 layout: AdminLayout
             }
         },
@@ -127,6 +136,7 @@ let router = new Router({
             component: () => import("./views/admin/projects/index.vue"),
             meta: {
                 requiresAuth: true,
+                permissions: ['admin', 'partner'],
                 layout: AdminLayout
             }
         },
@@ -136,6 +146,7 @@ let router = new Router({
             component: () => import("./views/admin/projects/add.vue"),
             meta: {
                 requiresAuth: true,
+                permissions: ['admin', 'partner'],
                 layout: AdminLayout
             }
         },
@@ -145,6 +156,7 @@ let router = new Router({
             component: () => import("./views/admin/projects/edit.vue"),
             meta: {
                 requiresAuth: true,
+                permissions: ['admin', 'partner'],
                 layout: AdminLayout
             }
         },
@@ -154,6 +166,7 @@ let router = new Router({
             component: () => import("./views/admin/projects/host-index.vue"),
             meta: {
                 requiresAuth: true,
+                permissions: ['admin', 'partner'],
                 layout: AdminLayout
             }
         },
@@ -163,6 +176,7 @@ let router = new Router({
             component: () => import("./views/admin/projects/host-details.vue"),
             meta: {
                 requiresAuth: true,
+                permissions: ['admin', 'partner'],
                 layout: AdminLayout
             }
         },
@@ -172,6 +186,7 @@ let router = new Router({
             component: () => import("./views/admin/projects/database-details.vue"),
             meta: {
                 requiresAuth: true,
+                permissions: ['admin', 'partner'],
                 layout: AdminLayout
             }
         },
@@ -181,6 +196,7 @@ let router = new Router({
             component: () => import("./views/admin/projects/specific-database-details.vue"),
             meta: {
                 requiresAuth: true,
+                permissions: ['admin', 'partner'],
                 layout: AdminLayout
             }
         },
@@ -190,6 +206,7 @@ let router = new Router({
             component: () => import("./views/admin/projects/upload-cpu-count.vue"),
             meta: {
                 requiresAuth: true,
+                permissions: ['admin', 'partner'],
                 layout: AdminLayout
             }
         },
@@ -199,6 +216,7 @@ let router = new Router({
             component: () => import("./views/admin/projects/upload-cpu-usage.vue"),
             meta: {
                 requiresAuth: true,
+                permissions: ['admin', 'partner'],
                 layout: AdminLayout
             }
         },
@@ -208,6 +226,7 @@ let router = new Router({
             component: () => import("./views/admin/projects/upload-options-packs.vue"),
             meta: {
                 requiresAuth: true,
+                permissions: ['admin', 'partner'],
                 layout: AdminLayout
             }
         },
@@ -217,6 +236,7 @@ let router = new Router({
             component: () => import("./views/admin/countries/add.vue"),
             meta: {
                 requiresAuth: true,
+                permissions: ['admin'],
                 layout: AdminLayout
             }
         },
@@ -226,6 +246,7 @@ let router = new Router({
             component: () => import("./views/admin/countries/edit.vue"),
             meta: {
                 requiresAuth: true,
+                permissions: ['admin'],
                 layout: AdminLayout
             }
         },
@@ -235,6 +256,7 @@ let router = new Router({
             component: () => import("./views/admin/countries/list.vue"),
             meta: {
                 requiresAuth: true,
+                permissions: ['admin'],
                 layout: AdminLayout
             }
         },
@@ -244,6 +266,7 @@ let router = new Router({
             component: () => import("./views/admin/question-categories/add.vue"),
             meta: {
                 requiresAuth: true,
+                permissions: ['admin'],
                 layout: AdminLayout
             }
         },
@@ -253,6 +276,7 @@ let router = new Router({
             component: () => import("./views/admin/question-categories/edit.vue"),
             meta: {
                 requiresAuth: true,
+                permissions: ['admin'],
                 layout: AdminLayout
             }
         },
@@ -262,6 +286,7 @@ let router = new Router({
             component: () => import("./views/admin/question-categories/list.vue"),
             meta: {
                 requiresAuth: true,
+                permissions: ['admin'],
                 layout: AdminLayout
             }
         },
@@ -273,6 +298,7 @@ let router = new Router({
             component: () => import("./views/admin/questions/add.vue"),
             meta: {
                 requiresAuth: true,
+                permissions: ['admin'],
                 layout: AdminLayout
             }
         },
@@ -282,6 +308,7 @@ let router = new Router({
             component: () => import("./views/admin/questions/edit.vue"),
             meta: {
                 requiresAuth: true,
+                permissions: ['admin'],
                 layout: AdminLayout
             }
         },
@@ -291,6 +318,7 @@ let router = new Router({
             component: () => import("./views/admin/questions/list.vue"),
             meta: {
                 requiresAuth: true,
+                permissions: ['admin'],
                 layout: AdminLayout
             }
         },
@@ -300,6 +328,7 @@ let router = new Router({
             component: () => import("./views/admin/page-not-found.vue"),
             meta: {
                 requiresAuth: true,
+                permissions: ['admin', 'partner'],
                 layout: AdminLayout
             }
         },
@@ -316,15 +345,20 @@ let router = new Router({
     ]
 });
 
+function hasPermissiion(role, permissions) {
+    return permissions.indexOf(role) !== -1
+}
+
 router.beforeEach((to, from, next) => {
     if (to.matched.some(record => record.meta.requiresAuth)) {
         if (store.getters.user) {
-            next();
-            return;
+            if (to.matched.some(record => hasPermissiion(store.getters.user.role, record.meta.permissions))) {
+                next();
+                return;
+            }
         }
         next("/");
     } else {
-        console.log("---else", from.name, to.name, store.getters.user);
         if (store.getters.user !== null && to.name === 'login') {
             next('/admin');
         } else {
