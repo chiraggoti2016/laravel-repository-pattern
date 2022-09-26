@@ -17,11 +17,18 @@
             :key="category"
           >
             <b-form-group
-              :label="index + 1 + '. ' + question.question"
               v-slot="{ questionsLiveFeedback }"
               v-for="(question, index) in questions"
               :key="index"
             >
+              <label
+                >{{ index + 1 + ". " + question.question }}
+                <i
+                  v-if="question.information !== ''"
+                  class="fas fa-info-circle"
+                  v-b-popover.hover.top="question.information"
+                ></i
+              ></label>
               <!-- FreeText -->
               <b-form-input
                 v-if="question.response_collector === 'FreeText'"
@@ -65,7 +72,9 @@
                   <label
                     class="require"
                     :for="'modal-name-input-question-' + index"
-                    >{{ index + 1 + "." + 1 + ". " + question.question }}</label
+                    >{{
+                      index + 1 + "." + 1 + ". " + question.sub_question
+                    }}</label
                   >
                   <b-form-input
                     :id="'modal-name-input-question-' + index"
@@ -88,7 +97,62 @@
               </div>
 
               <!-- Ticker -->
-              <div v-if="question.response_collector === 'Ticker'">Ticker</div>
+              <b-input-group
+                v-if="question.response_collector === 'Ticker'"
+                class="mt-3 w-15 ticker"
+              >
+                <b-input-group-prepend>
+                  <b-button
+                    variant="outline-info"
+                    class="btn-sm"
+                    @click="
+                      $v.form.questions[category].$each[index].input.$model =
+                        parseFloat(
+                          $v.form.questions[category].$each[index].input.$model
+                        ) - 1
+                    "
+                    disabled
+                  >
+                    <span class="icon">
+                      <i class="fas fa-minus"></i>
+                    </span>
+                  </b-button>
+                </b-input-group-prepend>
+
+                <b-form-input
+                  :id="'modal-name-input' + index"
+                  :name="'modal-name-input' + index"
+                  class="mb-2 mb-sm-0"
+                  v-model="
+                    $v.form.questions[category].$each[index].input.$model
+                  "
+                  :state="
+                    validateEachState('questions', category, index, 'input')
+                  "
+                  :aria-describedby="'modal-input-' + index + '-live-feedback'"
+                  size="sm"
+                  type="number"
+                  disabled
+                ></b-form-input>
+
+                <b-input-group-append>
+                  <b-button
+                    variant="outline-secondary"
+                    class="btn-sm"
+                    @click="
+                      $v.form.questions[category].$each[index].input.$model =
+                        parseFloat(
+                          $v.form.questions[category].$each[index].input.$model
+                        ) + 1
+                    "
+                    disabled
+                  >
+                    <span class="icon">
+                      <i class="fas fa-plus"></i>
+                    </span>
+                  </b-button>
+                </b-input-group-append>
+              </b-input-group>
 
               <!-- Form -->
               <div v-if="question.response_collector === 'Form'">
@@ -113,16 +177,157 @@
               </div>
 
               <!-- Upload -->
-              <b-form-file
-                v-if="question.response_collector === 'Upload'"
-                v-model="$v.form.questions[category].$each[index].input.$model"
-                :state="
-                  validateEachState('questions', category, index, 'input')
-                "
-                placeholder="Choose a file or drop it here..."
-                drop-placeholder="Drop file here..."
-                :aria-describedby="questionsLiveFeedback"
-              ></b-form-file>
+              <div v-if="question.response_collector === 'Upload'">
+                <div
+                  v-if="
+                    $v.form.questions[category].$each[index].input.$model !==
+                      null ||
+                    $v.form.questions[category].$each[index].input.$model !==
+                      undefined ||
+                    $v.form.questions[category].$each[index].input.$model !==
+                      {} ||
+                    $v.form.questions[category].$each[index].input.$model
+                      .length !== []
+                  "
+                >
+                  <div class="clearfix mt-2">
+                    <b-img
+                      v-if="
+                        $v.form.questions[category].$each[index].input.$model
+                          .type !== undefined &&
+                        $v.form.questions[category].$each[
+                          index
+                        ].input.$model.type.match(/image/) !== null
+                      "
+                      left
+                      rounded
+                      v-bind="{
+                        blank: false,
+                        blankColor: '#777',
+                        width: 75,
+                        height: 75,
+                        class: 'm1',
+                      }"
+                      :src="
+                        $v.form.questions[category].$each[index].input.$model
+                          ? $v.form.questions[category].$each[index].input
+                              .$model.file_url
+                          : ''
+                      "
+                      fluid
+                      alt="Responsive image"
+                    ></b-img>
+                    <b-img
+                      v-if="
+                        $v.form.questions[category].$each[index].input.$model
+                          .type !== undefined &&
+                        $v.form.questions[category].$each[
+                          index
+                        ].input.$model.type.match(/msword/) !== null
+                      "
+                      left
+                      rounded
+                      v-bind="{
+                        blank: false,
+                        blankColor: '#777',
+                        width: 75,
+                        height: 75,
+                        class: 'm1',
+                      }"
+                      src="/images/word.png"
+                      fluid
+                      alt="Word File"
+                    ></b-img>
+                    <b-img
+                      v-if="
+                        $v.form.questions[category].$each[index].input.$model
+                          .type !== undefined &&
+                        $v.form.questions[category].$each[
+                          index
+                        ].input.$model.type.match(/pdf/) !== null
+                      "
+                      left
+                      rounded
+                      v-bind="{
+                        blank: false,
+                        blankColor: '#777',
+                        width: 75,
+                        height: 75,
+                        class: 'm1',
+                      }"
+                      src="/images/pdf.png"
+                      fluid
+                      alt="Word File"
+                    ></b-img>
+                    <b-img
+                      v-if="
+                        $v.form.questions[category].$each[index].input.$model
+                          .type !== undefined &&
+                        $v.form.questions[category].$each[
+                          index
+                        ].input.$model.type.match(/powerpoint/) !== null
+                      "
+                      left
+                      rounded
+                      v-bind="{
+                        blank: false,
+                        blankColor: '#777',
+                        width: 75,
+                        height: 75,
+                        class: 'm1',
+                      }"
+                      src="/images/ppt.png"
+                      fluid
+                      alt="Powerpoint File"
+                    ></b-img>
+                    <b-img
+                      v-if="
+                        $v.form.questions[category].$each[index].input.$model
+                          .type !== undefined &&
+                        $v.form.questions[category].$each[
+                          index
+                        ].input.$model.type.match(/spreadsheetml|excel/) !==
+                          null
+                      "
+                      left
+                      rounded
+                      v-bind="{
+                        blank: false,
+                        blankColor: '#777',
+                        width: 75,
+                        height: 75,
+                        class: 'm1',
+                      }"
+                      src="/images/excel.png"
+                      fluid
+                      alt="Spreadsheet File"
+                    ></b-img>
+                  </div>
+                  <b-card-text
+                    v-if="
+                      $v.form.questions[category].$each[index].input.$model !==
+                      undefined
+                    "
+                    >{{
+                      $v.form.questions[category].$each[index].input.$model.file
+                    }}
+                    <a
+                      :href="
+                        $v.form.questions[category].$each[index].input.$model
+                          ? $v.form.questions[category].$each[index].input
+                              .$model.file_url
+                          : ''
+                      "
+                      :download="
+                        $v.form.questions[category].$each[index].input.$model
+                          .file
+                      "
+                    >
+                      <b-icon icon="cloud-download" aria-hidden="true"></b-icon
+                    ></a>
+                  </b-card-text>
+                </div>
+              </div>
 
               <b-form-invalid-feedback
                 v-if="!$v.form.questions[category].$each[index].input.required"

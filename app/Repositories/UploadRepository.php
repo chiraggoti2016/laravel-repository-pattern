@@ -15,7 +15,7 @@ class UploadRepository extends BaseRepository implements UploadContract
         $file = $request->file('file');
         
         $destinationPath = 'uploads';
-        $filename = uniqid() . '.' . $file->getClientOriginalExtension();
+        $filename = uniqid() . '_' . $file->getClientOriginalName();
         $type = $file->getMimeType();
         if($file->move($destinationPath, $filename)) {
             $upload = $this->create([

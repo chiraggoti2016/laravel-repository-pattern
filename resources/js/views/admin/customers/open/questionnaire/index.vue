@@ -232,6 +232,7 @@
               <!-- Upload -->
               <div v-if="question.response_collector === 'Upload'">
                 <b-form-file
+                  v-if="isProjectQuestionaireSend"
                   :state="
                     validateEachState('questions', category, index, 'input')
                   "
@@ -262,23 +263,142 @@
                       .length !== []
                   "
                 >
-                  <b-img
+                  <div class="clearfix mt-2">
+                    <b-img
+                      v-if="
+                        $v.form.questions[category].$each[index].input.$model
+                          .type !== undefined &&
+                        $v.form.questions[category].$each[
+                          index
+                        ].input.$model.type.match(/image/) !== null
+                      "
+                      left
+                      rounded
+                      v-bind="{
+                        blank: false,
+                        blankColor: '#777',
+                        width: 75,
+                        height: 75,
+                        class: 'm1',
+                      }"
+                      :src="
+                        $v.form.questions[category].$each[index].input.$model
+                          ? $v.form.questions[category].$each[index].input
+                              .$model.file_url
+                          : ''
+                      "
+                      fluid
+                      alt="Responsive image"
+                    ></b-img>
+                    <b-img
+                      v-if="
+                        $v.form.questions[category].$each[index].input.$model
+                          .type !== undefined &&
+                        $v.form.questions[category].$each[
+                          index
+                        ].input.$model.type.match(/msword/) !== null
+                      "
+                      left
+                      rounded
+                      v-bind="{
+                        blank: false,
+                        blankColor: '#777',
+                        width: 75,
+                        height: 75,
+                        class: 'm1',
+                      }"
+                      src="/images/word.png"
+                      fluid
+                      alt="Word File"
+                    ></b-img>
+                    <b-img
+                      v-if="
+                        $v.form.questions[category].$each[index].input.$model
+                          .type !== undefined &&
+                        $v.form.questions[category].$each[
+                          index
+                        ].input.$model.type.match(/pdf/) !== null
+                      "
+                      left
+                      rounded
+                      v-bind="{
+                        blank: false,
+                        blankColor: '#777',
+                        width: 75,
+                        height: 75,
+                        class: 'm1',
+                      }"
+                      src="/images/pdf.png"
+                      fluid
+                      alt="Word File"
+                    ></b-img>
+                    <b-img
+                      v-if="
+                        $v.form.questions[category].$each[index].input.$model
+                          .type !== undefined &&
+                        $v.form.questions[category].$each[
+                          index
+                        ].input.$model.type.match(/powerpoint/) !== null
+                      "
+                      left
+                      rounded
+                      v-bind="{
+                        blank: false,
+                        blankColor: '#777',
+                        width: 75,
+                        height: 75,
+                        class: 'm1',
+                      }"
+                      src="/images/ppt.png"
+                      fluid
+                      alt="Powerpoint File"
+                    ></b-img>
+                    <b-img
+                      v-if="
+                        $v.form.questions[category].$each[index].input.$model
+                          .type !== undefined &&
+                        $v.form.questions[category].$each[
+                          index
+                        ].input.$model.type.match(/spreadsheetml|excel/) !==
+                          null
+                      "
+                      left
+                      rounded
+                      v-bind="{
+                        blank: false,
+                        blankColor: '#777',
+                        width: 75,
+                        height: 75,
+                        class: 'm1',
+                      }"
+                      src="/images/excel.png"
+                      fluid
+                      alt="Spreadsheet File"
+                    ></b-img>
+                  </div>
+                  <b-card-text
                     v-if="
-                      $v.form.questions[category].$each[index].input.$model
-                        .type !== undefined &&
-                      $v.form.questions[category].$each[
-                        index
-                      ].input.$model.type.match(/image/) !== ''
+                      $v.form.questions[category].$each[index].input.$model !==
+                      undefined
                     "
-                    :src="
-                      $v.form.questions[category].$each[index].input.$model
-                        ? $v.form.questions[category].$each[index].input.$model
-                            .file_url
-                        : ''
-                    "
-                    fluid
-                    alt="Responsive image"
-                  ></b-img>
+                    >{{
+                      $v.form.questions[category].$each[index].input.$model.file
+                    }}
+                    <a
+                      :href="
+                        $v.form.questions[category].$each[index].input.$model
+                          ? $v.form.questions[category].$each[index].input
+                              .$model.file_url
+                          : ''
+                      "
+                      :download="
+                        $v.form.questions[category].$each[index].input.$model
+                          .file
+                      "
+                    >
+                      <b-icon icon="cloud-download" aria-hidden="true"></b-icon
+                    ></a>
+                  </b-card-text>
                 </div>
               </div>
 
