@@ -1,7 +1,7 @@
 <template>
 	<span>
 		<span v-if="data.diagnostics">Yes</span>
-		<span v-else>Yes</span>
+		<span v-else>No</span>
 	</span>
 </template>
 <script>

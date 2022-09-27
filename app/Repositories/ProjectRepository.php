@@ -112,7 +112,7 @@ class ProjectRepository extends BaseRepository implements ProjectContract
         $project = Project::where('slug', $slug)->first();
 
         $data = Hostname::select('hostnames.*', 'hostnames.id as hostname_id', DB::raw("(SELECT SUM(`davg_15`) FROM `usage_runqszs` where `usage_runqszs`.`hostname_id` = `hostname_id`) as ldavg_sum"))
-                        ->with('project', 'database', 'details', 'memory', 'usage_database')
+                        ->with('project', 'database', 'details', 'memory', 'usage_database', 'disk')
                         ->where('project_id', $project->id)
                         ->paginate($length);
 

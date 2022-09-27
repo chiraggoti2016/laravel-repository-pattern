@@ -19,14 +19,15 @@ use DB;
 class CpuCountController extends Controller
 {
     //
-    public function index(Request $request, $slug) {        
+    public function index(Request $request, $slug) {
         $validator = Validator::make($request->all(), [
             'file' => 'required|mimes:txt' 
         ]);
 
         if ($validator->fails()) {
             $messages = $validator->messages();
-            //return back()->withErrors($validator)->withInput();
+            dd($messages);
+            return back()->withErrors($validator)->withInput();
         }
         
         try {
@@ -44,7 +45,7 @@ class CpuCountController extends Controller
             $newfile  = explode('/', $file)[2];
 
             $sections = $this->getCpuUsage($path);
-            
+
             $file_type = trim($sections[0][0]);
             if($file_type == "CPU_COUNT") {
                 $cpu = $this->cpu_count($sections, $project, $filename, $newfile, $file);
@@ -115,7 +116,7 @@ class CpuCountController extends Controller
                     $tableColumns = [];
                     continue;
                 }
-                if( $sectionIndex >= 9) {
+                if( $sectionIndex >= 10) {
                     break;
                 }
                 if( empty($line) || preg_replace("/\s+/","", $line) === "" ) {
@@ -378,14 +379,41 @@ class CpuCountController extends Controller
             }
             
             // #7 Memory Details
-            /*if(!empty($sections[8]) && $sections[8] != '') {
-                $disk_details = $sections[8];
-                $cpu_count_disk_detail = new CpuCountDiskDetail();
-                $cpu_count_disk_detail->cpu_count_id = $cpu_count->id;
-                $cpu_count_disk_detail->name         =
-                $cpu_count_disk_detail->size         =
-                $cpu_count_disk_detail->save();
-            }*/
+            if(!empty($sections[9]) && count($sections[9]) > 0) {
+                $memory_array = [];
+                $index_new = 0;
+                foreach($sections[9] as $line) {
+                    if (str_contains($line, 'disk')) {
+                        $split = explode("  ", $line);
+                        $index = 0;
+                        foreach($split as $line) {
+                            if(isset($line) && $line != '') {
+                                $memory_array[$index_new][$index] = trim($line);
+                                $index++;
+                            }
+                        }
+                        $index_new++;
+                    }
+                }
+                CpuCountDiskDetail::where('project_id', $project->id)->where('hostname_id', $hostname->id)->delete();
+                foreach($memory_array as $line) {
+                    $split_by_tb = explode("T", $line[3]);
+                    $split_by_gb = explode("G", $line[3]);
+                    $cpu_count_disk_detail = new CpuCountDiskDetail();
+                    $cpu_count_disk_detail->project_id   = $project->id;
+                    $cpu_count_disk_detail->hostname_id  = $hostname->id;
+                    $cpu_count_disk_detail->cpu_count_id = $cpu_count->id;
+                    $cpu_count_disk_detail->name         = $line[0];
+                    if(!empty($split_by_tb) && count($split_by_tb) > 1) {
+                        $cpu_count_disk_detail->size = $split_by_tb[0]*1000;
+                    }
+                    if(!empty($split_by_gb) && count($split_by_gb) > 1) {
+                        $cpu_count_disk_detail->size = $split_by_gb[0];
+                    }
+                    $cpu_count_disk_detail->original_size = $line[3];
+                    $cpu_count_disk_detail->save();
+                }
+            }
 
             return true;
         } else {

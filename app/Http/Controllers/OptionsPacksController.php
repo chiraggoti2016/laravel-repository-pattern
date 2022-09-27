@@ -163,8 +163,6 @@ class OptionsPacksController extends Controller
                 }
             }
 
-            
-
             if(!empty($product) && count($product) > 0 ) {
                 OptionsPacksProduct::where('hostname_id', $hostname->id)->where('project_id', $project->id)->where('cpu_count_database_detail_id', $cpu_count_database_detail->id)->delete();
                 if(!empty($product['PRODUCT']) && count($product['PRODUCT']) > 0) {

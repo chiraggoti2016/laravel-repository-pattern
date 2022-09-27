@@ -20,6 +20,7 @@ return new class extends Migration
             $table->integer('cpu_count_id');
             $table->string('name')->nullable();
             $table->string('size')->nullable();
+            $table->string('original_size')->nullable();
             $table->timestamps();
         });
     }

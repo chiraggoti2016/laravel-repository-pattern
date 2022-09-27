@@ -33,7 +33,8 @@ export default {
         return {
             url: "/api/project/"+this.$route.params.slug+"/database-details/"+this.$route.params.host_id,
             columns: [
-                { label: "DB-Name", name: 'db_name', component: DbLink },
+                { label: "Instance Name", name: 'db_name' },
+                { label: "DB-Name", name: 'database_name', component: DbLink },
                 { label: "Version", name: 'version' },
                 { label: "Edition", name: 'banner' },
                 { label: "Role", name: 'db_role' },

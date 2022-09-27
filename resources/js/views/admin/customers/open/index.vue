@@ -388,11 +388,7 @@
                   <action-button
                     :data="data"
                     :meta="{
-                      ...initActionButton.meta,
-                      prefixLink:
-                        data.item.name === 'Pre-Engagement Questionaire'
-                          ? `/admin/customers/open/project/questionnaire/${$route.params.id}/${$route.params.projectid}`
-                          : null,
+                        ...initActionButton.meta, prefixLink: getLink(data.item.name),
                     }"
                     :classes="initActionButton.classes"
                     name="Initiate"
@@ -839,6 +835,15 @@ export default {
     };
   },
   methods: {
+    getLink(name) {
+        if(name == 'Pre-Engagement Questionaire') {
+            return `/admin/customers/open/project/questionnaire/${this.$route.params.id}/${this.$route.params.projectid}`;
+        } else if(name == 'Data Collection') {
+            return `/admin/project/hosts/${this.form.slug}`;
+        } else {
+            return null;
+        }
+    },
     async getScopes() {
       const { data } = await getScopesBySlug();
       this.scopeOptions = Object.keys(data).map((key) => ({
