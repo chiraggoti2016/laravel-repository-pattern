@@ -39,7 +39,8 @@ class PartnerRepository extends BaseRepository implements PartnerContract
             }
         }catch(\Throwable $e){
             DB::rollBack();
-            Log::debug('Customer Repository : ',[ 'error' =>$e ]);
+            Log::debug('Partner Repository : ',[ 'error' =>$e ]);
+            abort(404, $e->getMessage());
         }
         return false;
     }
@@ -57,7 +58,9 @@ class PartnerRepository extends BaseRepository implements PartnerContract
             }
         }catch(\Throwable $e){
             DB::rollBack();
-            Log::debug('Customer Repository : ',[ 'error' =>$e ]);
+            Log::debug('Partner Repository : ',[ 'error' =>$e ]);
+            
+            abort(404, $e->getMessage());
         }
         return false;
     }

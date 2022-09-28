@@ -36,9 +36,10 @@ class ProjectRepository extends BaseRepository implements ProjectContract
                 return $project;
             }
         } catch(\Throwable $e){
-            dd($e->getMessage());
             DB::rollBack();
-            //Log::debug('Project Repository : ',[ 'error' =>$e ]);
+            Log::debug('Project Repository : ',[ 'error' =>$e ]);
+            
+            abort(404, $e->getMessage());
         }
         return false;
     }
@@ -61,6 +62,8 @@ class ProjectRepository extends BaseRepository implements ProjectContract
         }catch(\Throwable $e){
             DB::rollBack();
             \Log::debug('Project Repository : ',[ 'error' =>$e ]);
+            
+            abort(404, $e->getMessage());
         }
         return false;
     }

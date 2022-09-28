@@ -34,8 +34,50 @@ class Handler extends ExceptionHandler
      */
     public function register()
     {
-        $this->reportable(function (Throwable $e) {
-            //
+        $this->reportable(function (Throwable $e, $request) {
+            dd('e');
+            if ($request->is('api/*')) {
+                return response()->json([
+                    'message' => $e->getMessage(),
+                ], 404);
+            }
         });
     }
+
+
+	public function render($request, Throwable  $exception)
+	{
+
+        if ($request->is('api/*')) {
+
+        
+            if($request->expectsJson()){
+                if($exception instanceof ValidationException){
+                    $transformed = [];
+    
+                    foreach ($exception->errors() as $field => $message) {
+                        $transformed[$field] = $message[0];
+                    }
+                    return response()->json([
+                        'errors' => $transformed,
+                        'message' => 'The given data was invalid.',
+                    ], 422);
+                }
+    
+                if($exception instanceof MethodNotAllowedHttpException || $exception instanceof ModelNotFoundException || $exception instanceof NotFoundHttpException){
+                    return response()->json([
+                        'errors' => new \StdClass(),
+                        'message' => 'URl/Method/Model Not Found.',
+                    ], 404);
+                }
+                
+                return response()->json([
+                    'message' => $exception->getMessage(),
+                ], $exception->getStatusCode());
+            }
+    
+        }
+
+		return parent::render($request, $exception);
+	}
 }
