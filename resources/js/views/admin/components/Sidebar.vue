@@ -52,7 +52,7 @@
       v-if="isAdmin()"
     >
       <router-link class="nav-link" to="/admin/partners">
-        <i class="fas fa-fw fa-table"></i>
+        <i class="fas fa-fw fa-users"></i>
         <span>Partners</span></router-link
       >
     </li>
@@ -74,7 +74,7 @@
       v-if="isPartner()"
     >
       <router-link class="nav-link" to="/admin/customers">
-        <i class="fas fa-fw fa-table"></i>
+        <i class="fas fa-fw fa-user"></i>
         <span>Customers</span></router-link
       >
     </li>
@@ -109,7 +109,7 @@
       v-if="isAdmin()"
     >
       <router-link class="nav-link" to="/admin/questions">
-        <i class="fas fa-fw fa-table"></i> <span>Questions</span>
+        <i class="fas fa-fw fa-question"></i> <span>Questions</span>
       </router-link>
     </li>
 
@@ -129,7 +129,7 @@
       v-if="isAdmin()"
     >
       <router-link class="nav-link" to="/admin/countries">
-        <i class="fas fa-fw fa-table"></i>
+        <i class="fas fa-fw fa-map"></i>
         <span>Countries</span></router-link
       >
     </li>
@@ -149,7 +149,7 @@
       v-if="isAdmin()"
     >
       <router-link class="nav-link" to="/admin/question/categories">
-        <i class="fas fa-fw fa-table"></i>
+        <i class="fas fa-fw fa-list"></i>
         <span>Question Categories</span></router-link
       >
     </li>

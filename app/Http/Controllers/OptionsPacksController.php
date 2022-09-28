@@ -74,14 +74,14 @@ class OptionsPacksController extends Controller
             $product_details = $sections['PRODUCT_DETAIL_TABLE'];
 
             if(isset($database['HOST_NAME']) && $database['HOST_NAME'] != '') {
-                $hostname = Hostname::where('project_id', $project->id)->where('hostname', $database['HOST_NAME'])->first();
+                $hostname = Hostname::where('project_id', $project->id)->where('hostname', 'LIKE', $database['HOST_NAME'].'%')->first();
                 if(isset($hostname) && $hostname != '') {
                     // existing entry will be updated
                 } else {
                     $hostname = new Hostname();
+                    $hostname->project_id = $project->id;
+                    $hostname->hostname   = $database['HOST_NAME'];
                 }
-                $hostname->project_id = $project->id;
-                $hostname->hostname   = $database['HOST_NAME'];
                 $hostname->options_packs_file      = $filename;
                 $hostname->options_packs_new_file  = $newfile;
                 $hostname->options_packs_file_path = $file;

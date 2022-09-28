@@ -40,7 +40,7 @@
         </div>
       </div>
       <div class="card-body">
-        <b-container class="bv-example-row">
+        <b-container class="bv-example-row ml-0 pl-0">
           <b-form @submit.stop.prevent="onSubmit">
             <b-row>
               <b-col>

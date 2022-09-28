@@ -21,7 +21,7 @@
         </div>
       </div>
       <div class="card-body">
-        <b-container class="bv-example-row">
+        <b-container class="bv-example-row ml-0 pl-0">
           <b-form @submit.stop.prevent="onSubmit">
             <b-row>
               <b-col cols="5">
@@ -840,6 +840,8 @@ export default {
             return `/admin/customers/open/project/questionnaire/${this.$route.params.id}/${this.$route.params.projectid}`;
         } else if(name == 'Data Collection') {
             return `/admin/project/hosts/${this.form.slug}`;
+        } else if(name == 'License Review') {
+            return `/admin/project/licence-review/${this.form.slug}`;
         } else {
             return null;
         }

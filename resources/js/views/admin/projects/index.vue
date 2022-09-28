@@ -49,7 +49,7 @@ export default {
                         "btn-sm": true,
                     },
                     meta: {
-                        prefixLink: "/admin/project/hosts/",
+                        prefixLink: "/admin/customers/open/project/",
                         icon: {
                             has: true,
                             classes: {

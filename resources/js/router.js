@@ -171,6 +171,16 @@ let router = new Router({
             }
         },
         {
+            path: "/admin/project/licence-review/:slug",
+            name: "projects-licence-review",
+            component: () => import("./views/admin/projects/licence-review.vue"),
+            meta: {
+                requiresAuth: true,
+                permissions: ['admin', 'partner'],
+                layout: AdminLayout
+            }
+        },
+        {
             path: "/admin/project/host-details/:slug",
             name: "projects-host-detail",
             component: () => import("./views/admin/projects/host-details.vue"),

@@ -18,7 +18,7 @@
       :class="classes"
       class="btn btn-icon-split"
       :to="
-        meta.prefixLink ? meta.prefixLink + (data.slug ? data.slug : '') : '#'
+        meta.prefixLink ? meta.prefixLink + (data ? data.customers[0].id + '/' + data.id : '') : '#'
       "
       title="name"
       :disabled="disabled"

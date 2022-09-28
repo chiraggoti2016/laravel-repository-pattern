@@ -22,7 +22,7 @@ class ScopeStageSeeder extends Seeder
         $scopes = [
             array('name' => 'Pre-Engagement Questionaire', 'scope' => 'oracle_database'),
             array('name' => 'Data Collection', 'scope' => 'oracle_database'),
-            array('name' => 'Data Review', 'scope' => 'oracle_database'),
+            array('name' => 'License Review', 'scope' => 'oracle_database'),
             array('name' => 'Right Sizing', 'scope' => 'oracle_database'),
             array('name' => 'Right Costing', 'scope' => 'oracle_database'),
             array('name' => 'TCO Calculation', 'scope' => 'oracle_database'),
