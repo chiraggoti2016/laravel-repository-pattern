@@ -95,7 +95,7 @@ let router = new Router({
             component: () => import("./views/admin/customers/open/index.vue"),
             meta: {
                 requiresAuth: true,
-                permissions: ['partner'],
+                permissions: ['admin', 'partner'],
                 layout: AdminLayout
             }
         },
@@ -105,7 +105,7 @@ let router = new Router({
             component: () => import("./views/admin/customers/open/questionnaire/index.vue"),
             meta: {
                 requiresAuth: true,
-                permissions: ['partner'],
+                permissions: ['admin', 'partner'],
                 layout: AdminLayout
             }
         },
