@@ -77,15 +77,22 @@ class User extends Authenticatable implements MustVerifyEmail
 
     public function sendEmailVerificationNotification()
     {
-        $user = $this;
+        try {
+            $user = $this;
         
-        $token = \Str::random(64);
+            $token = \Str::random(64);
 
-        UserVerify::create([
-            'user_id' => $user->id, 
-            'token' => $token
-        ]);
+            UserVerify::create([
+                'user_id' => $user->id, 
+                'token' => $token
+            ]);
 
-        dispatch(new \App\Jobs\VerifyMailJob($user->email, ['token' => $token, 'user' => $user]));
+            dispatch(new \App\Jobs\VerifyMailJob($user->email, ['token' => $token, 'user' => $user]));
+
+        }catch(\Throwable $e){
+        
+            abort(404, $e->getMessage());
+        }
+        
     }
 }
