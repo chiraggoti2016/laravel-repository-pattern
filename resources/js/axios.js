@@ -42,7 +42,4 @@ window.setAuthToken = function () {
     }
 };
 
-console.log("$.fn.dataTable", $.fn)
-// $.fn.dataTable.ext.errMode = 'none';
-
 export default axios;  

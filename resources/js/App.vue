@@ -12,8 +12,10 @@ import axios from "axios";
 
 export default {
   async created() {
-    const response = await axios.get("user");
-    this.$store.dispatch("user", response.data);
+    if (!!localStorage.getItem("token")) {
+      const response = await axios.get("user");
+      this.$store.dispatch("user", response.data);
+    }
   },
 };
 </script>
