@@ -18,16 +18,16 @@ import store from './vuex';
 //     }
 // );
 
-// axios.interceptors.response.use(function (response) {
-//     return response
-// }, function (error) {
-//     debugger
-//     if (error.response.status === 401) {
-//         store.dispatch('logout')
-//         router.push('/')
-//     }
-//     return Promise.reject(error)
-// })
+axios.interceptors.response.use(function (response) {
+    return response
+}, function (error) {
+    if (error.response.status === 401 || error.response.status === 500) {
+        localStorage.removeItem("token");
+        store.dispatch("user", null);
+        router.push('/')
+    }
+    return Promise.reject(error)
+})
 
 axios.defaults.baseURL = "/api/"; // change this if you want to use a different url for APIs
 axios.defaults.headers.common['Authorization'] = 'Bearer ' + localStorage.getItem('token');
@@ -41,5 +41,8 @@ window.setAuthToken = function () {
         Authorization: 'Bearer ' + localStorage.getItem('token'),
     }
 };
+
+console.log("$.fn.dataTable", $.fn)
+// $.fn.dataTable.ext.errMode = 'none';
 
 export default axios;  
