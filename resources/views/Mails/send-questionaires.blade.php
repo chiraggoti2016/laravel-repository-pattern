@@ -291,7 +291,9 @@ table, td { color: #000000; } #u_body a { color: #e67e23; text-decoration: under
         
         <div style="color: #333333; line-height: 200%; text-align: left; word-wrap: break-word;">
             <p style="font-size: 14px; line-height: 200%;"><span style="font-size: 16px; line-height: 32px;">Dear, {{ $user->name }}</span></p>
+            <p style="font-size: 14px; line-height: 200%;"><span style="font-size: 16px; line-height: 32px;">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</span></p>
             <p style="font-size: 14px; line-height: 200%;"> </p>
+            <p style="font-size: 14px; line-height: 200%;"><span style="font-size: 16px; line-height: 32px;">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</span></p>
             <p style="font-size: 14px; line-height: 200%;"><span style="font-size: 16px; line-height: 32px;">Please check bellow link </span></p>
         </div>
 

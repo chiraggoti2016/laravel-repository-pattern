@@ -33,8 +33,10 @@ class ForgotController extends Controller
                 'token' => $token
             ]);
 
+            $user = User::where('email', $email)->first();
+
             //send email
-            dispatch(new \App\Jobs\ForgotMailJob($user->email, ['token' => $token]));
+            dispatch(new \App\Jobs\ForgotMailJob($user->email, ['token' => $token, 'user' => $user]));
 
             return response([
                 'message' => 'Check your email!'
