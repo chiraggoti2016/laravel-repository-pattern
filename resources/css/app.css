@@ -96,3 +96,39 @@ label.require::after, .require-h6 h6::after{
 .ticker input[type=number] {
   -moz-appearance: textfield;
 }
+
+/* laravel-vue-datatable */
+.laravel-vue-datatable .laravel-vue-datatable-th {
+    font-size: 12px;
+}
+
+.laravel-vue-datatable .laravel-vue-datatable-td {
+    font-size: 12px;
+}
+
+.laravel-vue-datatable .laravel-vue-datatable-td a, 
+.laravel-vue-datatable .laravel-vue-datatable-td button {
+    font-size: 12px;
+}
+
+input[name='table-search'], select.form-control {
+    font-size: 12px;
+}
+
+.pagination {
+    font-size: 12px;
+}
+
+.leading-5 {
+    font-size: 12px;
+}
+
+select.form-control {
+    width: auto;
+}
+
+input[name='table-search'].form-control:focus, select.form-control:focus {
+    box-shadow: none;
+}
+
+
