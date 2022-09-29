@@ -20,13 +20,20 @@
 }
 
 .p0-last-3 table tbody tr td:nth-last-child(3) {
+    padding-left: 0px;
     padding-right: 0px;
+    text-align: right !important;
 }
 
 .p0-last-3 table tbody tr td:nth-last-child(1),
 .p0-last-3 table tbody tr td:nth-last-child(2) {
     padding-left: 0px;
     padding-right: 0px;
+    text-align: center !important;
+}
+
+.p0-last-3 table tbody tr td:nth-last-child(1) {
+    text-align: left !important;
 }
 
 
