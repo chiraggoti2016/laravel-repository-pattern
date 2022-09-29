@@ -15,7 +15,7 @@
                 </div>
             </div>
             <div class="card-body">
-                <div class="table-responsive p0-last-3">
+                <div class="p0-last-3">
                     <data-table :url="url" :columns="columns" :headers="headers"></data-table>
                 </div>
             </div>

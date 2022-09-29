@@ -24,7 +24,7 @@
         </div>
       </div>
       <div class="card-body">
-        <div class="table-responsive p0-last-2">
+        <div class="p0-last-2">
           <data-table
             :url="url"
             :columns="columns"

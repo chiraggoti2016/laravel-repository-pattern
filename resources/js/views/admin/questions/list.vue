@@ -22,7 +22,7 @@
         </div>
       </div>
       <div class="card-body">
-        <div class="table-responsive p0-last-2">
+        <div class="p0-last-2">
           <data-table
             :url="url"
             :columns="columns"
@@ -102,10 +102,18 @@ export default {
         {
           label: "Scope",
           name: "scope",
+          transform: ({ data, name }) =>
+            typeof data[name] === "string"
+              ? `${data[name].replace("_", " ")}`
+              : "",
         },
         {
           label: "Category",
           name: "category",
+          transform: ({ data, name }) =>
+            typeof data[name] === "string"
+              ? `${data[name].replace("_", " ")}`
+              : "",
         },
         {
           label: "",
