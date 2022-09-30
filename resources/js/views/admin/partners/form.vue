@@ -300,9 +300,6 @@
             :state="validateModalState('phone')"
             aria-describedby="modal-input-3-live-feedback"
           ></b-form-input>
-          <div class="invalid-feedback" v-if="!$v.newuser.phone.required">
-            This is a required field.
-          </div>
           <div class="invalid-feedback" v-if="!$v.newuser.phone.numbercheck">
             Enter vaild phone number.
           </div>
