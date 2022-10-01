@@ -39,7 +39,7 @@
         <div class="table-responsive" v-if="isProjectQuestionaireSend">
           <b-card
             sub-title="Email To (select client name to send)"
-            class="form-list"
+            class="form-list mb-3"
             body-class="require-h6"
             :class="
               $v.form.emailTo.$dirty && !$v.form.emailTo.required
@@ -72,7 +72,7 @@
         <div class="table-responsive">
           <b-card
             :header="category.toUpperCase()"
-            class="form-list"
+            class="form-list mb-3"
             v-for="(questions, category) in questionsbycategory"
             :key="category"
           >
