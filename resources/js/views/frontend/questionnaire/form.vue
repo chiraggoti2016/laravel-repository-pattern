@@ -2,7 +2,7 @@
   <b-card header="Form Fields" class="mb-2">
     <b-row v-if="question.fields.length > 0">
       <b-col
-        cols="3"
+        cols="6"
         :id="'input-group-input-' + index + '-field' + fieldIndex"
         v-for="(field, fieldIndex) in question.fields"
         :key="fieldIndex"

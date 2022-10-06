@@ -12,7 +12,7 @@
         <div class="table-responsive">
           <b-card
             :header="category.toUpperCase()"
-            class="form-list"
+            class="form-list mb-3"
             v-for="(questions, category) in questionsbycategory"
             :key="category"
           >
