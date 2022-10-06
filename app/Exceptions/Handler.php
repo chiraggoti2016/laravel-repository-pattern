@@ -70,7 +70,7 @@ class Handler extends ExceptionHandler
                     return response()->json([
                         'errors' => new \StdClass(),
                         'message' => $exception->getMessage() ?? 'URl/Method/Model Not Found.',
-                    ], 404);
+                    ], $exception->getStatusCode() ?? 422);
                 }
                 
                 return response()->json([

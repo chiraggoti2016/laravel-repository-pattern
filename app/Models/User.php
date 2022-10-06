@@ -91,7 +91,7 @@ class User extends Authenticatable implements MustVerifyEmail
 
         }catch(\Throwable $e){
         
-            abort(404, $e->getMessage());
+            abort(422, $e->getMessage());
         }
         
     }

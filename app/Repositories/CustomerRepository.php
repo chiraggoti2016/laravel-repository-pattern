@@ -46,7 +46,7 @@ class CustomerRepository extends BaseRepository implements CustomerContract
             DB::rollBack();
             \Log::debug('Customer Repository : ',[ 'error' =>$e ]);
             
-            abort(404, $e->getMessage());
+            abort(422, $e->getMessage());
         }
         return false;
     }
@@ -70,7 +70,7 @@ class CustomerRepository extends BaseRepository implements CustomerContract
             DB::rollBack();
             \Log::debug('Customer Repository : ',[ 'error' =>$e ]);
             
-            abort(404, $e->getMessage());
+            abort(422, $e->getMessage());
         }
         return false;
     }

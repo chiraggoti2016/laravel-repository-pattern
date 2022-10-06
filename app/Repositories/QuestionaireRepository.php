@@ -66,7 +66,7 @@ class QuestionaireRepository extends BaseRepository implements QuestionaireContr
             DB::rollBack();
             \Log::debug('Questionaire Repository : ',[ 'error' =>$e ]);
             
-            abort(404, $e->getMessage());
+            abort(422, $e->getMessage());
         }
         return false;
     }

@@ -39,7 +39,7 @@ class ProjectRepository extends BaseRepository implements ProjectContract
             DB::rollBack();
             Log::debug('Project Repository : ',[ 'error' =>$e ]);
             
-            abort(404, $e->getMessage());
+            abort(422, $e->getMessage());
         }
         return false;
     }
@@ -63,7 +63,7 @@ class ProjectRepository extends BaseRepository implements ProjectContract
             DB::rollBack();
             \Log::debug('Project Repository : ',[ 'error' =>$e ]);
             
-            abort(404, $e->getMessage());
+            abort(422, $e->getMessage());
         }
         return false;
     }
