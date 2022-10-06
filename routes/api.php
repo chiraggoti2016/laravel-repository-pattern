@@ -38,6 +38,7 @@ Route::group(['prefix' => 'questions', 'as' => 'questions'], function () {
 
 Route::group(['middleware' => ['auth:api']], function () {
     Route::get('user', [Api\Auth\AuthController::class, 'user']);
+    Route::post('change-password', [Api\UsersController::class, 'changePassword']);    
 
     Route::group(['prefix' => 'countries', 'as' => 'countries'], function () {
         Route::get('/list',[Api\CountriesController::class, 'list'])->name('.list');

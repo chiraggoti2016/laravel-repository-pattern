@@ -333,6 +333,16 @@ let router = new Router({
             }
         },
         {
+            path: "/admin/change-password",
+            name: "change-password",
+            component: () => import("./views/admin/change-password/index.vue"),
+            meta: {
+                requiresAuth: true,
+                permissions: ['admin'],
+                layout: AdminLayout
+            }
+        },
+        {
             path: "*",
             name: "page-not-found",
             component: () => import("./views/admin/page-not-found.vue"),

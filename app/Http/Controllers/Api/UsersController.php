@@ -8,6 +8,7 @@ use App\Http\Requests\Api\Users\AddUsersRequest;
 use App\Http\Requests\Api\Users\UpdateUsersRequest;
 use App\Contracts\UserContract;
 use App\Http\Requests\Api\Users\EmailAlreadyExistsRequest;
+use App\Http\Requests\Api\Users\ChangePasswordRequest;
 
 class UsersController extends Controller
 {
@@ -56,6 +57,11 @@ class UsersController extends Controller
 
 	public function resend(ResendRequest $request, $user) { 
 		$res=$this->userService->resend($request, $user);
+		return $this->sendResponse($res); 
+	}
+
+	public function changePassword(ChangePasswordRequest $request) { 
+		$res=$this->userService->changePassword($request);
 		return $this->sendResponse($res); 
 	}
 }
