@@ -30,10 +30,12 @@ class UserRepository extends BaseRepository implements UserContract
 
         if (!(\Hash::check($request->get('old_password'), \Auth::user()->password))) {
             // The passwords matches
-            abort(404, 'Your current password does not matches with the password.');
+            // abort(404, 'Your current password does not matches with the password.');
+            return ['message' => 'Your current password does not matches with the password.', 'status' => 404];
         } else if(strcmp($request->get('old_password'), $request->get('new_password')) == 0){
             // Current password and new password same
-            abort(404, 'New Password cannot be same as your current password.');
+            // abort(404, 'New Password cannot be same as your current password.');
+            return ['message' => 'New Password cannot be same as your current password.', 'status' => 404];
         } else {
 
             $user = \Auth::user();
@@ -42,10 +44,11 @@ class UserRepository extends BaseRepository implements UserContract
                 $user->update([
                     'password'  => \Hash::make($request->new_password),
                 ]);
-                return ['message' => 'password has been changed'];    
+                return ['message' => 'password has been changed', 'status' => 200];    
             }
     
-            abort(404, 'try again later.');
+            // abort(404, 'try again later.');
+            return ['message' => 'try again later.', 'status' => 404];
         }
 
     }
