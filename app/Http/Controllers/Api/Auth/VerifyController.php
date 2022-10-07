@@ -28,7 +28,14 @@ class VerifyController extends Controller
 
             $user->update(['password' => \Hash::make($password)]);
 
-            dispatch(new \App\Jobs\NewPasswordMailJob($user->email, ['user' => $user, 'password' => $password]));
+            $token = Str::random(10);
+
+            \DB::table('password_resets')->insert([
+                'email' => $user->email,
+                'token' => $token
+            ]);
+
+            dispatch(new \App\Jobs\NewPasswordMailJob($user->email, ['user' => $user, 'password' => $password, 'token' => $token]));
         }
 
         return redirect('/admin/login?verification_status=success');

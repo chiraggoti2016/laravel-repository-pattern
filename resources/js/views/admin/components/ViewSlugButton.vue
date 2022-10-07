@@ -18,9 +18,11 @@
       :class="classes"
       class="btn btn-icon-split"
       :to="
-        meta.prefixLink ? meta.prefixLink + (data ? data.customers[0].id + '/' + data.id : '') : '#'
+        meta.prefixLink
+          ? meta.prefixLink + (data ? data.customers[0].id + '/' + data.id : '')
+          : '#'
       "
-      title="name"
+      :title="name"
       :disabled="disabled"
     >
       <slot></slot>

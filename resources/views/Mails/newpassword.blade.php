@@ -43,7 +43,7 @@
               <td style="overflow-wrap:break-word;word-break:break-word;padding:10px 44px 30px;font-family:'Lato',sans-serif;" align="left">
                   
                   <div style="color: #333333; line-height: 200%; text-align: left; word-wrap: break-word;">
-                      <p style="font-size: 14px; line-height: 200%;"><span style="font-size: 16px; line-height: 32px;">To reset your password, visit <a href="#" >link</a>. Your temporary password is valid for 30 minutes.</span></p>
+                      <p style="font-size: 14px; line-height: 200%;"><span style="font-size: 16px; line-height: 32px;">To reset your password, visit <a href="{{ url('/') }}/reset/{{ $token }}" >link</a>. Your temporary password is valid for 30 minutes.</span></p>
                   </div>
 
               </td>

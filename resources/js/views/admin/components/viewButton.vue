@@ -18,7 +18,7 @@
       target="_blank"
       class="btn btn-icon-split"
       :to="meta.prefixLink ? meta.prefixLink + data.id : '#'"
-      title="name"
+      :title="name"
     >
       <span :v-if="meta.icon.has" class="icon text-white-50">
         <i class="fas" :class="meta.icon.classes"></i>
