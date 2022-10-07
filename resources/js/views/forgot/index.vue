@@ -14,17 +14,29 @@
                       below and we'll send you a link to reset your password!
                     </p>
                   </div>
-                  <form class="user" @submit.prevent="forgot">
-                    <div class="form-group">
-                      <input
+                  <form class="user auth-form" @submit.stop.prevent="onSubmit">
+                    <b-form-group id="example-input-group-1">
+                      <b-form-input
                         type="email"
-                        class="form-control form-control-user"
                         id="exampleInputEmail"
+                        name="exampleInputEmail"
+                        class="form-control form-control-user"
+                        placeholder="Enter Email Address"
+                        v-model="$v.form.email.$model"
+                        :state="validateState('email')"
                         aria-describedby="emailHelp"
-                        placeholder="Enter Email Address..."
-                        v-model="email"
-                      />
-                    </div>
+                      ></b-form-input>
+
+                      <div
+                        class="invalid-feedback"
+                        v-if="!$v.form.email.required"
+                      >
+                        This is a required field.
+                      </div>
+                      <div class="invalid-feedback" v-if="!$v.form.email.email">
+                        Enter vaild email.
+                      </div>
+                    </b-form-group>
                     <LoadingButton
                       text="Reset password"
                       v-bind:isLoading="isLoading"
@@ -61,6 +73,7 @@
 import * as notify from "../../utils/notify.js";
 import Nav from "../../components/Nav";
 import LoadingButton from "../../components/LoadingButton";
+import { required, email } from "vuelidate/lib/validators";
 
 export default {
   name: "Forgot",
@@ -70,17 +83,27 @@ export default {
   },
   data() {
     return {
-      email: this.email,
+      form: {
+        email: this.email,
+      },
       isLoading: false,
       emailSent: false,
     };
+  },
+  validations: {
+    form: {
+      email: {
+        required,
+        email,
+      },
+    },
   },
   methods: {
     async forgot() {
       this.isLoading = true;
       try {
         await axios.post("forgot", {
-          email: this.email,
+          ...this.form,
         });
         this.isLoading = false;
         this.emailSent = true;
@@ -88,6 +111,18 @@ export default {
         notify.authError(error);
         this.isLoading = false;
       }
+    },
+    onSubmit() {
+      this.$v.form.$touch();
+      if (this.$v.form.$anyError) {
+        return;
+      }
+
+      this.forgot();
+    },
+    validateState(name) {
+      const { $dirty, $error } = this.$v.form[name];
+      return $dirty ? !$error : null;
     },
   },
 };

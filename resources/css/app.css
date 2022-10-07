@@ -136,3 +136,8 @@ input[name='table-search'].form-control:focus, select.form-control:focus {
 .capital-text{
     text-transform: capitalize;
 }
+
+/* login page form */
+.auth-form .invalid-feedback {
+    margin-left: 20px;
+}

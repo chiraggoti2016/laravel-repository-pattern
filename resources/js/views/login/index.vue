@@ -31,26 +31,47 @@
                 <div class="text-center">
                   <h1 class="h4 text-gray-900 mb-4">Login</h1>
                 </div>
-                <form class="user" @submit.prevent="login">
-                  <div class="form-group">
-                    <input
+                <form class="user auth-form" @submit.stop.prevent="onSubmit">
+                  <b-form-group id="example-input-group-1">
+                    <b-form-input
                       type="email"
-                      class="form-control form-control-user"
                       id="exampleInputEmail"
-                      aria-describedby="emailHelp"
-                      placeholder="Enter Email Address..."
-                      v-model="email"
-                    />
-                  </div>
-                  <div class="form-group">
-                    <input
-                      type="password"
+                      name="exampleInputEmail"
                       class="form-control form-control-user"
+                      placeholder="Enter Email Address"
+                      v-model="$v.form.email.$model"
+                      :state="validateState('email')"
+                      aria-describedby="emailHelp"
+                    ></b-form-input>
+
+                    <div
+                      class="invalid-feedback"
+                      v-if="!$v.form.email.required"
+                    >
+                      This is a required field.
+                    </div>
+                    <div class="invalid-feedback" v-if="!$v.form.email.email">
+                      Enter vaild email.
+                    </div>
+                  </b-form-group>
+
+                  <b-form-group id="example-input-group-2">
+                    <b-form-input
+                      type="password"
                       id="exampleInputPassword"
-                      placeholder="Password"
-                      v-model="password"
-                    />
-                  </div>
+                      name="exampleInputPassword"
+                      class="form-control form-control-user"
+                      placeholder="Enter Password"
+                      v-model="$v.form.password.$model"
+                      :state="validateState('password')"
+                      aria-describedby="passwordHelp"
+                    ></b-form-input>
+
+                    <b-form-invalid-feedback id="passwordHelp"
+                      >This is a required field.</b-form-invalid-feedback
+                    >
+                  </b-form-group>
+
                   <div class="form-group">
                     <div class="custom-control custom-checkbox small">
                       <input
@@ -94,6 +115,7 @@
 import axios from "axios";
 import Nav from "../../components/Nav";
 import * as notify from "../../utils/notify.js";
+import { required, email } from "vuelidate/lib/validators";
 
 export default {
   name: "Login",
@@ -102,8 +124,11 @@ export default {
   },
   data() {
     return {
-      email: "",
-      password: "",
+      form: {
+        email: null,
+        password: null,
+      },
+      loading: false,
       verificationStatus: this.$route.query.verification_status ? true : false,
       verificationMessage: "",
       verificationAlertClasses: {
@@ -111,6 +136,17 @@ export default {
         "alert-danger": false,
       },
     };
+  },
+  validations: {
+    form: {
+      email: {
+        required,
+        email,
+      },
+      password: {
+        required,
+      },
+    },
   },
   created: function () {
     if (this.$route.query.verification_status === "success") {
@@ -125,10 +161,7 @@ export default {
   methods: {
     async login() {
       try {
-        const response = await axios.post("login", {
-          email: this.email,
-          password: this.password,
-        });
+        const response = await axios.post("login", { ...this.form });
 
         localStorage.setItem("token", response.data.token);
         this.$store.dispatch("user", response.data.user);
@@ -136,6 +169,18 @@ export default {
       } catch (error) {
         notify.authError(error);
       }
+    },
+    onSubmit() {
+      this.$v.form.$touch();
+      if (this.$v.form.$anyError) {
+        return;
+      }
+
+      this.login();
+    },
+    validateState(name) {
+      const { $dirty, $error } = this.$v.form[name];
+      return $dirty ? !$error : null;
     },
   },
 };

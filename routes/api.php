@@ -19,7 +19,7 @@ Route::post('login', [Api\Auth\AuthController::class, 'login']);
 Route::post('register', [Api\Auth\RegisterController::class, 'register']);
 Route::post('forgot', [Api\Auth\ForgotController::class, 'forgot']);
 Route::post('reset', [Api\Auth\ForgotController::class, 'reset']);
-Route::post('email/resend/{user}', [Api\Auth\VerifyController::class, 'resend'])->name('verification.resend');
+Route::any('email/resend/{user}', [Api\Auth\VerifyController::class, 'resend'])->name('verification.resend');
 Route::get('email/verify/{id}', [Api\Auth\VerifyController::class, 'verify'])->name('verification.verify');; // Make sure to keep this as your route name
 
 Route::any('project/hosts/{slug}', [Api\ProjectsController::class, 'hosts']);

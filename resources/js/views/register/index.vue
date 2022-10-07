@@ -7,56 +7,115 @@
             <div class="text-center">
               <h1 class="h4 text-gray-900 mb-4">Create an Account</h1>
             </div>
-            <form class="user" @submit.prevent="register">
-              <div class="form-group row">
-                <div class="col-sm-6 mb-3 mb-sm-0">
-                  <input
-                    type="text"
-                    class="form-control form-control-user"
-                    id="exampleFirstName"
-                    placeholder="First Name"
-                    v-model="first_name"
-                  />
-                </div>
-                <div class="col-sm-6">
-                  <input
-                    type="text"
-                    class="form-control form-control-user"
-                    id="exampleLastName"
-                    placeholder="Last Name"
-                    v-model="last_name"
-                  />
-                </div>
-              </div>
-              <div class="form-group">
-                <input
+            <form class="user auth-form" @submit.stop.prevent="onSubmit">
+              <b-row>
+                <b-col sm="6" class="mb-3 mb-sm-0">
+                  <b-form-group id="example-input-group-1">
+                    <b-form-input
+                      type="text"
+                      id="exampleFirstName"
+                      name="exampleFirstName"
+                      class="form-control form-control-user"
+                      placeholder="First Name"
+                      v-model="$v.form.first_name.$model"
+                      :state="validateState('first_name')"
+                      aria-describedby="firstNameHelp"
+                    ></b-form-input>
+
+                    <div
+                      class="invalid-feedback"
+                      v-if="!$v.form.first_name.required"
+                    >
+                      This is a required field.
+                    </div>
+                  </b-form-group>
+                </b-col>
+                <b-col sm="6">
+                  <b-form-group id="example-input-group-2">
+                    <b-form-input
+                      type="text"
+                      id="exampleLastName"
+                      name="exampleLastName"
+                      class="form-control form-control-user"
+                      placeholder="Last Name"
+                      v-model="$v.form.last_name.$model"
+                      :state="validateState('last_name')"
+                      aria-describedby="last_nameHelp"
+                    ></b-form-input>
+
+                    <div
+                      class="invalid-feedback"
+                      v-if="!$v.form.last_name.required"
+                    >
+                      This is a required field.
+                    </div>
+                  </b-form-group>
+                </b-col>
+              </b-row>
+              <b-form-group id="example-input-group-3">
+                <b-form-input
                   type="email"
-                  class="form-control form-control-user"
                   id="exampleInputEmail"
-                  placeholder="Email Address"
-                  v-model="email"
-                />
-              </div>
-              <div class="form-group row">
-                <div class="col-sm-6 mb-3 mb-sm-0">
-                  <input
-                    type="password"
-                    class="form-control form-control-user"
-                    id="exampleInputPassword"
-                    placeholder="Password"
-                    v-model="password"
-                  />
+                  name="exampleInputEmail"
+                  class="form-control form-control-user"
+                  placeholder="Enter Email Address"
+                  v-model="$v.form.email.$model"
+                  :state="validateState('email')"
+                  aria-describedby="emailHelp"
+                ></b-form-input>
+
+                <div class="invalid-feedback" v-if="!$v.form.email.required">
+                  This is a required field.
                 </div>
-                <div class="col-sm-6">
-                  <input
-                    type="password"
-                    class="form-control form-control-user"
-                    id="exampleRepeatPassword"
-                    placeholder="Repeat Password"
-                    v-model="password_confirm"
-                  />
+                <div class="invalid-feedback" v-if="!$v.form.email.email">
+                  Enter vaild email.
                 </div>
-              </div>
+              </b-form-group>
+              <b-row>
+                <b-col sm="6" class="mb-3 mb-sm-0">
+                  <b-form-group id="example-input-group-4">
+                    <b-form-input
+                      type="password"
+                      id="examplePassword"
+                      name="examplePassword"
+                      class="form-control form-control-user"
+                      placeholder="Password"
+                      v-model="$v.form.password.$model"
+                      :state="validateState('password')"
+                      aria-describedby="passwordHelp"
+                    ></b-form-input>
+
+                    <div
+                      class="invalid-feedback"
+                      v-if="!$v.form.password.required"
+                    >
+                      This is a required field.
+                    </div>
+                  </b-form-group>
+                </b-col>
+                <b-col sm="6">
+                  <b-form-group id="example-input-group-4">
+                    <b-form-input
+                      type="password"
+                      id="exampleRepeatPassword"
+                      name="exampleRepeatPassword"
+                      class="form-control form-control-user"
+                      placeholder="Repeat Password"
+                      v-model="$v.form.password_confirm.$model"
+                      :state="validateState('password_confirm')"
+                      aria-describedby="password_confirmHelp"
+                    ></b-form-input>
+
+                    <div
+                      class="invalid-feedback"
+                      v-if="!$v.form.password_confirm.sameAsPassword"
+                    >
+                      Passwords must be identical
+                    </div>
+                  </b-form-group>
+                </b-col>
+              </b-row>
+
               <LoadingButton
                 text="Register Account"
                 v-bind:isLoading="isLoading"
@@ -85,6 +144,7 @@ import axios from "axios";
 import * as notify from "../../utils/notify.js";
 import Nav from "../../components/Nav";
 import LoadingButton from "../../components/LoadingButton";
+import { required, email, sameAs, minLength } from "vuelidate/lib/validators";
 
 export default {
   name: "Register",
@@ -94,24 +154,44 @@ export default {
   },
   data() {
     return {
-      first_name: "",
-      last_name: "",
-      email: "",
-      password: "",
-      password_confirm: "",
+      form: {
+        first_name: "",
+        last_name: "",
+        email: "",
+        password: "",
+        password_confirm: "",
+      },
       isLoading: false,
     };
   },
+  validations: {
+    form: {
+      first_name: {
+        required,
+      },
+      last_name: {
+        required,
+      },
+      email: {
+        required,
+        email,
+      },
+      password: {
+        required,
+        minLength: minLength(6),
+      },
+      password_confirm: {
+        sameAsPassword: sameAs("password"),
+      },
+    },
+  },
+
   methods: {
     async register() {
       this.isLoading = true;
       try {
         var response = await axios.post("register", {
-          first_name: this.first_name,
-          last_name: this.last_name,
-          email: this.email,
-          password: this.password,
-          password_confirm: this.password_confirm,
+          ...this.form,
         });
 
         this.isLoading = false;
@@ -132,6 +212,18 @@ export default {
         notify.authError(error);
         this.isLoading = false;
       }
+    },
+    onSubmit() {
+      this.$v.form.$touch();
+      if (this.$v.form.$anyError) {
+        return;
+      }
+
+      this.register();
+    },
+    validateState(name) {
+      const { $dirty, $error } = this.$v.form[name];
+      return $dirty ? !$error : null;
     },
   },
 };
