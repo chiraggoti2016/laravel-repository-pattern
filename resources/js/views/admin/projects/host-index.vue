@@ -35,11 +35,12 @@
 
 <script>
 import { reactive, toRefs } from "vue";
-import ViewSlugButton from "./../components/ViewSlugButton.vue";
+//import ViewSlugButton from "./../components/ViewSlugButton.vue";
 import OptionsPacksLabel from "./../components/OptionsPacksLabel.vue";
 import CpuCountLabel from "./../components/CpuCountLabel.vue";
 import CpuUsageLabel from "./../components/CpuUsageLabel.vue";
 import ActionButton from "./../components/ActionButton.vue";
+import ViewProjectHostDetail from "./../components/ViewProjectHostDetail.vue";
 export default {
     name: "Project",
     data() {
@@ -71,9 +72,9 @@ export default {
                     },
                     event: "click",
                     handler: () => {},
-                    component: ViewSlugButton,
+                    component: ViewProjectHostDetail,
                 },
-                {
+                /*{
                     label: "",
                     name: "Edit",
                     orderable: false,
@@ -116,7 +117,7 @@ export default {
                     event: "click",
                     handler: this.deleteAction,
                     component: ActionButton,
-                },
+                },*/
             ],
             headers: {
                 ...axiosHeaders,
@@ -126,10 +127,10 @@ export default {
     },
     components: {
         ActionButton,
-        ViewSlugButton,
         CpuCountLabel,
         CpuUsageLabel,
-        OptionsPacksLabel
+        OptionsPacksLabel,
+        ViewProjectHostDetail
     },
     async mounted() {
         //console.log(this.$route.params);
