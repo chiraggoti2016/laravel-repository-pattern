@@ -40,12 +40,12 @@
                 <hr />
                 <div class="text-center">
                   <router-link class="small" to="/register"
-                    >Create an Account!</router-link
+                    >Create an Account</router-link
                   >
                 </div>
                 <div class="text-center">
                   <router-link class="small" to="/"
-                    >Already have an account? Login!</router-link
+                    >Already have an account? Login</router-link
                   >
                 </div>
               </div>

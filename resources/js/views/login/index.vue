@@ -29,7 +29,7 @@
               <!-- Nested Row within Card Body -->
               <div class="p-5">
                 <div class="text-center">
-                  <h1 class="h4 text-gray-900 mb-4">Login!</h1>
+                  <h1 class="h4 text-gray-900 mb-4">Login</h1>
                 </div>
                 <form class="user" @submit.prevent="login">
                   <div class="form-group">
@@ -78,7 +78,7 @@
                 </div>
                 <div class="text-center">
                   <router-link class="small" to="/register"
-                    >Create an Account!</router-link
+                    >Create an Account</router-link
                   >
                 </div>
               </div>

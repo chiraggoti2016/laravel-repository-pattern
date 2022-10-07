@@ -44,6 +44,6 @@ class VerifyController extends Controller
 
         $user->sendEmailVerificationNotification();
 
-        return response()->json(["message" => "Email verification link sent on email."]);
+        return response()->json(["message" => "Please check your email to complete verification."]);
     }
 }
