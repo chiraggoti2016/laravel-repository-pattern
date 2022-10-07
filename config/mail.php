@@ -107,4 +107,10 @@ return [
         ],
     ],
 
+    'template' => [
+        'website'   => env('MAIL_TEMPLATE_WEBSITE','optimacloud.services'),
+        'address'   => env('MAIL_TEMPLATE_ADDRESS','noreply@optimacloud.services'),
+        'contact'   => env('MAIL_TEMPLATE_CONTACT','123-456-7890'),
+    ],
+
 ];
