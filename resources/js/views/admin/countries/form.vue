@@ -22,8 +22,7 @@
                 ></b-icon>
                 <i v-else class="fas fa-save"></i>
               </span>
-              <span v-if="formtype === 'add'" class="text">Save</span>
-              <span v-if="formtype === 'edit'" class="text">Update</span>
+              <span class="text">Save</span>
             </a>
             <a
               v-if="formtype === 'add'"
