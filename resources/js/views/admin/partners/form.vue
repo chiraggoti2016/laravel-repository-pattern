@@ -176,7 +176,7 @@
                     :data="data"
                     :meta="verifyActionButton.meta"
                     :classes="verifyActionButton.classes"
-                    name="send verify mail"
+                    name="send verification email"
                     @click="verifyActionButtonClick"
                   ></action-button>
                 </template>
@@ -207,7 +207,9 @@
           aria-labelledby="form-confirm-label"
           class="text-center p-3"
         >
-          <p><strong id="form-confirm-label">Are you sure?</strong></p>
+          <p>
+            <strong id="form-confirm-label">{{ overlayMessage }}</strong>
+          </p>
           <div class="d-flex">
             <b-button
               variant="outline-danger"
@@ -236,7 +238,7 @@
       <form ref="form" @submit.stop.prevent="handleAddUserSubmit">
         <b-form-group
           id="example-modal-input-group-1"
-          label="Name"
+          label="Full Name"
           label-for="modal-name-input"
           label-class="require"
         >
@@ -244,7 +246,7 @@
             id="modal-name-input"
             name="modal-name-input"
             class="mb-2 mr-sm-2 mb-sm-0"
-            placeholder="Name"
+            placeholder="Full Name"
             v-model="$v.newuser.name.$model"
             :state="validateModalState('name')"
             aria-describedby="modal-input-1-live-feedback"
@@ -335,6 +337,7 @@ export default {
       loading: false,
       isLoading: false,
       busy: false,
+      overlayMessage: "Are you sure?",
       countriesOptions: [],
       userFields: [
         "index",
@@ -591,17 +594,20 @@ export default {
     deleteActionButtonClick(data) {
       this.editUserIndex = data.index;
       this.overlayFor = "delete";
+      this.overlayMessage = `Are you sure to delete ${data.item.email} user?`;
       this.busy = true;
     },
     verifyActionButtonClick(data) {
       this.userData = data.item;
       this.overlayFor = "verify";
+      this.overlayMessage = `Continue email verification for ${data.item.email} user?`;
       this.busy = true;
     },
 
     onOverlayCancel() {
       this.busy = false;
       this.overlayFor = null;
+      this.overlayMessage = null;
       this.userData = null;
     },
     onOverlayOK() {

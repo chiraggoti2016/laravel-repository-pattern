@@ -177,7 +177,7 @@
                     :data="data"
                     :meta="verifyActionButton.meta"
                     :classes="verifyActionButton.classes"
-                    name="send verify mail"
+                    name="send verification email"
                     @click="verifyActionButtonClick"
                   ></action-button>
                 </template>
@@ -295,7 +295,9 @@
           aria-labelledby="form-confirm-label"
           class="text-center p-3"
         >
-          <p><strong id="form-confirm-label">Are you sure?</strong></p>
+          <p>
+            <strong id="form-confirm-label">{{ overlayMessage }}</strong>
+          </p>
           <div class="d-flex">
             <b-button
               variant="outline-danger"
@@ -324,7 +326,7 @@
       <form ref="form" @submit.stop.prevent="handleAddUserSubmit">
         <b-form-group
           id="example-modal-input-group-1"
-          label="Name"
+          label="Full Name"
           label-for="modal-name-input"
           label-class="require"
         >
@@ -332,7 +334,7 @@
             id="modal-name-input"
             name="modal-name-input"
             class="mb-2 mr-sm-2 mb-sm-0"
-            placeholder="Name"
+            placeholder="Full Name"
             v-model="$v.newuser.name.$model"
             :state="validateModalState('name')"
             aria-describedby="modal-input-1-live-feedback"
@@ -502,6 +504,7 @@ export default {
         oracle_database: { id: 1, name: "Oracle Database" },
       },
       busy: false,
+      overlayMessage: "Are you sure?",
       isDeleteFor: null,
       countriesOptions: [],
       userFields: [
@@ -894,16 +897,19 @@ export default {
       this.isDeleteFor = "project";
       this.editProjectIndex = data.index;
       this.busy = true;
+      this.overlayMessage = `Are you sure to delete ${data.item.name} project?`;
     },
     verifyActionButtonClick(data) {
       this.userData = data.item;
       this.overlayFor = "verify";
       this.busy = true;
+      this.overlayMessage = `Continue email verification for ${data.item.email} user?`;
     },
 
     onOverlayCancel() {
       this.isDeleteFor = null;
       this.busy = false;
+      this.overlayMessage = null;
       this.overlayFor = null;
       this.userData = null;
     },

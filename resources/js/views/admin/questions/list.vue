@@ -47,7 +47,9 @@
           aria-labelledby="form-confirm-label"
           class="text-center p-3"
         >
-          <p><strong id="form-confirm-label">Are you sure?</strong></p>
+          <p>
+            <strong id="form-confirm-label">{{ overlayMessage }}</strong>
+          </p>
           <div class="d-flex">
             <b-button
               variant="outline-danger"
@@ -166,6 +168,7 @@ export default {
         ...axiosHeaders,
       },
       busy: false,
+      overlayMessage: "Are you sure?",
     };
   },
   components: {

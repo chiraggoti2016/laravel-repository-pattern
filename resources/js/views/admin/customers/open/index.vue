@@ -310,7 +310,7 @@
                     :data="data"
                     :meta="verifyActionButton.meta"
                     :classes="verifyActionButton.classes"
-                    name="send verify mail"
+                    name="send verification email"
                     @click="verifyActionButtonClick"
                   ></action-button>
                 </template>
@@ -457,7 +457,9 @@
           aria-labelledby="form-confirm-label"
           class="text-center p-3"
         >
-          <p><strong id="form-confirm-label">Are you sure?</strong></p>
+          <p>
+            <strong id="form-confirm-label">{{ overlayMessage }}</strong>
+          </p>
           <div class="d-flex">
             <b-button
               variant="outline-danger"
@@ -634,6 +636,7 @@ export default {
     return {
       stagesByScope: {},
       busy: false,
+      overlayMessage: "Are you sure?",
       isDeleteFor: null,
       scopeOptions: [],
       pvcotOptions: PVCOT_OPTIONS,
@@ -1005,17 +1008,20 @@ export default {
       this.overlayFor = "delete";
       this.isDeleteFor = "participant";
       this.editUserIndex = data.index;
+      this.overlayMessage = `Are you sure to delete ${data.item.email} participant?`;
       this.busy = true;
     },
     verifyActionButtonClick(data) {
       this.userData = data.item;
       this.overlayFor = "verify";
+      this.overlayMessage = `Continue email verification for ${data.item.email} user?`;
       this.busy = true;
     },
 
     onOverlayCancel() {
       this.isDeleteFor = null;
       this.busy = false;
+      this.overlayMessage = null;
       this.overlayFor = null;
       this.userData = null;
     },

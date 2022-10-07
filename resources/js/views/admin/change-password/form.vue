@@ -129,33 +129,6 @@
       :active.sync="isLoading"
     >
     </loading>
-
-    <b-overlay :show="busy" no-wrap>
-      <template #overlay>
-        <div
-          ref="dialog"
-          tabindex="-1"
-          role="dialog"
-          aria-modal="false"
-          aria-labelledby="form-confirm-label"
-          class="text-center p-3"
-        >
-          <p><strong id="form-confirm-label">Are you sure?</strong></p>
-          <div class="d-flex">
-            <b-button
-              variant="outline-danger"
-              class="mr-3"
-              @click="onOverlayCancel"
-            >
-              Cancel
-            </b-button>
-            <b-button variant="outline-success" @click="onOverlayOK"
-              >OK</b-button
-            >
-          </div>
-        </div>
-      </template>
-    </b-overlay>
   </div>
 </template>
 
@@ -181,7 +154,6 @@ export default {
     return {
       loading: false,
       isLoading: false,
-      busy: false,
       form: {
         old_password: null,
         new_password: null,
