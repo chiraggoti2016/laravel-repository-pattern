@@ -23,8 +23,8 @@ class ScopeSeeder extends Seeder
     		array('id' => '1','name' => 'Oracle Database', 'slug' => 'oracle_database'),
     		array('id' => '2','name' => 'Oracle Apps', 'slug' => 'oracle_apps'),
     		array('id' => '3','name' => 'Microsoft', 'slug' => 'microsoft'),
-    		array('id' => '4','name' => 'Vmware', 'slug' => 'vmware'),
-    		array('id' => '5','name' => 'Sap', 'slug' => 'sap'),
+    		array('id' => '4','name' => 'VMware', 'slug' => 'vmware'),
+    		array('id' => '5','name' => 'SAP', 'slug' => 'sap'),
     	];
     	DB::table('scopes')->insert($scopes);
 
