@@ -50,6 +50,24 @@ class UserRepository extends BaseRepository implements UserContract
 
     }
 
+    public function resetPassword(Request $request, $id)
+    {
+        $user = User::find($id);
+
+        if( $user ) {
+            if (!$user->hasVerifiedEmail()) {
+                $user->markEmailAsVerified();
+            }
+            $user->update([
+                'password'  => \Hash::make($request->password),
+            ]);
+            return ['message' => 'password has been changed', 'status' => 200];    
+        }
+
+        abort(422, 'try again later.');
+
+    }
+
 }
 
 ?>

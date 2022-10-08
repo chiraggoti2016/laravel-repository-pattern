@@ -7,7 +7,7 @@
 
     <!-- Content Row -->
     <b-card title="Comming Soon">
-      <b-card-text> Dashboard development is inprogress stage. </b-card-text>
+      <b-card-text> Dashboard development is in-progress stage. </b-card-text>
     </b-card>
   </div>
 </template>

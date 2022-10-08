@@ -171,6 +171,13 @@
                     @click="deleteActionButtonClick"
                   ></action-button>
                   <action-button
+                    :data="data"
+                    :meta="resetActionButton.meta"
+                    :classes="resetActionButton.classes"
+                    name="reset password"
+                    @click="resetActionButtonClick"
+                  ></action-button>
+                  <action-button
                     v-if="!data.item.email_verified_at"
                     :data="data"
                     :meta="verifyActionButton.meta"
@@ -307,6 +314,71 @@
         </b-form-group>
       </form>
     </b-modal>
+
+    <b-modal
+      id="modal-prevent-reset-password"
+      ref="modal"
+      :title="
+        this.userData
+          ? `Reset password for ${this.userData.email}`
+          : 'Reset Password'
+      "
+      @show="resetResetModal"
+      @hidden="resetResetModal"
+      @ok="handleResetOk"
+      ok-title="Reset"
+    >
+      <form ref="form" @submit.stop.prevent="handleResetSubmit">
+        <b-form-group
+          id="example-modal-input-group-1"
+          label="Password"
+          label-for="modal-name-input-password"
+          label-class="require"
+        >
+          <b-form-input
+            type="password"
+            id="modal-name-input-password"
+            name="modal-name-input-password"
+            class="mb-2 mr-sm-2 mb-sm-0"
+            placeholder="Enter Password"
+            v-model="$v.reset.password.$model"
+            :state="validateResetModalState('password')"
+            aria-describedby="modal-input-password-1-live-feedback"
+          ></b-form-input>
+          <div class="invalid-feedback" v-if="!$v.reset.password.required">
+            This is a required field.
+          </div>
+          <div class="invalid-feedback" v-if="!$v.reset.password.minLength">
+            Password must have at least
+            {{ $v.reset.password.$params.minLength.min }} letters.
+          </div>
+        </b-form-group>
+
+        <b-form-group
+          id="example-modal-input-group-1"
+          label="Password"
+          label-for="modal-name-input-password"
+          label-class="require"
+        >
+          <b-form-input
+            type="password"
+            id="modal-name-input-password"
+            name="modal-name-input-password"
+            class="mb-2 mr-sm-2 mb-sm-0"
+            placeholder="Repeat Password"
+            v-model="$v.reset.password_confirm.$model"
+            :state="validateResetModalState('password_confirm')"
+            aria-describedby="modal-input-password-1-live-feedback"
+          ></b-form-input>
+          <div
+            class="invalid-feedback"
+            v-if="!$v.reset.password_confirm.sameAsPassword"
+          >
+            Passwords must be identical
+          </div>
+        </b-form-group>
+      </form>
+    </b-modal>
   </div>
 </template>
 
@@ -315,7 +387,14 @@ import ActionButton from "./../components/ActionButton.vue";
 import * as notify from "../../../utils/notify.js";
 import { reactive, toRefs } from "vue";
 import { validationMixin } from "vuelidate";
-import { required, email, helpers, numeric } from "vuelidate/lib/validators";
+import {
+  required,
+  email,
+  helpers,
+  numeric,
+  sameAs,
+  minLength,
+} from "vuelidate/lib/validators";
 import { getAllCountries } from "../../../services/country";
 
 export default {
@@ -355,6 +434,10 @@ export default {
         address: null,
         country: null,
         users: [],
+      },
+      reset: {
+        password: null,
+        password_confirm: null,
       },
       editUserIndex: null,
       userData: null,
@@ -410,6 +493,22 @@ export default {
           "btn-sm": true,
         },
       },
+      resetActionButton: {
+        meta: {
+          icon: {
+            has: true,
+            classes: {
+              "fa-eye-slash": true,
+            },
+          },
+          onlyicon: true,
+        },
+        classes: {
+          btn: true,
+          "btn-secondary": true,
+          "btn-sm": true,
+        },
+      },
     };
   },
   validations: {
@@ -452,19 +551,31 @@ export default {
         numbercheck: helpers.regex("phone", /^(\+\d{1,3}[- ]?)?\d{10}$/),
       },
     },
+    reset: {
+      password: {
+        required,
+        minLength: minLength(6),
+      },
+      password_confirm: {
+        sameAsPassword: sameAs("password"),
+      },
+    },
   },
   async mounted() {
-    this.isLoading = true;
-    await this.getCountries();
-    if (this.formtype === "edit") {
-      const { data } = await this.getData(this.$route.params.id);
-      this.form = {
-        ...data,
-      };
-    }
-    this.isLoading = false;
+    await this.load();
   },
   methods: {
+    async load() {
+      this.isLoading = true;
+      await this.getCountries();
+      if (this.formtype === "edit") {
+        const { data } = await this.getData(this.$route.params.id);
+        this.form = {
+          ...data,
+        };
+      }
+      this.isLoading = false;
+    },
     async getCountries() {
       const { data } = await getAllCountries();
       this.countriesOptions = data
@@ -531,6 +642,10 @@ export default {
       const { $dirty, $error } = this.$v.newuser[name];
       return $dirty ? !$error : null;
     },
+    validateResetModalState(name) {
+      const { $dirty, $error } = this.$v.reset[name];
+      return $dirty ? !$error : null;
+    },
     resetModal() {
       this.newuser = {
         id: null,
@@ -544,11 +659,26 @@ export default {
 
       this.$v.$reset();
     },
+    resetResetModal() {
+      this.reset = {
+        password: null,
+        password_confirm: null,
+      };
+      this.userData = null;
+
+      this.$v.$reset();
+    },
     handleOk(bvModalEvent) {
       // Prevent modal from closing
       bvModalEvent.preventDefault();
       // Trigger submit handler
       this.handleAddUserSubmit();
+    },
+    handleResetOk(bvModalEvent) {
+      // Prevent modal from closing
+      bvModalEvent.preventDefault();
+      // Trigger submit handler
+      this.handleResetSubmit();
     },
     handleAddUserSubmit() {
       this.$v.newuser.$touch();
@@ -568,6 +698,38 @@ export default {
       this.$nextTick(() => {
         this.$bvModal.hide("modal-prevent-closing");
       });
+    },
+    async handleResetSubmit() {
+      this.$v.reset.$touch();
+      if (this.$v.reset.$anyError) {
+        return;
+      }
+
+      if (this.userData) {
+        await this.resetPassword(this.userData.id);
+      }
+
+      this.resetResetModal();
+
+      // Hide the modal manually
+      this.$nextTick(() => {
+        this.$bvModal.hide("modal-prevent-reset-password");
+      });
+    },
+    async resetPassword(id) {
+      try {
+        const response = await axios.post(`users/reset-password/${id}`, {
+          ...this.reset,
+        });
+
+        let toast = this.$toasted.show("Password updated successfully", {
+          theme: "toasted-primary",
+          position: "top-right",
+          duration: 5000,
+        });
+      } catch (error) {
+        notify.authError(error);
+      }
     },
     async getData(id) {
       try {
@@ -601,6 +763,11 @@ export default {
       this.overlayFor = "verify";
       this.overlayMessage = `Continue email verification for ${data.item.email} user?`;
       this.busy = true;
+    },
+    resetActionButtonClick(data) {
+      this.$bvModal.show("modal-prevent-reset-password");
+      this.$v.$reset();
+      this.userData = data.item;
     },
 
     onOverlayCancel() {

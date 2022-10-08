@@ -9,6 +9,7 @@ use App\Http\Requests\Api\Users\UpdateUsersRequest;
 use App\Contracts\UserContract;
 use App\Http\Requests\Api\Users\EmailAlreadyExistsRequest;
 use App\Http\Requests\Api\Users\ChangePasswordRequest;
+use App\Http\Requests\Api\Users\ResetPasswordRequest;
 
 class UsersController extends Controller
 {
@@ -63,5 +64,10 @@ class UsersController extends Controller
 	public function changePassword(ChangePasswordRequest $request) { 
 		$res=$this->userService->changePassword($request);
 		return $res['status'] === 200 ? $this->sendResponse($res) : $this->sendError([], $res['message'], $res['status']); 
+	}
+
+	public function resetPassword(ResetPasswordRequest $request, $id) { 
+		$res=$this->userService->resetPassword($request, $id);
+		return $this->sendResponse($res);
 	}
 }

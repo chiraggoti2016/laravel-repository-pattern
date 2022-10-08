@@ -22,9 +22,19 @@
                       aria-describedby="passwordHelp"
                     ></b-form-input>
 
-                    <b-form-invalid-feedback id="passwordHelp"
-                      >This is a required field.</b-form-invalid-feedback
+                    <div
+                      class="invalid-feedback"
+                      v-if="!$v.form.password.required"
                     >
+                      This is a required field.
+                    </div>
+                    <div
+                      class="invalid-feedback"
+                      v-if="!$v.form.password.minLength"
+                    >
+                      Password must have at least
+                      {{ $v.form.password.$params.minLength.min }} letters.
+                    </div>
                   </b-form-group>
 
                   <b-form-group id="example-input-group-2">

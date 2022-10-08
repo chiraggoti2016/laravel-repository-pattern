@@ -54,6 +54,7 @@ Route::group(['middleware' => ['auth:api']], function () {
 
     Route::group(['prefix' => 'users', 'as' => 'users'], function () {
         Route::post('/email-already-exists', [Api\UsersController::class, 'emailAlreadyExists'])->name('.email-already-exists');
+        Route::post('/reset-password/{user}', [Api\UsersController::class, 'resetPassword'])->name('.reset-password');
     });
     
     Route::group(['prefix' => 'scopes', 'as' => 'scopes'], function () {
