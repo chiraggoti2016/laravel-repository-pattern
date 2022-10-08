@@ -24,18 +24,22 @@ class VerifyController extends Controller
 
         if ($user && !$user->hasVerifiedEmail()) {
             $user->markEmailAsVerified();
-            $password = Str::random(8);
 
-            $user->update(['password' => \Hash::make($password)]);
+            if($user->role === 'partner') {
+                $password = Str::random(8);
 
-            $token = Str::random(10);
+                $user->update(['password' => \Hash::make($password)]);
+    
+                $token = Str::random(10);
+    
+                \DB::table('password_resets')->insert([
+                    'email' => $user->email,
+                    'token' => $token
+                ]);
+    
+                dispatch(new \App\Jobs\NewPasswordMailJob($user->email, ['user' => $user, 'password' => $password, 'token' => $token]));
+            }
 
-            \DB::table('password_resets')->insert([
-                'email' => $user->email,
-                'token' => $token
-            ]);
-
-            dispatch(new \App\Jobs\NewPasswordMailJob($user->email, ['user' => $user, 'password' => $password, 'token' => $token]));
         }
 
         return redirect('/admin/login?verification_status=success');
