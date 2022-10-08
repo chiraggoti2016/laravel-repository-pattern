@@ -350,7 +350,22 @@
         </div>
 
         <div class="table-responsive">
-          <b-card sub-title="Stages">
+          <b-card
+            v-if="defaultScope !== form.scope"
+            border-variant="danger"
+            header-text-variant="danger"
+            align="center"
+            class="mb-3"
+            body-class="p-2"
+          >
+            <b-card-text>
+              Save changes if you want to change scope stages
+            </b-card-text>
+          </b-card>
+          <b-card
+            sub-title="Stages"
+            :class="defaultScope !== form.scope ? 'pe-none' : ''"
+          >
             <b-card-text>
               <b-table
                 v-if="form.scope && stagesByScope[form.scope]"
@@ -718,6 +733,7 @@ export default {
       editUserIndex: null,
       userData: null,
       overlayFor: null,
+      defaultScope: null,
       newparticipant: {
         name: null,
         email: null,
@@ -1061,6 +1077,7 @@ export default {
       this.form = {
         ...data,
       };
+      this.defaultScope = data.scope;
     },
     editActionButtonClick(data) {
       const { id, name, email, phone, pivot, email_verified_at } = data.item;
