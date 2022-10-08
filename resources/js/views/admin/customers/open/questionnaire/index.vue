@@ -519,7 +519,7 @@ export default {
                 : v.response_collector == "YesNo"
                 ? "no"
                 : v.response_collector == "Upload"
-                ? null
+                ? { type: "text/plan" }
                 : v.response_collector == "Ticker"
                 ? 0
                 : "",
