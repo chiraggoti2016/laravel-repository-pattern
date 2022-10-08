@@ -73,6 +73,10 @@ Route::group(['middleware' => ['auth:api']], function () {
         Route::post('/file',[Api\UploadsController::class, 'file'])->name('.file');
     });
 
+    Route::group(['prefix' => 'projects', 'as' => 'projects'], function () {
+        Route::post('/stage-update',[Api\ProjectsController::class, 'stageUpdate'])->name('.stage-update');
+    });
+
     // Resources
     Route::resource('countries',Api\CountriesController::class);
     Route::resource('partners',Api\PartnersController::class);

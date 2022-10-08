@@ -284,7 +284,7 @@
     >
     </loading>
 
-    <b-overlay :show="busy" no-wrap>
+    <b-overlay :show="busy" no-wrap fixed>
       <template #overlay>
         <div
           ref="dialog"

@@ -51,6 +51,6 @@ class Project extends Model
 
     public function stages()
     {
-        return $this->belongsToMany(ScopeStage::class, 'project_stages')->withPivot('status');
+        return $this->belongsToMany(ScopeStage::class, 'project_stages')->withPivot(['status','startdate','enddate']);
     }
 }

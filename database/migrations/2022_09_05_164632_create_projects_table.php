@@ -20,7 +20,7 @@ class CreateProjectsTable extends Migration
             $table->string('folder', 25)->nullable();
             $table->date('startdate')->nullable();
             $table->date('enddate')->nullable();
-            $table->enum('status', ['pending', 'on-going', 'completed'])->default('pending');
+            $table->enum('status', ['pending', 'in progress', 'completed'])->default('pending');
             $table->enum('scope', ['oracle_database', 'oracle_apps', 'microsoft', 'vmware', 'sap'])->default('oracle_database');
             $table->timestamps();
         });

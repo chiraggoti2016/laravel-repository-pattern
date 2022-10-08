@@ -44,6 +44,12 @@ class ProjectsController extends Controller
 		return $this->sendResponse($res ? new ProjectResource($res) : []);
 	}
 
+	public function stageUpdate(Request $request)
+	{
+		$res  = $this->projectService->stageUpdate($request->all());
+		return $this->sendResponse($res ? $res : []);
+	}
+
 	public function hosts(Request $request, $slug) {
 		return $this->projectService->hosts($request, $slug);
 	}

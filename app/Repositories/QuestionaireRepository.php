@@ -4,6 +4,7 @@ namespace App\Repositories;
 use App\Models\Questionaire;
 use App\Models\QuestionaireQuestion;
 use App\Models\QuestionaireUser;
+use App\Models\ProjectStage;
 use App\Contracts\QuestionaireContract;
 use App\Http\Resources\Questionaire as QuestionaireResource;
 use DB;
@@ -17,20 +18,26 @@ class QuestionaireRepository extends BaseRepository implements QuestionaireContr
     function send($data, $project_id) {
         DB::beginTransaction();
         try {
+
+            // set status
+            if($project = Project::find($project_id)){
+                $project->update(['status' => 'in progress']);
+            }
+
             if($questionaire = $this->model->updateOrCreate([
                 'project_id'    => $project_id,
             ],[
                 'status'    => $data['status']
             ])) {
-                if($questionaire->startdate === null) {
-                    $questionaire->startdate = date('Y-m-d h:i:s');
-                }
 
-                if($questionaire->status === 'send' && $questionaire->enddate === null) {
-                    $questionaire->enddate = date('Y-m-d h:i:s');
-                }
-
-                $questionaire->save();
+                $project_stage = ProjectStage::updateOrCreate([
+                    "project_id"        => $project_id,
+                    "scope_stage_id"    => $data['stage_id'],
+                ],[
+                    "status"            => $data['status'] == 'send' ? 'complete' : 'init',
+                    "enddate"           => $data['status'] == 'send' ? date('Y-m-d h:i:s'):null,
+                    
+                ]);
                                 
                 // users
                 foreach($data['emailTo'] as $userId) {

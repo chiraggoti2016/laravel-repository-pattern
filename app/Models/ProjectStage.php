@@ -15,6 +15,8 @@ class ProjectStage extends Model
      * @var array
      */
     protected $fillable = [
+        'startdate',
+        'enddate',
         'status',
         'project_id',
         'scope_stage_id',

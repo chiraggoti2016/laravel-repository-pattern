@@ -15,4 +15,9 @@ class ScopeStage extends Model
     {
         return $this->hasOne(ProjectStage::class);
     }
+
+    public function scopeModel()
+    {
+        return $this->belongsTo(Scope::class, 'scope', 'slug');
+    }
 }

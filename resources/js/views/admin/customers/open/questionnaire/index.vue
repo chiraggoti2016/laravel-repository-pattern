@@ -612,10 +612,11 @@ export default {
     async saveProject(draft = false) {
       try {
         const params = this.$route.params;
-        const { id, projectid } = params;
+        const { id, projectid, stageid } = params;
         const response = await axios.post(`questionaires/send/${projectid}`, {
           ...this.form,
           status: draft ? "draft" : "send",
+          stage_id: stageid,
         });
 
         this.$router.push(`/admin/customers/open/project/${id}/${projectid}`);

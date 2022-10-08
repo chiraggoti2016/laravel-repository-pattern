@@ -90,11 +90,33 @@
               </b-col>
               <b-col cols="2">
                 <label> Status </label>
-                <a href="#" class="btn btn-secondary btn-icon-split"
-                  ><span class="icon text-white-50"
-                    ><i class="fas fa-arrow-right"></i
-                  ></span>
-                  <span class="text">{{ form.status }}</span></a
+                <a
+                  href="#"
+                  class="btn btn-icon-split"
+                  :class="
+                    form.status === 'pending'
+                      ? 'btn-secondary'
+                      : form.status === 'in progress'
+                      ? 'btn-primary'
+                      : 'btn-success'
+                  "
+                >
+                  <span class="icon text-white-50">
+                    <b-icon
+                      v-if="form.status === 'in progress'"
+                      icon="card-checklist"
+                      font-scale="1"
+                    ></b-icon>
+
+                    <b-icon
+                      v-else-if="form.status === 'completed'"
+                      icon="check-all"
+                      font-scale="1"
+                    ></b-icon>
+
+                    <i v-else class="fas fa-arrow-right"></i>
+                  </span>
+                  <span class="text capital-text">{{ form.status }}</span></a
                 >
               </b-col>
             </b-row>
@@ -344,16 +366,13 @@
                 </template>
 
                 <template #cell(status)="data">
-                  <p v-if="data.item.status">
-                    {{ data.item.status }}
-                  </p>
                   <p
-                    v-else-if="
-                      form.questionaire !== null &&
-                      data.item.name === 'Pre-Engagement Questionaire'
+                    v-if="
+                      data.item.project_stage !== null &&
+                      data.item.project_stage.status
                     "
                   >
-                    {{ form.questionaire.status }}
+                    {{ data.item.project_stage.status }}
                   </p>
                   <p v-else>-</p>
                 </template>
@@ -361,12 +380,11 @@
                 <template #cell(start)="data">
                   <p
                     v-if="
-                      data.item.name === 'Pre-Engagement Questionaire' &&
-                      form.questionaire &&
-                      form.questionaire.startdate
+                      data.item.project_stage !== null &&
+                      data.item.project_stage.startdate
                     "
                   >
-                    {{ form.questionaire.startdate }}
+                    {{ data.item.project_stage.startdate }}
                   </p>
                   <p v-else-if="data.item.start">{{ data.item.start }}</p>
                   <p v-else>-</p>
@@ -375,14 +393,12 @@
                 <template #cell(end)="data">
                   <p
                     v-if="
-                      data.item.name === 'Pre-Engagement Questionaire' &&
-                      form.questionaire &&
-                      form.questionaire.enddate
+                      data.item.project_stage !== null &&
+                      data.item.project_stage.enddate
                     "
                   >
-                    {{ form.questionaire.enddate }}
+                    {{ data.item.project_stage.enddate }}
                   </p>
-                  <p v-else-if="data.item.end">{{ data.item.end }}</p>
                   <p v-else>-</p>
                 </template>
 
@@ -391,13 +407,13 @@
                     :data="data"
                     :meta="{
                       ...initActionButton.meta,
-                      prefixLink: getLink(data.item.name),
+                      prefixLink: getLink(data.item.id, data.item.name),
                     }"
                     :classes="initActionButton.classes"
                     name="Initiate"
                     :disabled="
-                      data.item.name === 'Pre-Engagement Questionaire' &&
-                      form.questionaire !== null
+                      data.item.project_stage != null &&
+                      data.item.project_stage.status != 'init'
                     "
                   >
                   </action-button>
@@ -405,17 +421,14 @@
                     :data="data"
                     :meta="{
                       ...openActionButton.meta,
-                      prefixLink:
-                        data.item.name === 'Pre-Engagement Questionaire' &&
-                        form.questionaire !== null
-                          ? `/admin/customers/open/project/questionnaire/${$route.params.id}/${$route.params.projectid}`
-                          : null,
+                      prefixLink: getLink(data.item.id, data.item.name),
                     }"
                     :classes="openActionButton.classes"
                     name="Open"
                     :disabled="
-                      data.item.name === 'Pre-Engagement Questionaire' &&
-                      form.questionaire === null
+                      data.item.project_stage == null ||
+                      (data.item.project_stage != null &&
+                        data.item.project_stage.status == 'init')
                     "
                   >
                   </action-button>
@@ -433,6 +446,34 @@
                     name="Reminder"
                   >
                   </action-button>
+
+                  <action-button
+                    :disabled="
+                      data.item.project_stage != null &&
+                      ['complete', 'skip'].indexOf(
+                        data.item.project_stage.status
+                      ) != -1
+                    "
+                    :data="data"
+                    :meta="markAsCompleteActionButton.meta"
+                    :classes="markAsCompleteActionButton.classes"
+                    name="mark as complete"
+                    @click="markAsCompleteActionButtonClick"
+                  ></action-button>
+
+                  <action-button
+                    :disabled="
+                      data.item.project_stage != null &&
+                      ['complete', 'skip'].indexOf(
+                        data.item.project_stage.status
+                      ) != -1
+                    "
+                    :data="data"
+                    :meta="markAsSkipActionButton.meta"
+                    :classes="markAsSkipActionButton.classes"
+                    name="mark as skip"
+                    @click="markAsSkipActionButtonClick"
+                  ></action-button>
                 </template>
               </b-table>
             </b-card-text>
@@ -441,7 +482,7 @@
       </div>
     </div>
 
-    <b-overlay :show="busy" no-wrap>
+    <b-overlay :show="busy" no-wrap fixed>
       <template #overlay>
         <div
           ref="dialog"
@@ -615,6 +656,7 @@ import { validationMixin } from "vuelidate";
 import { required, email, helpers, numeric } from "vuelidate/lib/validators";
 import { getScopesBySlug } from "../../../../services/scope";
 import { getStagesByScopeProject } from "../../../../services/scope-stage";
+import { stageUpdate } from "../../../../services/projects";
 import { PVCOT_OPTIONS, RACI_OPTIONS } from "../../../../mixins/constants";
 
 export default {
@@ -777,6 +819,38 @@ export default {
           "btn-sm": true,
         },
       },
+      markAsCompleteActionButton: {
+        meta: {
+          icon: {
+            has: false,
+            classes: {
+              "fa-check": true,
+            },
+          },
+          onlyicon: true,
+        },
+        classes: {
+          btn: true,
+          "btn-success": true,
+          "btn-sm": true,
+        },
+      },
+      markAsSkipActionButton: {
+        meta: {
+          icon: {
+            has: false,
+            classes: {
+              "fa-minus": true,
+            },
+          },
+          onlyicon: true,
+        },
+        classes: {
+          btn: true,
+          "btn-danger": true,
+          "btn-sm": true,
+        },
+      },
       deleteActionButton: {
         meta: {
           icon: {
@@ -850,18 +924,12 @@ export default {
     },
   },
   async mounted() {
-    const params = this.getParam();
-    await this.getScopes();
-    await this.getStagesByScope(params.projectid);
-    const { data } = await this.getData(params);
-    this.form = {
-      ...data,
-    };
+    await this.load();
   },
   methods: {
-    getLink(name) {
+    getLink(stageid, name) {
       if (name == "Pre-Engagement Questionaire") {
-        return `/admin/customers/open/project/questionnaire/${this.$route.params.id}/${this.$route.params.projectid}`;
+        return `/admin/customers/open/project/questionnaire/${this.$route.params.id}/${this.$route.params.projectid}/${stageid}`;
       } else if (name == "Data Collection") {
         return `/admin/project/hosts/${this.form.slug}`;
       } else if (name == "License Review") {
@@ -917,7 +985,8 @@ export default {
           ...this.form,
         });
 
-        this.$router.push(`/admin/customers/open/project/${id}/${projectid}`);
+        // this.$router.push(`/admin/customers/open/project/${id}/${projectid}`);
+        this.load();
       } catch (error) {
         notify.authError(error);
       }
@@ -984,6 +1053,15 @@ export default {
         notify.authError(error);
       }
     },
+    async load() {
+      const params = this.getParam();
+      await this.getScopes();
+      await this.getStagesByScope(params.projectid);
+      const { data } = await this.getData(params);
+      this.form = {
+        ...data,
+      };
+    },
     editActionButtonClick(data) {
       const { id, name, email, phone, pivot, email_verified_at } = data.item;
       this.$bvModal.show("modal-prevent-closing");
@@ -1011,6 +1089,18 @@ export default {
       this.overlayMessage = `Continue email verification for ${data.item.email} user?`;
       this.busy = true;
     },
+    markAsCompleteActionButtonClick(data) {
+      this.userData = data.item;
+      this.overlayFor = "markAsComplete";
+      this.overlayMessage = `${data.item.name} is mark as complete?`;
+      this.busy = true;
+    },
+    markAsSkipActionButtonClick(data) {
+      this.userData = data.item;
+      this.overlayFor = "markAsSkip";
+      this.overlayMessage = `${data.item.name} is mark as skip?`;
+      this.busy = true;
+    },
 
     onOverlayCancel() {
       this.isDeleteFor = null;
@@ -1023,6 +1113,8 @@ export default {
     onOverlayOK() {
       if (this.overlayFor === "delete") this.onDeleteOk();
       else if (this.overlayFor === "verify") this.onVerifyOk();
+      else if (this.overlayFor === "markAsComplete") this.onMarkAsCompleteOk();
+      else if (this.overlayFor === "markAsSkip") this.onMarkAsSkipOk();
 
       this.onOverlayCancel();
     },
@@ -1037,6 +1129,18 @@ export default {
     },
     onVerifyOk() {
       this.sendVerifyMail(this.userData);
+    },
+    onMarkAsCompleteOk() {
+      this.stageUpdate({
+        status: "complete",
+        scope_stage_id: this.userData.id,
+      });
+    },
+    onMarkAsSkipOk() {
+      this.stageUpdate({
+        status: "skip",
+        scope_stage_id: this.userData.id,
+      });
     },
     async sendVerifyMail(data) {
       this.isLoading = true;
@@ -1053,6 +1157,23 @@ export default {
         notify.authError(error);
       }
       this.isLoading = false;
+    },
+    async stageUpdate(data) {
+      try {
+        const params = this.$route.params;
+        const { id, projectid } = params;
+        const response = await stageUpdate({ ...data, project_id: projectid });
+        await this.onSubmit();
+        // await this.load();
+
+        let toast = this.$toasted.show(response.data.message, {
+          theme: "toasted-primary",
+          position: "top-right",
+          duration: 5000,
+        });
+      } catch (error) {
+        notify.authError(error);
+      }
     },
   },
   components: {

@@ -15,8 +15,8 @@ class CreateProjectStagesTable extends Migration
     {
         Schema::create('project_stages', function (Blueprint $table) {
             $table->id();
-            $table->date('startdate')->useCurrent();
-            $table->date('enddate')->nullable();
+            $table->datetime('startdate')->default(\DB::raw('CURRENT_TIMESTAMP'));
+            $table->datetime('enddate')->nullable();
             $table->string('status')->default('init');
             $table->unsignedBigInteger('project_id')->comment('project id');
             $table->foreign('project_id')->references('id')->on('projects')->onDelete('cascade');

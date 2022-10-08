@@ -100,7 +100,7 @@ let router = new Router({
             }
         },
         {
-            path: "/admin/customers/open/project/questionnaire/:id/:projectid",
+            path: "/admin/customers/open/project/questionnaire/:id/:projectid/:stageid",
             name: "customers-open-questionnaire",
             component: () => import("./views/admin/customers/open/questionnaire/index.vue"),
             meta: {

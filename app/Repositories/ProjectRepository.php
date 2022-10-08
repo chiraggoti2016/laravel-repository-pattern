@@ -2,6 +2,7 @@
 namespace App\Repositories;
 
 use App\Models\Project;
+use App\Models\ProjectStage;
 use App\Models\Hostname;
 use App\Models\User;
 use App\Models\CpuCountDatabaseDetail;
@@ -11,6 +12,7 @@ use App\Http\Resources\Project as ProjectResource;
 use Illuminate\Http\Request;
 use DataTableCollectionResource;
 use DB;
+use Log;
 
 class ProjectRepository extends BaseRepository implements ProjectContract
 {
@@ -169,6 +171,42 @@ class ProjectRepository extends BaseRepository implements ProjectContract
                     ->paginate($length);
 
         return new DataTableCollectionResource($data);
+    }
+
+    function stageUpdate($data) {
+        DB::beginTransaction();
+        try {
+                        
+            if($project_stage = ProjectStage::updateOrCreate([
+                "project_id"        => $data['project_id'],
+                "scope_stage_id"    => $data['scope_stage_id'],
+            ],[
+                "status"            => $data['status'],
+                "enddate"           => $data['status'] === "complete" ? date('Y-m-d h:i:s'):null,    
+            ])) {
+                // set status
+                if($project = Project::find($data['project_id'])){
+                    $totalCount = null;
+                    $skipCompleteCount = $project->stages()->whereIn('status',['complete','skip'])->count();
+                    if(isset($project_stage->scope_stage->scopeModel->stages)){
+                        $totalCount = $project_stage->scope_stage->scopeModel->stages->count();
+                    }
+                    
+                    $project->update([
+                        'status' => $totalCount === $skipCompleteCount ? 'completed': 'in progress'
+                    ]);
+
+                }
+                DB::commit();
+                return ['message' => 'change stage successfully.'];
+            }
+        } catch(\Throwable $e){
+            DB::rollBack();
+            Log::debug('Project Repository : ',[ 'error' =>$e ]);
+            
+            abort(422, $e->getMessage());
+        }
+        return false;
     }
     
 }
