@@ -10,4 +10,9 @@ class ScopeStage extends Model
     use HasFactory;
 
     protected $timestampes = false;
+
+    public function project_stage()
+    {
+        return $this->hasOne(ProjectStage::class);
+    }
 }

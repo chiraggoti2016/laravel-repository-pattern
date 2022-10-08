@@ -7,3 +7,9 @@ export const getStagesByScope =
     }
 
 
+export const getStagesByScopeProject =
+    function (project_id) {
+        return axios.get(`scope-stages/list/byscope/${project_id}`);
+    }
+
+

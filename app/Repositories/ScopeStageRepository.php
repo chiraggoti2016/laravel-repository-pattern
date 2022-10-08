@@ -15,6 +15,14 @@ class ScopeStageRepository extends BaseRepository implements ScopeStageContract
             return [$item['scope'] => $item];
         });
     }
+
+	public function listByScopeProject($project_id) {
+        return $this->model->with(['project_stage' => function($q) use($project_id) {
+            return $q->whereProjectId($project_id);
+        }])->get()->mapToGroups(function ($item, $key) {
+            return [$item['scope'] => $item];
+        });
+    }
 }
 
 ?>

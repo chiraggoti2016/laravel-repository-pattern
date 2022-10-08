@@ -23,7 +23,7 @@ class Project extends Model
         'scope',
     ];
 
-    protected $with = ['questionaire', 'questionaire.users', 'customers'];
+    protected $with = ['questionaire', 'questionaire.users', 'customers', 'stages'];
 
     public function participants()
     {
@@ -47,5 +47,10 @@ class Project extends Model
     public function getCustomerAttribute()
     {
         return $this->customers()->first();
+    }
+
+    public function stages()
+    {
+        return $this->belongsToMany(ScopeStage::class, 'project_stages')->withPivot('status');
     }
 }

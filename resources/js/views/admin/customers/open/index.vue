@@ -343,12 +343,6 @@
                   {{ data.index + 1 }}
                 </template>
 
-                <template #cell(scope)="data">
-                  <p v-if="data.item.scope && scopes[data.item.scope]">
-                    {{ scopes[data.item.scope].name }}
-                  </p>
-                </template>
-
                 <template #cell(status)="data">
                   <p v-if="data.item.status">
                     {{ data.item.status }}
@@ -620,7 +614,7 @@ import * as notify from "../../../../utils/notify.js";
 import { validationMixin } from "vuelidate";
 import { required, email, helpers, numeric } from "vuelidate/lib/validators";
 import { getScopesBySlug } from "../../../../services/scope";
-import { getStagesByScope } from "../../../../services/scope-stage";
+import { getStagesByScopeProject } from "../../../../services/scope-stage";
 import { PVCOT_OPTIONS, RACI_OPTIONS } from "../../../../mixins/constants";
 
 export default {
@@ -644,7 +638,6 @@ export default {
       stageFields: [
         { key: "index", label: "#" },
         { key: "name", label: "Stage" },
-        { key: "scope", class: "text-center" },
         { key: "status", class: "text-center" },
         { key: "start", class: "text-center" },
         { key: "end", class: "text-center" },
@@ -857,9 +850,10 @@ export default {
     },
   },
   async mounted() {
+    const params = this.getParam();
     await this.getScopes();
-    await this.getStagesByScope();
-    const { data } = await this.getData(this.getParam());
+    await this.getStagesByScope(params.projectid);
+    const { data } = await this.getData(params);
     this.form = {
       ...data,
     };
@@ -884,8 +878,8 @@ export default {
       }));
       this.scopes = data;
     },
-    async getStagesByScope() {
-      const { data } = await getStagesByScope();
+    async getStagesByScope(project_id) {
+      const { data } = await getStagesByScopeProject(project_id);
       this.stagesByScope = { ...data };
     },
     getParam() {

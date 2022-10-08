@@ -61,6 +61,7 @@ Route::group(['middleware' => ['auth:api']], function () {
     });
 
     Route::group(['prefix' => 'scope-stages', 'as' => 'scope.stages'], function () {
+        Route::get('/list/byscope/{project_id}',[Api\ScopeStagesController::class, 'listByScopeProject'])->name('.listbyscope.project_id');
         Route::get('/list/byscope',[Api\ScopeStagesController::class, 'listByScope'])->name('.listbyscope');
     });
 

@@ -20,4 +20,9 @@ class ScopeStagesController extends Controller
 		return $this->scopeStageService->listByScope();
 	}
 
+	public function listByScopeProject(Request $request, $project_id)
+	{
+		return $this->scopeStageService->listByScopeProject($project_id);
+	}
+
 }
