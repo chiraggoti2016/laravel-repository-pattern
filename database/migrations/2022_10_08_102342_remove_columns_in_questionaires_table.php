@@ -14,7 +14,7 @@ class RemoveColumnsInQuestionairesTable extends Migration
     public function up()
     {
         Schema::table('questionaires', function (Blueprint $table) {
-            $table->dropColumn(['status','startdate', 'enddate']);
+            $table->dropColumn(['startdate', 'enddate']);
         });
     }
 
@@ -27,7 +27,6 @@ class RemoveColumnsInQuestionairesTable extends Migration
     {
         
         Schema::table('questionaires', function (Blueprint $table) {
-            $table->enum('status', ['init', 'draft', 'send', 'completed'])->default('init');
             $table->text('startdate')->nullable();
             $table->text('enddate')->nullable();
         });

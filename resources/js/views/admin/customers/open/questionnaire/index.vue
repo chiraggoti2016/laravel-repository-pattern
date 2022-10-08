@@ -559,7 +559,7 @@ export default {
 
       const response = await uploadFile(formData);
       const { data } = response;
-      console.log("response---", $model, data);
+      // console.log("response---", $model, data);
       this.form[name][category][index][each] = data; //data.file;
     },
     resetForm() {
