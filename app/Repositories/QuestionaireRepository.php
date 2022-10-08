@@ -35,7 +35,7 @@ class QuestionaireRepository extends BaseRepository implements QuestionaireContr
                     "project_id"        => $project_id,
                     "scope_stage_id"    => $data['stage_id'],
                 ],[
-                    "status"            => $data['status'] == 'send' ? 'complete' : 'init',
+                    "status"            => $data['status'] == 'send' ? 'complete' : 'in progress',
                     "enddate"           => $data['status'] == 'send' ? date('Y-m-d h:i:s'):null,
                     
                 ]);
