@@ -10,10 +10,17 @@
             <a
               href="#"
               class="btn btn-sm btn-primary btn-icon-split"
+              :class="loading ? 'pe-none' : ''"
               @click="onSubmit()"
             >
               <span class="icon text-white-50">
-                <i class="fas fa-save"></i>
+                <b-icon
+                  v-if="loading"
+                  icon="arrow-clockwise"
+                  animation="spin-pulse"
+                  font-scale="1"
+                ></b-icon>
+                <i v-else class="fas fa-save"></i>
               </span>
               <span class="text">Save</span>
             </a>
@@ -687,6 +694,7 @@ export default {
     return {
       stagesByScope: {},
       busy: false,
+      loading: false,
       overlayMessage: "Are you sure?",
       isDeleteFor: null,
       scopeOptions: [],
@@ -991,6 +999,8 @@ export default {
         return;
       }
 
+      this.loading = true;
+
       this.saveProject();
     },
     async saveProject() {
@@ -1000,6 +1010,7 @@ export default {
         const response = await axios.put(`projects/${id}`, {
           ...this.form,
         });
+        this.loading = false;
 
         // this.$router.push(`/admin/customers/open/project/${id}/${projectid}`);
         this.load();

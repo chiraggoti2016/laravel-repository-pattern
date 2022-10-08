@@ -15,20 +15,34 @@
             <a
               href="#"
               class="btn btn-sm btn-primary btn-icon-split"
+              :class="loading ? 'pe-none' : ''"
               @click="onSubmit()"
             >
               <span class="icon text-white-50">
-                <i class="fas fa-arrow-right"></i>
+                <b-icon
+                  v-if="loading"
+                  icon="arrow-clockwise"
+                  animation="spin-pulse"
+                  font-scale="1"
+                ></b-icon>
+                <i v-else class="fas fa-arrow-right"></i>
               </span>
               <span class="text">Send</span>
             </a>
             <a
               href="#"
               class="btn btn-sm btn-secondary btn-icon-split ml-2"
+              :class="draftLoading ? 'pe-none' : ''"
               @click="onSaveDraft()"
             >
               <span class="icon text-white-50">
-                <i class="fas fa-save"></i>
+                <b-icon
+                  v-if="draftLoading"
+                  icon="arrow-clockwise"
+                  animation="spin-pulse"
+                  font-scale="1"
+                ></b-icon>
+                <i v-else class="fas fa-save"></i>
               </span>
               <span class="text">Save As Draft</span>
             </a>
@@ -428,6 +442,8 @@ export default {
   mixins: [validationMixin],
   data() {
     return {
+      loading: false,
+      draftLoading: false,
       parentData: null,
       yesNoOptions: YESNO_OPTION,
       form: {
@@ -582,6 +598,7 @@ export default {
         "questionnaire-" + id + "-" + projectid,
         JSON.stringify(data)
       );
+      this.draftLoading = true;
       this.saveProject(true);
       let message = "data has been save as draft successfully.";
 
@@ -607,6 +624,8 @@ export default {
         return;
       }
 
+      this.loading = true;
+
       this.saveProject();
     },
     async saveProject(draft = false) {
@@ -618,6 +637,9 @@ export default {
           status: draft ? "draft" : "send",
           stage_id: stageid,
         });
+
+        this.loading = false;
+        this.draftLoading = false;
 
         this.$router.push(`/admin/customers/open/project/${id}/${projectid}`);
       } catch (error) {
