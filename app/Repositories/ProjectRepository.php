@@ -25,8 +25,19 @@ class ProjectRepository extends BaseRepository implements ProjectContract
         $orderBy = $request->input('column'); //Index
         $orderByDir = $request->input('dir', 'asc');
         $searchValue = $request->input('search');
+        $data = [];
 
-        $data = Project::paginate($length);
+        $authUser = auth()->user();
+        if($authUser) {
+            if($authUser->role === 'admin') {
+                $data = Project::paginate($length);
+            } else if($authUser->role === 'partner') {
+                $data = $this->model->whereHas('customers', function($q) use($authUser) {
+                    return $q->where('added_by', $authUser->id);
+                })->paginate($length);
+            }
+        }
+
         return new DataTableCollectionResource($data);
     }
 
