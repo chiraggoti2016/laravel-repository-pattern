@@ -6,7 +6,7 @@
     </div>
 
     <!-- Content Row -->
-    <b-card title="Comming Soon">
+    <b-card title="Coming Soon">
       <b-card-text> Dashboard development is in-progress stage. </b-card-text>
     </b-card>
   </div>
